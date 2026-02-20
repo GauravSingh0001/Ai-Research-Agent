@@ -1,3 +1,0 @@
-• There have been recent calls for more scrutiny on machine learning performance and possible limitations.
-
-• Adopting a structured methods description for machine learning based on data, optimization, model, evaluation (DOME) will aim to help both reviewers and readers to better understand and assess the performance and limitations of a method or outcome.

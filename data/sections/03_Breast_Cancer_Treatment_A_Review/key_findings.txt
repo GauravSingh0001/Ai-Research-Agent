@@ -1,7 +1,0 @@
-• Importance Breast cancer will be diagnosed in 12% of women in the United States over the course of their lifetimes and more than 250 000 new cases of breast cancer were diagnosed in the United States in 2017.
-
-• Observations Breast cancer is categorized into 3 major subtypes based on the presence or absence of molecular markers for estrogen or progesterone receptors and human epidermal growth factor 2 (ERBB2; formerly HER2): hormone receptor positive/ERBB2 negative (70% of patients), ERBB2 positive (15%-20%), and triple-negative (tumors lacking all 3 standard molecular markers; 15%).
-
-• More than 90% of breast cancers are not metastatic at the time of diagnosis.
-
-• Triple-negative breast cancer is more likely to recur than the other 2 subtypes, with 85% 5-year breast cancer–specific survival for stage I triple-negative tumors vs 94% to 99% for hormone receptor positive and ERBB2 positive.

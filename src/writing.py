@@ -100,9 +100,12 @@ class ResearchWriter:
     def _ai_or_fallback(self, prompt: str, fallback: str, max_tokens: int = 1024) -> str:
         """Call AI with prompt; return fallback string if AI unavailable or fails."""
         if self.ai and self.ai.provider != "None":
-            result = self.ai.generate(prompt, system_prompt=SYSTEM_PROMPT, max_tokens=max_tokens)
-            if result.get("status") == "success" and result.get("text"):
-                return result["text"]
+            try:
+                result = self.ai.generate(prompt, system_prompt=SYSTEM_PROMPT, max_tokens=max_tokens)
+                if result.get("status") == "success" and result.get("text"):
+                    return result["text"]
+            except BaseException as e:
+                logger.warning(f"AI generation failed ({type(e).__name__}): {str(e)[:100]}, using fallback")
         return fallback
 
     # ─────────────────────────────────────────────

@@ -1,1 +1,0 @@
-• The experimental results show that the random forest model outperformed the other models and achieved good performance, and “the mental suffering damages that plaintiff claims” and “the age of the victim” play important roles in assessments of mental suffering damages in fatal car accident cases in Taiwan.

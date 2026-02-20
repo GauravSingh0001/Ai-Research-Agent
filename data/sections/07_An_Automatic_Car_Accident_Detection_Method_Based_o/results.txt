@@ -1,1 +1,0 @@
-Car accidents cause a large number of deaths and disabilities every day, a certain proportion of which result from untimely treatment and secondary accidents. To some extent, automatic car accident detection can shorten response time of rescue agencies and vehicles around accidents to improve rescue efficiency and traffic safety level.

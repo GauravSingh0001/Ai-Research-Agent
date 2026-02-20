@@ -1,0 +1,1 @@
+XENON1T utilizes a liquid xenon time projection chamber with a fiducial mass of (1.30±0.01)  ton, resulting in a 1.0 ton yr exposure.

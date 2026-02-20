@@ -1,3 +1,0 @@
-• Additionally, it examines the retrieval-augmented generation paradigm and other methods for corpus modeling and understanding, demonstrating how generative AI can enhance information access systems.
-
-• It also summarizes potential challenges and fruitful directions for future studies.

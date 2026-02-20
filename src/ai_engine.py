@@ -154,7 +154,7 @@ class AIEngine:
                         logger.warning(f"HF generation failed: {e}")
                         break  # Non-retryable error, move to next provider
 
-        # 3. Try Cohere (with exponential backoff for 500 errors)
+        # 3. Try Cohere (with exponential backoff for 500 errors and timeout handling)
         if self.cohere_client:
             for attempt in range(3):
                 try:
@@ -172,6 +172,10 @@ class AIEngine:
                         logger.warning(f"Cohere 500 INTERNAL error (attempt {attempt+1}/3): {e}")
                         if attempt < 2:
                             self._exponential_backoff(attempt)
+                    elif "timeout" in err_str.lower() or "timed out" in err_str.lower():
+                        logger.warning(f"Cohere timeout (attempt {attempt+1}/3): {e}")
+                        if attempt < 2:
+                            time.sleep(5)  # Wait before retry
                     else:
                         logger.warning(f"Cohere generation failed: {e}")
                         break  # Non-retryable error

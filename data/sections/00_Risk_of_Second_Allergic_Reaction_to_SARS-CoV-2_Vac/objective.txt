@@ -1,5 +1,0 @@
-Objective
-To assess the risk of severe immediate allergic reactions (eg, anaphylaxis) to a second dose of SARS-CoV-2 mRNA vaccine among persons with immediate allergic reactions to their first vaccine dose. Data Sources
-MEDLINE, Embase, Web of Science, and the World Health Organization Global Coronavirus database were searched from inception through October 4, 2021. Study Selection
-Included studies addressed immediate allergic reactions of any severity to a second SARS-CoV-2 vaccine dose in persons with a known or suspected immediate allergic reaction (<4 hours after vaccination) after their first SARS-CoV-2 vaccine dose. Studies describing a second vaccine dose among persons reporting delayed reactions (>4 hours after vaccination) were excluded. Data Extraction and Synthesis
-Paired reviewers independently selected studies, extracted data, and assessed risk of bias.

@@ -1,3 +1,0 @@
-• By employing spatial analysis, road safety planning can be enhanced, high-risk areas can be identified, interventions can be evaluated, and resources can be optimally allocated to facilitate effective road safety measures and decision-making, especially in settings with limited resources.
-
-• Therefore, it is crucial to consider ML and spatial analysis techniques and advanced optimization algorithms to enhance traffic flow control, in road safety research and transport planning efforts.

@@ -1,0 +1,1 @@
+• No significant excess over background is found, and a profile likelihood analysis parametrized in spatial and energy dimensions excludes new parameter space for the WIMP-nucleon spin-independent elastic scatter cross section for WIMP masses above 6  GeV/c^{2}, with a minimum of 4.1×10^{-47}  cm^{2} at 30  GeV/c^{2} and a 90% confidence level.

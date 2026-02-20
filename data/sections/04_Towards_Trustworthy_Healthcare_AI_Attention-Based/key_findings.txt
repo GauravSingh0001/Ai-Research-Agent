@@ -1,3 +1,0 @@
-• Quantitative and qualitative evaluations are conducted on the trustworthiness of the models, through the use of "trust score" computation and a visual explainability technique.
-
-• We conclude that the attention-based feature learning approach is promising in building trustworthy deep learning models for healthcare.

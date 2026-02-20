@@ -1,5 +1,0 @@
-• Artificial intelligence (AI) systems increasingly achieve expert-level predictive accuracy in healthcare, yet improvements in model performance often fail to produce corresponding gains in patient outcomes.
-
-• Using constrained optimisation and Markov decision processes, we show how improved estimation affects optimal allocation under scarcity.
-
-• A synthetic triage simulation demonstrates that allocation-aware policies substantially outperform risk-threshold approaches in realised utility, even with identical predictive accuracy.
