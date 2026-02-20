@@ -3,10 +3,21 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Base Directories
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-OUTPUT_DIR = BASE_DIR / "output"
-SRC_DIR = BASE_DIR / "src"
+# Base Directories
+if os.environ.get("VERCEL"):
+    BASE_DIR = Path("/tmp")
+    DATA_DIR = BASE_DIR / "data"
+    OUTPUT_DIR = BASE_DIR / "output"
+    SRC_DIR = Path(__file__).resolve().parent  # Keep source code location
+    
+    # Ensure directories exist in /tmp
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+else:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    DATA_DIR = BASE_DIR / "data"
+    OUTPUT_DIR = BASE_DIR / "output"
+    SRC_DIR = BASE_DIR / "src"
 
 # Load environment variables
 load_dotenv(BASE_DIR / ".env")
