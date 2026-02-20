@@ -10,32 +10,15 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 # Local Imports
-try:
-    from src.config import (
-        ANALYSIS_RESULTS_FILE,
-        RESEARCH_SYNTHESIS_FILE,
-        SECTIONS_DATA_FILE,
-        BIBTEX_FILE,
-        ABSTRACT_WORD_LIMIT,
-        OUTPUT_DIR
-    )
-    from src.utils import setup_logger
-    # Delayed import of AIEngine to avoid circular dependency loop with config/utils
-    # from src.ai_engine import AIEngine 
-except ImportError:
-    from config import (
-        ANALYSIS_RESULTS_FILE,
-        RESEARCH_SYNTHESIS_FILE,
-        SECTIONS_DATA_FILE,
-        BIBTEX_FILE,
-        ABSTRACT_WORD_LIMIT,
-        OUTPUT_DIR
-    )
-    from utils import setup_logger
-    try:
-        from ai_engine import AIEngine
-    except ImportError:
-        AIEngine = None
+from src.config import (
+    ANALYSIS_RESULTS_FILE,
+    RESEARCH_SYNTHESIS_FILE,
+    SECTIONS_DATA_FILE,
+    BIBTEX_FILE,
+    ABSTRACT_WORD_LIMIT,
+    OUTPUT_DIR
+)
+from src.utils import setup_logger
 
 logger = setup_logger(__name__)
 
