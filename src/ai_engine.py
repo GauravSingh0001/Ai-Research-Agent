@@ -10,7 +10,10 @@ Features:
 
 import time
 import json
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 import cohere
 from openai import OpenAI
 from src.config import (
@@ -36,7 +39,7 @@ class AIEngine:
         """Initialize ALL available providers (all are tried independently)."""
 
         # 1. Google Gemini
-        if GEMINI_API_KEY:
+        if GEMINI_API_KEY and genai:
             try:
                 genai.configure(api_key=GEMINI_API_KEY)
                 self.gemini_ready = True
