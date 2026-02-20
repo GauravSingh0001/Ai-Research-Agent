@@ -1,0 +1,1 @@
+Various learning curve models have been proposed to use learning curves for decision making.

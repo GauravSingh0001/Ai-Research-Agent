@@ -1,0 +1,6 @@
+• Results
+Among 22 studies of SARS-CoV-2 mRNA vaccines, 1366 individuals (87.8% women; mean age, 46.1 years) had immediate allergic reactions to their first vaccination.
+
+• Analysis using the pooled random-effects model found that 6 patients developed severe immediate allergic reactions after their second vaccination (absolute risk, 0.16% [95% CI, 0.01%-2.94%]), 232 developed mild symptoms (13.65% [95% CI, 7.76%-22.9%]), and, conversely, 1360 tolerated the dose (99.84% [95% CI, 97.09%-99.99%]).
+
+• Among 78 persons with severe immediate allergic reactions to their first SARS-CoV-2 mRNA vaccination, 4 people (4.94% [95% CI, 0.93%-22.28%]) had a second severe immediate reaction, and 15 had nonsevere symptoms (9.54% [95% CI, 2.18%-33.34%]).

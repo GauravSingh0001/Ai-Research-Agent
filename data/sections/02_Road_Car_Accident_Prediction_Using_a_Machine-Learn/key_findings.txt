@@ -1,0 +1,3 @@
+• Four classification methods, including decision trees, random forest, multinomial logistic regression, and naïve Bayes, are used and evaluated to study the performance of road accident prediction.
+
+• The results address acceptable levels of accuracy for car accident prediction except for naïve Bayes.

@@ -1,0 +1,9 @@
+• To some extent, automatic car accident detection can shorten response time of rescue agencies and vehicles around accidents to improve rescue efficiency and traffic safety level.
+
+• First of all, a novel image dataset CAD-CVIS is established to improve accuracy of accident detection based on intelligent roadside devices in CVIS.
+
+• In the model, we utilize Multi-Scale Feature Fusion (MSFF) and loss function with dynamic weights to enhance performance of detecting small objects.
+
+• Finally, our experiment study evaluates performance of YOLO-CA for detecting car accidents, and the results show that our proposed method can detect car accident in 0.0461 seconds (21.6FPS) with 90.02% average precision (AP).
+
+• In additionally, we compare YOLO-CA with other object detection models, and the results demonstrate the comprehensive performance improvement on the accuracy and real-time over other models.

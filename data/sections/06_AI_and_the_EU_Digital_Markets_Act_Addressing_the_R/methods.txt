@@ -1,0 +1,1 @@
+Still, the current framework may not adequately cover generative AI systems that could become gateways for AI-based services. This paper argues for integrating certain AI software as core platform services and classifying certain developers as gatekeepers under the DMA.

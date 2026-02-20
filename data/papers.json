@@ -1,0 +1,135 @@
+[
+  {
+    "title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+    "year": 2025,
+    "authors": [],
+    "abstract": "No abstract",
+    "pdf": "",
+    "url": "https://www.semanticscholar.org/paper/8451b89fd6e5d3c8f790ec9901c98ccf581db3ba",
+    "citations": 122,
+    "venue": "International Journal of Progressive Research in Engineering Management and Science",
+    "publication_date": "2025-04-25",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+    "year": 2024,
+    "authors": [
+      "Xinyu Wu",
+      "Tingting Li"
+    ],
+    "abstract": "No abstract",
+    "pdf": "",
+    "url": "https://www.semanticscholar.org/paper/7e0f06d016683436a108ee04c8aec9a702449d96",
+    "citations": 15,
+    "venue": "Journal of Optics",
+    "publication_date": "2024-01-03",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+    "year": 2023,
+    "authors": [
+      "Saeid Pourroostaei Ardakani",
+      "Xiangning Liang",
+      "Kal Tenna Mengistu",
+      "Richard Sugianto So",
+      "Xuhui Wei",
+      "Baojie He",
+      "A. Cheshmehzangi"
+    ],
+    "abstract": "Traffic accidents have become severe risks as they are one of the causes of enormous deaths worldwide. Reducing the number of incidents is critical to saving lives and achieving sustainable cities and communities. Machine learning and data analysis techniques interpret the reasons for car accidents and propose solutions to minimize them. However, this needs to take the benefits of big data solutions as the size and velocity of traffic accident data are increasingly large and rapid. This paper explores road car accident data patterns and proposes a predictive model by investigating meaningful data features, such as accident severity, the number of casualties, and the number of vehicles. Therefore, a pre-processing model is designed to convert raw data using missing and meaningless feature removal, data attribute generalization, and outlier removal using interquartile. Four classification methods, including decision trees, random forest, multinomial logistic regression, and naïve Bayes, are used and evaluated to study the performance of road accident prediction. The results address acceptable levels of accuracy for car accident prediction except for naïve Bayes. The findings are discussed through a data-driven approach to understand the factors influencing road car accidents and highlight the key ones to propose accident prevention solutions. Finally, some strategies are provided to achieve healthy and community-friendly cities.",
+    "pdf": "https://www.mdpi.com/2071-1050/15/7/5939/pdf?version=1680086634",
+    "url": "https://www.semanticscholar.org/paper/896d2ce26b7e3f7191a9b4de20d9ad1aa931c1ce",
+    "citations": 67,
+    "venue": "Sustainability",
+    "publication_date": "2023-03-29",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+    "year": 2023,
+    "authors": [
+      "Yetay Berhanu",
+      "Esayas Alemayehu",
+      "D. Schröder"
+    ],
+    "abstract": "Road accidents are a significant negative outcome of transportation systems, causing injuries, fatalities, traffic congestion, and economic losses. As cities expand and the number of vehicles on the road increases, traffic accidents (TAs) have become a significant problem. Studies have shown that urban development plays a more significant role in transportation safety than previously thought. Low-income countries have higher fatality rates than high-income countries, according to the Permanent International Association of Road Congress (PIARC) and the World Health Organization (WHO). Predicting and preventing the occurrence of accidents and congestion is necessary worldwide, especially in developing countries where fatality rates are higher. The objective of this study is to examine and make a comparative analysis in low-income and high-income countries of the existing literature on the global challenge of car accidents and use its prediction techniques to enhance road safety and reduce traffic congestion. The study evaluates various approaches such as logistic regression, decision tree, random forest, deep neural network, support vector machine, random forest, K-nearest neighbors, Naïve Bayes, empirical Bayes, geospatial analysis methods, and UIMA, NSGA-II, and MOPS algorithms. The research identifies current challenges, prevention ideas, and future directions for preventing accidents and congestion on the road network. Integrating GIS-based spatial statistical methods and temporal data and utilizing advanced optimization algorithms and machine learning methods can result in accurate prediction models that can help identify accident hotspots and reduce congestions and enhance traffic safety and mitigate their occurrence. Effectively preventing urban traffic congestion requires the integration of spatial data into precise accident prediction models. By employing spatial analysis, road safety planning can be enhanced, high-risk areas can be identified, interventions can be evaluated, and resources can be optimally allocated to facilitate effective road safety measures and decision-making, especially in settings with limited resources. Therefore, it is crucial to consider ML and spatial analysis techniques and advanced optimization algorithms to enhance traffic flow control, in road safety research and transport planning efforts.",
+    "pdf": "https://downloads.hindawi.com/journals/jat/2023/6643412.pdf",
+    "url": "https://www.semanticscholar.org/paper/3068250c68d19d8b22f131132bb58d8702855bb7",
+    "citations": 71,
+    "venue": "Journal of Advanced Transportation",
+    "publication_date": "2023-07-25",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+    "year": 2022,
+    "authors": [
+      "Livio Brühwiler",
+      "Cheng Fu",
+      "Haosheng Huang",
+      "L. Longhi",
+      "R. Weibel"
+    ],
+    "abstract": "No abstract",
+    "pdf": "https://doi.org/10.1016/j.compenvurbsys.2022.101760",
+    "url": "https://www.semanticscholar.org/paper/6d7eb410f8dabd531e6f1857373789804276199c",
+    "citations": 33,
+    "venue": "Computers, Environment and Urban Systems",
+    "publication_date": "2022-04-01",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+    "year": 2021,
+    "authors": [
+      "Decheng Hsieh",
+      "Lieuhen Chen",
+      "Taiping Sun"
+    ],
+    "abstract": "The discretionary damage of mental suffering in fatal car accident cases in Taiwan is subjective, uncertain, and unpredictable; thus, plaintiffs, defendants, and their lawyers find it difficult to judge whether spending much of their money and time on the lawsuit is worthwhile and which legal factors judges will consider important and dominant when they are assessing the mental suffering damages. To address these problems, we propose k-nearest neighbor, classification and regression trees, and random forests as learning algorithms for regression to build optimal predictive models. In addition, we reveal the importance ranking of legal factors by permutation feature importance. The experimental results show that the random forest model outperformed the other models and achieved good performance, and “the mental suffering damages that plaintiff claims” and “the age of the victim” play important roles in assessments of mental suffering damages in fatal car accident cases in Taiwan. Therefore, litigants and their lawyers can predict the discretionary damages of mental suffering in advance and wisely decide whether they should litigate or not, and then they can focus on the crucial legal factors and develop the best litigation strategy.",
+    "pdf": "https://www.mdpi.com/2076-3417/11/21/10361/pdf?version=1636025171",
+    "url": "https://www.semanticscholar.org/paper/a8a5e70ca1a778f7f17cfadd02ba5b31f6947a95",
+    "citations": 13,
+    "venue": "Applied Sciences",
+    "publication_date": "2021-11-04",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "Car Accident Prevention And Health Monitoring System For Drivers",
+    "year": 2021,
+    "authors": [
+      "Md. Hasibul Islam",
+      "Azmi Aziz Khandoker",
+      "T. M. Safi Sami",
+      "Touhidul Islam Talukder",
+      "Md. Isfaqur Rahman",
+      "Pritom Kumar Sarkar"
+    ],
+    "abstract": "At present, road accident has become a regular headache for all people around the world. To overcome the situation, people are thinking of updating the way of driving and road law. Different brands of automobile companies are trying to invent different types of facilities in vehicles. The main focus of this paper is to ensure the life security of the drivers. There will be sensors for health monitoring system that will track the driver's health, such as heart rate, temperature, and whether or not the driver is drunk, as well as drowsiness. This prototype uses an ultrasonic sensor, which will detect very close vehicles and reduce its own speed. However, the engine will start based on driver health, where sensors will always observe the driver's lively movement. Car accident prevention with the health monitoring system of the driver can be a blueprint to reduce car accidents, and it will be cost-effective. This project is expected to have a significant effect on society and obtain better results.",
+    "pdf": "",
+    "url": "https://www.semanticscholar.org/paper/fe6114d15c89e294a48b6693d92b4a3b03f1d0a7",
+    "citations": 13,
+    "venue": "2021 IEEE Region 10 Symposium (TENSYMP)",
+    "publication_date": "2021-08-23",
+    "source": "semantic_scholar"
+  },
+  {
+    "title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+    "year": 2019,
+    "authors": [
+      "Daxin Tian",
+      "Chuang Zhang",
+      "Xuting Duan",
+      "Xixian Wang"
+    ],
+    "abstract": "Car accidents cause a large number of deaths and disabilities every day, a certain proportion of which result from untimely treatment and secondary accidents. To some extent, automatic car accident detection can shorten response time of rescue agencies and vehicles around accidents to improve rescue efficiency and traffic safety level. In this paper, we proposed an automatic car accident detection method based on Cooperative Vehicle Infrastructure Systems (CVIS) and machine vision. First of all, a novel image dataset CAD-CVIS is established to improve accuracy of accident detection based on intelligent roadside devices in CVIS. Especially, CAD-CVIS is consisted of various kinds of accident types, weather conditions and accident location, which can improve self-adaptability of accident detection methods among different traffic situations. Secondly, we develop a deep neural network model YOLO-CA based on CAD-CVIS and deep learning algorithms to detect accident. In the model, we utilize Multi-Scale Feature Fusion (MSFF) and loss function with dynamic weights to enhance performance of detecting small objects. Finally, our experiment study evaluates performance of YOLO-CA for detecting car accidents, and the results show that our proposed method can detect car accident in 0.0461 seconds (21.6FPS) with 90.02% average precision (AP). In additionally, we compare YOLO-CA with other object detection models, and the results demonstrate the comprehensive performance improvement on the accuracy and real-time over other models.",
+    "pdf": "https://ieeexplore.ieee.org/ielx7/6287639/8600701/08832160.pdf",
+    "url": "https://www.semanticscholar.org/paper/e391ad836247b6657c3e7791e6e60a8268fe5ad3",
+    "citations": 100,
+    "venue": "IEEE Access",
+    "publication_date": "2019-09-11",
+    "source": "semantic_scholar"
+  }
+]

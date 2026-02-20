@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Paper Reviewer</title>
+  <meta name="description" content="AI-powered academic paper review and synthesis platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <div id="toast-container" aria-live="polite"></div>
+
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-content">
+      <div class="loading-orb"></div>
+      <p class="loading-label">Synthesizing<span class="loading-dots"></span></p>
+    </div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- ── SIDEBAR ─────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2L3 6v10l8 4 8-4V6L11 2z" stroke="url(#lg1)" stroke-width="1.5" stroke-linejoin="round" />
+            <path d="M11 2v14M3 6l8 4 8-4" stroke="url(#lg1)" stroke-width="1.5" />
+            <defs>
+              <linearGradient id="lg1" x1="3" y1="2" x2="19" y2="20" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#4F8EF7" />
+                <stop offset="1" stop-color="#7B61FF" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">AI Paper Reviewer</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item" id="nav-search" onclick="switchView('search')" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.5" />
+            <path d="M14 14l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          Search &amp; Discover
+        </button>
+        <button class="nav-item" id="nav-extraction" onclick="switchView('extraction')" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          Extraction Pipeline
+        </button>
+        <button class="nav-item active" id="nav-synthesis" onclick="switchView('synthesis')" aria-current="page">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M2 10h3l2-5 3 10 2-5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          Synthesis Workspace
+        </button>
+        <button class="nav-item" id="nav-reports" onclick="switchView('reports')" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M5 3h10a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="currentColor"
+              stroke-width="1.5" />
+            <path d="M7 8h6M7 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          Final Reports
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ── MAIN ───────────────────────────────────────── -->
+    <div class="main-wrapper">
+
+      <!-- TOPBAR -->
+      <header class="topbar" role="banner">
+        <div class="topbar-project">
+          <span class="topbar-project-label">Project:</span>
+          <span class="topbar-project-name" id="topbar-project-name">Gen AI in Healthcare</span>
+        </div>
+        <div class="topbar-search" role="search">
+          <svg viewBox="0 0 20 20" fill="none">
+            <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.5" />
+            <path d="M14 14l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <input type="search" id="global-search" placeholder="Search papers, citations, or findings…"
+            aria-label="Global search" />
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-icon-btn" aria-label="Notifications" onclick="showToast('No new notifications','info')">
+            <svg viewBox="0 0 20 20" fill="none">
+              <path d="M10 2a6 6 0 016 6v3l2 3H2l2-3V8a6 6 0 016-6z" stroke="currentColor" stroke-width="1.5" />
+              <path d="M8 16a2 2 0 004 0" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <span class="notif-dot"></span>
+          </button>
+          
+        </div>
+      </header>
+
+      <!-- CONTENT AREA -->
+      <main class="content-area" id="main-content">
+
+        <!-- VIEW: SEARCH -->
+        <section class="view" id="view-search" style="display:none">
+          <div class="view-header">
+            <h1 class="view-title">Search &amp; Discover</h1>
+            <div class="view-header-right">
+              <span class="search-sel-badge empty" id="search-selection-badge">0 / 6 selected</span>
+              <button class="btn-primary" id="analyze-btn" disabled onclick="runAnalyzeSelected()"
+                title="Select 1 to 6 papers to analyze">
+                <svg viewBox="0 0 18 18" fill="none" width="14" height="14">
+                  <path d="M3 9h12M9 3l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Analyze Selected
+              </button>
+            </div>
+          </div>
+          <div class="search-hero-bar">
+            <svg viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.5" />
+              <path d="M14 14l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <input type="text" id="topic-search"
+              placeholder="Enter research topic (e.g. 'Generative AI in Healthcare')&hellip;" />
+            <button class="search-hero-btn" onclick="simulateSearch()">Search</button>
+          </div>
+          <div class="tag-row">
+            <span class="tag" onclick="setSearch('Generative AI Healthcare')">Generative AI Healthcare</span>
+            <span class="tag" onclick="setSearch('Quantum Computing')">Quantum Computing</span>
+            <span class="tag" onclick="setSearch('Machine Learning')">Machine Learning</span>
+            <span class="tag" onclick="setSearch('Agentic AI')">Agentic AI</span>
+          </div>
+          <div class="search-hint">Select <strong>1 to 6 papers</strong> then click <strong>Analyze Selected</strong> to
+            run the pipeline.</div>
+          <div class="search-grid" id="search-paper-grid">
+            <div class="skeleton-card">
+              <div class="sk-line w60"></div>
+              <div class="sk-line w40"></div>
+              <div class="sk-line w80"></div>
+              <div class="sk-line w50"></div>
+            </div>
+            <div class="skeleton-card">
+              <div class="sk-line w70"></div>
+              <div class="sk-line w30"></div>
+              <div class="sk-line w90"></div>
+              <div class="sk-line w60"></div>
+            </div>
+            <div class="skeleton-card">
+              <div class="sk-line w50"></div>
+              <div class="sk-line w70"></div>
+              <div class="sk-line w40"></div>
+              <div class="sk-line w80"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: EXTRACTION -->
+        <section class="view" id="view-extraction" style="display:none">
+          <div class="view-header">
+            <h1 class="view-title">Extraction Pipeline</h1>
+            <button class="btn-primary" onclick="runExtraction()">
+              <svg viewBox="0 0 18 18" fill="none" width="14" height="14">
+                <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              Run Extraction
+            </button>
+          </div>
+          <div class="pipeline-status-label" id="pipeline-status-label">Ready to analyze papers.</div>
+          <div class="pipeline-grid" id="pipeline-grid"></div>
+        </section>
+
+        <!-- VIEW: SYNTHESIS (DEFAULT) -->
+        <section class="view synthesis-view" id="view-synthesis">
+          <div class="synthesis-columns">
+
+            <!-- LEFT: Source Insights -->
+            <div class="col-left">
+              <div class="panel-header">
+                <div class="panel-header-left">
+                  <svg viewBox="0 0 20 20" fill="none">
+                    <path d="M4 4h12v2H4zM4 8h12v2H4zM4 12h8v2H4z" fill="currentColor" opacity=".5" />
+                  </svg>
+                  <span class="panel-title">SOURCE INSIGHTS</span>
+                </div>
+                <div class="panel-header-tabs">
+                  <button class="ph-tab active" id="tab-btn-papers" onclick="switchSourceTab('papers')">Papers</button>
+                  <button class="ph-tab" id="tab-btn-analysis" onclick="switchSourceTab('analysis')">Analysis</button>
+                </div>
+              </div>
+
+              <!-- Paper cards are injected here by app.js from /api/papers — DO NOT add hardcoded cards here -->
+              <div class="paper-list-scroll" id="source-tab-papers">
+                <div id="paper-cards-list" style="display:contents">
+                  <div style="padding:24px 16px;color:#555;font-size:13px;text-align:center">
+                    Loading papers from server…
+                  </div>
+                </div>
+              </div>
+
+              <!-- ANALYSIS TAB: Similarity & Themes -->
+              <div id="source-tab-analysis" style="display:none">
+                <div class="analysis-stat-row">
+                  <div class="stat-card">
+                    <span class="stat-val" id="stat-papers-count">0</span>
+                    <span class="stat-lbl">Papers</span>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-val" id="stat-vocab-size">3.2k</span>
+                    <span class="stat-lbl">Vocab Size</span>
+                  </div>
+                </div>
+
+                <div class="similarity-header">
+                  <span>Cosine Similarity</span>
+                  <span class="badge-selected">Milestone 2</span>
+                </div>
+                <div class="similarity-list" id="similarity-list">
+                  <!-- Pairs will be injected by app.js -->
+                </div>
+
+                <div class="similarity-header" style="margin-top:20px">
+                  <span>Research Themes</span>
+                </div>
+                <div class="themes-cloud" id="themes-cloud">
+                  <!-- Themes will be injected by app.js -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT: AI Synthesis Draft -->
+            <div class="col-right">
+              <div class="panel-header">
+                <div class="panel-header-left">
+                  <svg viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                  <span class="panel-title">AI SYNTHESIS DRAFT</span>
+                </div>
+                <div class="panel-header-right">
+                  <span class="badge-selected" id="papers-selected-badge">0 Papers Selected</span>
+                  <button class="btn-generate" id="generate-synthesis-btn" onclick="runSynthesis()">
+                    <svg viewBox="0 0 18 18" fill="none" width="14" height="14">
+                      <path d="M9 2a7 7 0 100 14A7 7 0 009 2z" stroke="currentColor" stroke-width="1.5" />
+                      <path d="M6 9l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                    Generate Synthesis
+                  </button>
+                </div>
+              </div>
+
+              <div class="draft-scroll">
+
+                <!-- Abstract -->
+                <div class="draft-section">
+                  <div class="draft-section-heading">
+                    <span class="draft-section-icon">
+                      <svg viewBox="0 0 20 20" fill="none">
+                        <path d="M4 6h12M4 10h8M4 14h5" stroke="currentColor" stroke-width="1.5"
+                          stroke-linecap="round" />
+                      </svg>
+                    </span>
+                    <h2 class="draft-section-title">Abstract</h2>
+                  </div>
+                  <div class="abstract-card">
+                    <blockquote id="abstract-text">
+                      "Run synthesis to generate abstract…"
+                    </blockquote>
+                  </div>
+                </div>
+
+                <!-- Methods Comparison -->
+                <div class="draft-section">
+                  <div class="draft-section-heading">
+                    <span class="draft-section-icon">
+                      <svg viewBox="0 0 20 20" fill="none">
+                        <rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" />
+                        <rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" />
+                        <rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" />
+                        <rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" />
+                      </svg>
+                    </span>
+                    <h2 class="draft-section-title">Methods Comparison</h2>
+                  </div>
+                  <div class="methods-table" role="table" aria-label="Methods comparison" id="methods-table">
+                    <div class="methods-table-header" role="row">
+                      <div role="columnheader">Paper</div>
+                      <div role="columnheader">Key Method / Approach</div>
+                      <div role="columnheader">Main Finding</div>
+                    </div>
+                    <!-- Rows injected by app.js from real paper data — no hardcoded rows here -->
+                    <div id="methods-table-body">
+                      <div class="methods-table-row" role="row" style="color:#555;font-style:italic">
+                        <div role="cell" colspan="3">Run synthesis to generate comparison…</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- VIEW: REPORTS -->
+        <section class="view" id="view-reports" style="display:none">
+          <div class="view-header">
+            <h1 class="view-title">Final Reports</h1>
+            <button class="btn-primary" onclick="exportAPA()">Export APA 7th Ed.</button>
+          </div>
+          <div class="reports-grid" id="reports-grid"></div>
+        </section>
+
+      </main>
+
+      <!-- BOTTOM BAR -->
+      <footer class="bottom-bar" role="contentinfo">
+        <div class="stepper" role="progressbar" aria-label="Workflow progress">
+          <div class="step done" data-step="1" onclick="switchView('search')"><span class="step-num">1</span><span
+              class="step-label">Search</span></div>
+          <svg class="step-arrow" viewBox="0 0 8 12" fill="none">
+            <path d="M2 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <div class="step done" data-step="2" onclick="switchView('extraction')"><span class="step-num">2</span><span
+              class="step-label">Extraction</span></div>
+          <svg class="step-arrow" viewBox="0 0 8 12" fill="none">
+            <path d="M2 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <div class="step done" data-step="3"><span class="step-num">3</span><span class="step-label">Analysis</span>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 8 12" fill="none">
+            <path d="M2 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <div class="step active" data-step="4" onclick="switchView('synthesis')"><span class="step-num">4</span><span
+              class="step-label">Synthesis</span></div>
+          <svg class="step-arrow" viewBox="0 0 8 12" fill="none">
+            <path d="M2 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <div class="step" data-step="5" onclick="switchView('reports')"><span class="step-num">5</span><span
+              class="step-label">Review</span></div>
+        </div>
+        <div class="bottom-actions">
+          <input type="text" id="revision-input" class="revision-input"
+            placeholder="Type suggestion (e.g. 'Add more quantitative results')..." />
+
+          <button class="btn-export" id="export-btn" onclick="exportAPA()">
+            <svg viewBox="0 0 18 18" fill="none">
+              <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            Export APA References
+          </button>
+          <button class="btn-export" onclick="exportPDF()" style="background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.35);color:#818cf8;">
+            <svg viewBox="0 0 18 18" fill="none">
+              <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="2" y="13" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Export PDF
+          </button>
+          <button class="btn-critique" id="critique-btn" onclick="runCritique()">
+            <svg viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5" />
+              <path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            Critique &amp; Revise
+          </button>
+        </div>
+      </footer>
+
+    </div><!-- end main-wrapper -->
+  </div><!-- end app-shell -->
+
+  <script src="app.js"></script>
+</body>
+
+</html>

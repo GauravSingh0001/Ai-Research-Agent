@@ -1,0 +1,3 @@
+• We explore some of the challenges in applying a document understanding model to referrals, which have formats varying by medical practice, and evaluate model performance using MUC-5 metrics to obtain appropriate metrics for the practical use case.
+
+• Our analysis shows the addition of domain-specific rules to the transformer model yields greatly increased precision and F1 scores, suggesting a hybrid model trained on a curated dataset can increase efficiency in referral management.

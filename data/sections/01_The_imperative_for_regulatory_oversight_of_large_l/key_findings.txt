@@ -1,0 +1,3 @@
+• We argue that regulatory oversight should assure medical professionals and patients can use LLMs without causing harm or compromising their data or privacy.
+
+• This paper summarizes our practical recommendations for what we can expect from regulators to bring this vision to reality.

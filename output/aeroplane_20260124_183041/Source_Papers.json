@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Controlling aeroplane crashing through aviation infrastructure using multi-agent technology",
+    "year": 2024,
+    "authors": [
+      "Sunidhi Thakur",
+      "Somesh Kumar Sharma",
+      "R. Parti",
+      "Vikram Singh"
+    ],
+    "abstract": "Abstract Aeroplane crashing is a major concern for aviation safety. This article aim is to control aeroplane crashing through aviation infrastructure by using Multi-Agent Technology (MAT). For this 6 variables of aeroplane crashing, 20 variables of aviation infrastructure and 34 variables of MAT are extracted from the literatureto develop the information framework for the study. Fuzzy Multi-Criteria Decision-Making (FMCDM) technique is utilised to analyse prioritise, ranking, and identify interrelationship among them. The human error is evolved most significant factor of aeroplane crashing followed by others. For aviation infrastructure, runway is found to be the most important variable in global ranking. Whereas, in MAT pilot assistance agent is most prioritised variable in overall ranking. The proposed framework can assist the aviation industry to understand the behaviour of aviation infrastructure and MAT variables to control aeroplane crashing. The results of this study can be utilised by aviation professionals in improving aviation safety.",
+    "pdf": "",
+    "url": "https://www.semanticscholar.org/paper/71b478ce5edb483c3bed10c924c511b1eb4b41a0",
+    "citations": 2,
+    "venue": "International Journal of Crashworthiness",
+    "publication_date": "2024-03-27"
+  },
+  {
+    "title": "Spatially continuous snow depth mapping by aeroplane photogrammetry for annual peak of winter from 2017 to 2021 in open areas",
+    "year": 2023,
+    "authors": [
+      "Leon J. Bührle",
+      "M. Marty",
+      "Lucie A. Eberhard",
+      "A. Stoffel",
+      "Elisabeth D. Hafner",
+      "Y. Bühler"
+    ],
+    "abstract": "Abstract. Information on snow depth and its spatial distribution is important for\nnumerous applications, including natural hazard management, snow water\nequivalent estimation for hydropower, the study of the distribution and\nevolution of flora and fauna, and the validation of snow hydrological\nmodels. Due to its heterogeneity and complexity, specific remote sensing\ntools are required to accurately map the snow depth distribution in Alpine\nterrain. To cover large areas (>100 km2),\nairborne laser scanning (ALS) or aerial photogrammetry with large-format\ncameras is needed. While both systems require piloted aircraft for data\nacquisition, ALS is typically more expensive than photogrammetry but yields\nbetter results in forested terrain. While photogrammetry is slightly\ncheaper, it is limited due to its dependency on favourable acquisition\nconditions (weather, light conditions). In this study, we present\nphotogrammetrically processed high-spatial-resolution (0.5 m) annual snow\ndepth maps, recorded during the peak of winter over a 5-year period under\ndifferent acquisition conditions over a study area around Davos,\nSwitzerland. Compared to previously carried out studies, using the Vexcel\nUltraCam Eagle Mark 3 (M3) sensor improves the average ground sampling distance to\n0.1 m at similar flight altitudes above ground. This allows for very\ndetailed snow depth maps in open areas, calculated by subtracting a snow-off\ndigital terrain model (DTM, acquired with ALS) from the snow-on digital\nsurface models (DSMs) processed from the airborne imagery. Despite\nchallenging acquisition conditions during the recording of the UltraCam\nimages (clouds, shaded areas and fresh snow), 99 % of unforested areas\nwere successfully photogrammetrically reconstructed. We applied masks (high\nvegetation, settlements, water, glaciers) to increase the reliability of the\nsnow depth calculations. An extensive accuracy assessment was carried out\nusing check points, the comparison to DSMs derived from unpiloted aerial\nsystems and the comparison of snow-free DSM pixels to the ALS DTM. The\nresults show a root mean square error of approximately 0.25 m for the\nUltraCam X and 0.15 m for the successor, the UltraCam Eagle M3. We developed\na consistent and reliable photogrammetric workflow for accurate snow depth\ndistribution mapping over large regions, capable of analysing snow\ndistribution in complex terrain. This enables more detailed investigations\non seasonal snow dynamics and can be used for numerous applications related\nto snow depth distribution, as well as serving as a ground reference for new\nmodelling approaches and satellite-based snow depth mapping.\n",
+    "pdf": "https://doi.org/10.5194/tc-17-3383-2023",
+    "url": "https://www.semanticscholar.org/paper/5858b4889ef2700d89cd45ace4adced63c2dc7c9",
+    "citations": 14,
+    "venue": "The Cryosphere",
+    "publication_date": "2023-08-22"
+  },
+  {
+    "title": "A new study for Aeroplane Wing shapes made of Boron Nitride nanotubes-reinforced Aluminium, Part I: Review, Dynamical Analyses and Simulation",
+    "year": 2022,
+    "authors": [
+      "Dinh Gia Ninh",
+      "Nguyen Trong Long",
+      "Tran Van Vang",
+      "Nguyen Thi Hoang Ha",
+      "Cong Thanh Nguyen",
+      "Dzung Viet Dao"
+    ],
+    "abstract": "No abstract",
+    "pdf": "https://doi.org/10.1016/j.compstruct.2022.116239",
+    "url": "https://www.semanticscholar.org/paper/f98799b945a91da5f7d89abc5145894d11d0ff84",
+    "citations": 36,
+    "venue": "Composite structures",
+    "publication_date": "2022-09-01"
+  }
+]

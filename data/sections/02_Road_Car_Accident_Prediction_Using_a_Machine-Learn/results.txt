@@ -1,0 +1,1 @@
+The results address acceptable levels of accuracy for car accident prediction except for naïve Bayes. Finally, some strategies are provided to achieve healthy and community-friendly cities.

@@ -1,0 +1,40 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Base Directories
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+OUTPUT_DIR = BASE_DIR / "output"
+SRC_DIR = BASE_DIR / "src"
+
+# Load environment variables
+load_dotenv(BASE_DIR / ".env")
+
+# API Configuration
+SEMANTIC_SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+SEMANTIC_SCHOLAR_API_KEY = os.getenv("SEMANTIC_SCHOLAR_API_KEY")
+SEMANTIC_SCHOLAR_API_KEY_SECONDARY = os.getenv("SEMANTIC_SCHOLAR_API_KEY_SECONDARY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GPT_MODEL = os.getenv("GPT_MODEL", "Qwen/Qwen2.5-72B-Instruct")
+HF_BASE_URL = "https://router.huggingface.co/v1"
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+# Search Configuration
+SEARCH_FIELDS = "title,authors,year,abstract,url,openAccessPdf,citationCount,venue,publicationDate"
+SEARCH_LIMIT_DEFAULT = 3
+SEARCH_TIMEOUT_SECONDS = 10
+
+# File Paths
+PAPERS_DATA_FILE = DATA_DIR / "papers.json"
+ANALYSIS_RESULTS_FILE = DATA_DIR / "analysis_results.json"
+RESEARCH_SYNTHESIS_FILE = OUTPUT_DIR / "research_synthesis.md"
+SECTIONS_DATA_FILE = OUTPUT_DIR / "document_sections.json"
+BIBTEX_FILE = OUTPUT_DIR / "references.bib"
+
+# Writing Configuration
+ABSTRACT_WORD_LIMIT = 100

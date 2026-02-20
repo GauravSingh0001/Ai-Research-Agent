@@ -1,0 +1,3 @@
+• For machine learning (ML) researchers, emotion models may improve learning efficiency.
+
+• It systematically addresses 1) from what underlying dimensions (e.g., homeostasis, appraisal) emotions can be derived and how these can be modelled in RL-agents, 2) what types of emotions have been derived from these dimensions, and 3) how these emotions may either influence the learning efficiency of the agent or be useful as social signals.

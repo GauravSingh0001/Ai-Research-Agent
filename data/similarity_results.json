@@ -1,0 +1,646 @@
+{
+  "matrix": [
+    [
+      1.0,
+      0.2094,
+      0.0943,
+      0.0417,
+      0.176,
+      0.0361,
+      0.1888,
+      0.0895
+    ],
+    [
+      0.2094,
+      1.0,
+      0.1208,
+      0.0849,
+      0.129,
+      0.0439,
+      0.0342,
+      0.2405
+    ],
+    [
+      0.0943,
+      0.1208,
+      1.0,
+      0.2643,
+      0.048,
+      0.0966,
+      0.0841,
+      0.1567
+    ],
+    [
+      0.0417,
+      0.0849,
+      0.2643,
+      1.0,
+      0.0324,
+      0.049,
+      0.1088,
+      0.1243
+    ],
+    [
+      0.176,
+      0.129,
+      0.048,
+      0.0324,
+      1.0,
+      0.0344,
+      0.0499,
+      0.0551
+    ],
+    [
+      0.0361,
+      0.0439,
+      0.0966,
+      0.049,
+      0.0344,
+      1.0,
+      0.0292,
+      0.0702
+    ],
+    [
+      0.1888,
+      0.0342,
+      0.0841,
+      0.1088,
+      0.0499,
+      0.0292,
+      1.0,
+      0.0824
+    ],
+    [
+      0.0895,
+      0.2405,
+      0.1567,
+      0.1243,
+      0.0551,
+      0.0702,
+      0.0824,
+      1.0
+    ]
+  ],
+  "pairs": [
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 3,
+      "paper_a_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "paper_b_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "similarity": 0.2643
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 7,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.2405
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 1,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "similarity": 0.2094
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 6,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.1888
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 4,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "similarity": 0.176
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 7,
+      "paper_a_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.1567
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 4,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "similarity": 0.129
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 7,
+      "paper_a_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.1243
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 2,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "similarity": 0.1208
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 6,
+      "paper_a_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.1088
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 5,
+      "paper_a_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "paper_b_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "similarity": 0.0966
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 2,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "similarity": 0.0943
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 7,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.0895
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 3,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "similarity": 0.0849
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 6,
+      "paper_a_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.0841
+    },
+    {
+      "paper_a_idx": 6,
+      "paper_b_idx": 7,
+      "paper_a_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.0824
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 7,
+      "paper_a_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.0702
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 7,
+      "paper_a_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "paper_b_title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "similarity": 0.0551
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 6,
+      "paper_a_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.0499
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 5,
+      "paper_a_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "paper_b_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "similarity": 0.049
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 4,
+      "paper_a_title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "paper_b_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "similarity": 0.048
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 5,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "similarity": 0.0439
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 3,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "similarity": 0.0417
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 5,
+      "paper_a_title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "paper_b_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "similarity": 0.0361
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 5,
+      "paper_a_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "paper_b_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "similarity": 0.0344
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 6,
+      "paper_a_title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.0342
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 4,
+      "paper_a_title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "paper_b_title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "similarity": 0.0324
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 6,
+      "paper_a_title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "paper_b_title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "similarity": 0.0292
+    }
+  ],
+  "top_terms": [
+    {
+      "paper_idx": 0,
+      "title": "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+      "top_terms": [
+        {
+          "term": "iot",
+          "score": 0.4173
+        },
+        {
+          "term": "system",
+          "score": 0.3498
+        },
+        {
+          "term": "abstract",
+          "score": 0.3018
+        },
+        {
+          "term": "prevention",
+          "score": 0.2646
+        },
+        {
+          "term": "car",
+          "score": 0.1667
+        },
+        {
+          "term": "accident",
+          "score": 0.1667
+        }
+      ]
+    },
+    {
+      "paper_idx": 1,
+      "title": "A deep learning-based car accident detection approach in video-based traffic surveillance",
+      "top_terms": [
+        {
+          "term": "video",
+          "score": 0.2504
+        },
+        {
+          "term": "surveillance",
+          "score": 0.2504
+        },
+        {
+          "term": "detection",
+          "score": 0.2099
+        },
+        {
+          "term": "approach",
+          "score": 0.2099
+        },
+        {
+          "term": "deep",
+          "score": 0.1811
+        },
+        {
+          "term": "abstract",
+          "score": 0.1811
+        },
+        {
+          "term": "traffic",
+          "score": 0.1588
+        },
+        {
+          "term": "learning",
+          "score": 0.1405
+        },
+        {
+          "term": "car",
+          "score": 0.1
+        },
+        {
+          "term": "accident",
+          "score": 0.1
+        }
+      ]
+    },
+    {
+      "paper_idx": 2,
+      "title": "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+      "top_terms": [
+        {
+          "term": "data",
+          "score": 0.1259
+        },
+        {
+          "term": "solutions",
+          "score": 0.0501
+        },
+        {
+          "term": "road",
+          "score": 0.0483
+        },
+        {
+          "term": "accident",
+          "score": 0.0467
+        },
+        {
+          "term": "prediction",
+          "score": 0.0362
+        },
+        {
+          "term": "number",
+          "score": 0.0362
+        },
+        {
+          "term": "removal",
+          "score": 0.0334
+        },
+        {
+          "term": "car",
+          "score": 0.0333
+        },
+        {
+          "term": "accidents",
+          "score": 0.0318
+        },
+        {
+          "term": "analysis",
+          "score": 0.028
+        }
+      ]
+    },
+    {
+      "paper_idx": 3,
+      "title": "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+      "top_terms": [
+        {
+          "term": "road",
+          "score": 0.0733
+        },
+        {
+          "term": "congestion",
+          "score": 0.0608
+        },
+        {
+          "term": "income",
+          "score": 0.0608
+        },
+        {
+          "term": "safety",
+          "score": 0.0595
+        },
+        {
+          "term": "countries",
+          "score": 0.0507
+        },
+        {
+          "term": "traffic",
+          "score": 0.045
+        },
+        {
+          "term": "analysis",
+          "score": 0.0425
+        },
+        {
+          "term": "high",
+          "score": 0.0406
+        },
+        {
+          "term": "spatial",
+          "score": 0.0406
+        },
+        {
+          "term": "accidents",
+          "score": 0.0321
+        }
+      ]
+    },
+    {
+      "paper_idx": 4,
+      "title": "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+      "top_terms": [
+        {
+          "term": "individuals",
+          "score": 0.2276
+        },
+        {
+          "term": "trajectory",
+          "score": 0.2276
+        },
+        {
+          "term": "events",
+          "score": 0.2276
+        },
+        {
+          "term": "geographical",
+          "score": 0.2276
+        },
+        {
+          "term": "context",
+          "score": 0.2276
+        },
+        {
+          "term": "risk",
+          "score": 0.1908
+        },
+        {
+          "term": "driving",
+          "score": 0.1908
+        },
+        {
+          "term": "predicting",
+          "score": 0.1646
+        },
+        {
+          "term": "abstract",
+          "score": 0.1646
+        },
+        {
+          "term": "car",
+          "score": 0.0909
+        }
+      ]
+    },
+    {
+      "paper_idx": 5,
+      "title": "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+      "top_terms": [
+        {
+          "term": "mental",
+          "score": 0.1174
+        },
+        {
+          "term": "suffering",
+          "score": 0.1174
+        },
+        {
+          "term": "damages",
+          "score": 0.0978
+        },
+        {
+          "term": "legal",
+          "score": 0.0783
+        },
+        {
+          "term": "discretionary",
+          "score": 0.0587
+        },
+        {
+          "term": "fatal",
+          "score": 0.0587
+        },
+        {
+          "term": "cases",
+          "score": 0.0587
+        },
+        {
+          "term": "factors",
+          "score": 0.0492
+        },
+        {
+          "term": "taiwan",
+          "score": 0.0391
+        },
+        {
+          "term": "lawyers",
+          "score": 0.0391
+        }
+      ]
+    },
+    {
+      "paper_idx": 6,
+      "title": "Car Accident Prevention And Health Monitoring System For Drivers",
+      "top_terms": [
+        {
+          "term": "driver",
+          "score": 0.1227
+        },
+        {
+          "term": "health",
+          "score": 0.1029
+        },
+        {
+          "term": "monitoring",
+          "score": 0.0736
+        },
+        {
+          "term": "system",
+          "score": 0.0617
+        },
+        {
+          "term": "drivers",
+          "score": 0.0491
+        },
+        {
+          "term": "people",
+          "score": 0.0491
+        },
+        {
+          "term": "sensors",
+          "score": 0.0491
+        },
+        {
+          "term": "different",
+          "score": 0.0411
+        },
+        {
+          "term": "reduce",
+          "score": 0.0411
+        },
+        {
+          "term": "road",
+          "score": 0.0355
+        }
+      ]
+    },
+    {
+      "paper_idx": 7,
+      "title": "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems",
+      "top_terms": [
+        {
+          "term": "detection",
+          "score": 0.0787
+        },
+        {
+          "term": "cvis",
+          "score": 0.0783
+        },
+        {
+          "term": "accident",
+          "score": 0.0563
+        },
+        {
+          "term": "automatic",
+          "score": 0.047
+        },
+        {
+          "term": "method",
+          "score": 0.047
+        },
+        {
+          "term": "cad",
+          "score": 0.047
+        },
+        {
+          "term": "improve",
+          "score": 0.047
+        },
+        {
+          "term": "yolo",
+          "score": 0.047
+        },
+        {
+          "term": "accidents",
+          "score": 0.0397
+        },
+        {
+          "term": "car",
+          "score": 0.0375
+        }
+      ]
+    }
+  ],
+  "paper_titles": [
+    "IOT BASED CAR ACCIDENT PREVENTION SYSTEM",
+    "A deep learning-based car accident detection approach in video-based traffic surveillance",
+    "Road Car Accident Prediction Using a Machine-Learning-Enabled Data Analysis",
+    "Examining Car Accident Prediction Techniques and Road Traffic Congestion: A Comparative Analysis of Road Safety and Prevention of World Challenges in Low-Income and High-Income Countries",
+    "Predicting individuals' car accident risk by trajectory, driving events, and geographical context",
+    "Legal Judgment Prediction Based on Machine Learning: Predicting the Discretionary Damages of Mental Suffering in Fatal Car Accident Cases",
+    "Car Accident Prevention And Health Monitoring System For Drivers",
+    "An Automatic Car Accident Detection Method Based on Cooperative Vehicle Infrastructure Systems"
+  ]
+}
