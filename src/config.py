@@ -20,7 +20,12 @@ else:
     SRC_DIR = BASE_DIR / "src"
 
 # Load environment variables
-load_dotenv(BASE_DIR / ".env")
+# Load environment variables
+if not os.environ.get("VERCEL"):
+    load_dotenv(BASE_DIR / ".env")
+else:
+    # On Vercel, env vars are injected by the platform
+    pass
 
 # API Configuration
 SEMANTIC_SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
