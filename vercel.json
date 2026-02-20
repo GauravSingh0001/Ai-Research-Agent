@@ -1,9 +1,13 @@
 {
     "version": 2,
+    "buildCommand": "pip install -r requirements.txt",
     "builds": [
         {
             "src": "server.py",
-            "use": "@vercel/python"
+            "use": "@vercel/python@3.1.0",
+            "config": {
+                "maxLambdaSize": "250mb"
+            }
         }
     ],
     "routes": [
@@ -11,5 +15,9 @@
             "src": "/(.*)",
             "dest": "server.py"
         }
-    ]
+    ],
+    "env": {
+        "PYTHONPATH": "./",
+        "VERCEL": "1"
+    }
 }

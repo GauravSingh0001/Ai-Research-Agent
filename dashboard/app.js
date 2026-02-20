@@ -8,11 +8,12 @@
    - Paper comparison: side-by-side diff view
    - PDF export: download via /api/export/pdf
    - Papers not updating: force refresh on every view switch
+   - Vercel deployment: relative API endpoint
    ═══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 // ── STATE ──────────────────────────────────────────────────
 const state = {

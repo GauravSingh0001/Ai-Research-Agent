@@ -1,0 +1,21 @@
+# Exclude unnecessary files from Vercel deployment
+.git
+.gitignore
+.env.local
+.env.development
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.venv
+venv
+node_modules
+
+# Large data files that can be generated or fetched on demand
+data/cleaned_dataset.json
+data/similarity_results.json
+data/papers.json
+
+# Large output directories
+output/
