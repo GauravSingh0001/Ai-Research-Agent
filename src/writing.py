@@ -20,7 +20,8 @@ try:
         OUTPUT_DIR
     )
     from src.utils import setup_logger
-    from src.ai_engine import AIEngine
+    # Delayed import of AIEngine to avoid circular dependency loop with config/utils
+    # from src.ai_engine import AIEngine 
 except ImportError:
     from config import (
         ANALYSIS_RESULTS_FILE,
@@ -49,6 +50,9 @@ class ResearchWriter:
     """Generates a complete, structured research synthesis document."""
 
     def __init__(self, analysis_file: str = None):
+        # Delayed import
+        from src.ai_engine import AIEngine
+        self.ai = AIEngine()
         self.analysis_file = analysis_file if analysis_file else ANALYSIS_RESULTS_FILE
         self.analysis_data = self._load_analysis()
         self.output_sections = {
