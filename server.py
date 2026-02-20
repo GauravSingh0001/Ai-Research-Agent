@@ -46,6 +46,10 @@ from src.utils import setup_logger
 
 logger = setup_logger(__name__)
 
+# Deployment Verification Marker
+logger.info("--- STARTING VERCEL DEPLOYMENT (Fix Applied) ---")
+
+
 app = Flask(__name__)
 CORS(app)  # Allow dashboard (file://) to call the API
 
