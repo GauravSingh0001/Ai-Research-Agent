@@ -544,6 +544,9 @@ def api_export_markdown():
 
 
 # ── Run ───────────────────────────────────────────────────
+# Export app for Vercel serverless functions
+# Vercel will use this directly without calling app.run()
+
 if __name__ == "__main__":
     print("\n" + "="*50)
     print("  AI PAPER REVIEWER — API SERVER")
