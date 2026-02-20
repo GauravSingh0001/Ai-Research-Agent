@@ -36,6 +36,14 @@ Perfect for literature reviews, research surveys, and staying up-to-date with ac
 
 ---
 
+## 🎓 Acknowledgements
+
+*   Developed as part of the **Infosys Springboard Internship** program.
+*   Special thanks to the Infosys Springboard team for their mentorship and guidance throughout the development of this AI Research Agent.
+*   This project demonstrates the practical application of AI in automating academic research workflows.
+
+---
+
 ## 🚀 Quick Start
 
 ### Installation
