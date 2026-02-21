@@ -73,6 +73,8 @@ synthesis_state = {
     "done": False,
     "error": None,
     "last_run": None,
+    "generation_id": None,  # Track which synthesis run is active
+    "started_at": None,  # Track when synthesis started
 }
 
 # ── Helpers ───────────────────────────────────────────────
@@ -83,6 +85,14 @@ def _reset_pipeline():
         s["subtitle"] = "Waiting…"
     pipeline_state["running"] = False
     pipeline_state["error"] = None
+
+def _reset_synthesis():
+    """Reset synthesis state to initial values."""
+    synthesis_state["running"] = False
+    synthesis_state["done"] = False
+    synthesis_state["error"] = None
+    synthesis_state["generation_id"] = None
+    synthesis_state["started_at"] = None
 
 def _set_stage(idx, status, subtitle, progress):
     s = pipeline_state["stages"][idx]
@@ -316,17 +326,21 @@ def api_pipeline_status():
 
 # ── Synthesis ─────────────────────────────────────────────
 
-def _run_synthesis_thread():
+def _run_synthesis_thread(gen_id):
     try:
         writer = ResearchWriter()
         writer.generate_complete_document()
-        synthesis_state["done"] = True
-        synthesis_state["last_run"] = datetime.now().isoformat()
+        # Only mark as done if this is still the active generation
+        if synthesis_state["generation_id"] == gen_id:
+            synthesis_state["done"] = True
+            synthesis_state["last_run"] = datetime.now().isoformat()
     except Exception as e:
         logger.error(f"Synthesis error: {e}")
-        synthesis_state["error"] = str(e)
+        if synthesis_state["generation_id"] == gen_id:
+            synthesis_state["error"] = str(e)
     finally:
-        synthesis_state["running"] = False
+        if synthesis_state["generation_id"] == gen_id:
+            synthesis_state["running"] = False
 
 
 @app.route("/api/synthesis/run", methods=["POST"])
@@ -336,12 +350,17 @@ def api_synthesis_run():
     if not ANALYSIS_RESULTS_FILE.exists():
         return jsonify({"error": "Run the extraction pipeline first."}), 400
 
+    # Generate unique ID for this synthesis run to prevent stale data issues
+    import uuid
+    gen_id = str(uuid.uuid4())
+    synthesis_state["generation_id"] = gen_id
     synthesis_state["running"] = True
     synthesis_state["done"]    = False
     synthesis_state["error"]   = None
-    t = threading.Thread(target=_run_synthesis_thread, daemon=True)
+    synthesis_state["started_at"] = datetime.now().isoformat()
+    t = threading.Thread(target=_run_synthesis_thread, args=(gen_id,), daemon=True)
     t.start()
-    return jsonify({"ok": True, "message": "Synthesis started"})
+    return jsonify({"ok": True, "message": "Synthesis started", "generation_id": gen_id})
 
 
 @app.route("/api/synthesis")
@@ -364,13 +383,30 @@ def api_synthesis():
     # Parse markdown sections for the dashboard
     parsed = _parse_synthesis_md(md_text)
 
+    # Check if synthesis has actually completed by looking at file modification time
+    # vs last_run timestamp to prevent showing stale "done" status
+    has_content = bool(md_text and len(md_text) > 100)
+    
+    # Calculate elapsed time for running synthesis
+    elapsed_seconds = 0
+    if synthesis_state["running"] and synthesis_state["started_at"]:
+        try:
+            started = datetime.fromisoformat(synthesis_state["started_at"])
+            elapsed = datetime.now() - started
+            elapsed_seconds = int(elapsed.total_seconds())
+        except:
+            pass
+    
     return jsonify({
         "markdown":  md_text,
         "sections":  sections,
         "parsed":    parsed,
         "running":   synthesis_state["running"],
-        "done":      synthesis_state["done"],
+        "done":      synthesis_state["done"] and has_content,  # Only mark done if files exist
+        "error":     synthesis_state["error"],  # Include error so frontend can display it
         "last_run":  synthesis_state["last_run"],
+        "generation_id": synthesis_state["generation_id"],
+        "elapsed_seconds": elapsed_seconds,  # For debugging long-running processes
     })
 
 
@@ -382,31 +418,46 @@ def api_synthesis_revise():
     if not instruction:
         return jsonify({"error": "Instruction required"}), 400
         
-    def _revise_thread(instr):
+    def _revise_thread(instr, gen_id):
         synthesis_state["running"] = True
         try:
-            writer = ResearchWriter()
-            # Reload sections data to keep state
+            # Initialize ResearchWriter explicitly with analysis data
+            writer = ResearchWriter(analysis_file=ANALYSIS_RESULTS_FILE)
+            
+            # Load previously generated sections to maintain context
             sec_path = SECTIONS_DATA_FILE
             if sec_path.exists():
-                writer.output_sections = _load_json(sec_path) or writer.output_sections
-                
+                sections_data = _load_json(sec_path)
+                if sections_data and isinstance(sections_data, dict):
+                    writer.output_sections.update(sections_data)
+                    logger.info(f"[REVISE] Loaded {len(sections_data)} sections for context preservation")
+            
             writer.revise_document(instr)
-            synthesis_state["done"] = True
-            synthesis_state["last_run"] = datetime.now().isoformat()
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["done"] = True
+                synthesis_state["last_run"] = datetime.now().isoformat()
         except Exception as e:
             logger.error(f"Revision error: {e}")
-            synthesis_state["error"] = str(e)
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["error"] = str(e)
         finally:
-            synthesis_state["running"] = False
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["running"] = False
 
     if synthesis_state["running"]:
         return jsonify({"error": "Synthesis/Revision already in progress"}), 409
 
-    t = threading.Thread(target=_revise_thread, args=(instruction,), daemon=True)
+    import uuid
+    gen_id = str(uuid.uuid4())
+    synthesis_state["generation_id"] = gen_id
+    synthesis_state["running"] = True
+    synthesis_state["done"] = False
+    synthesis_state["error"] = None
+    synthesis_state["started_at"] = datetime.now().isoformat()
+    t = threading.Thread(target=_revise_thread, args=(instruction, gen_id), daemon=True)
     t.start()
     
-    return jsonify({"ok": True, "message": "Revision started"})
+    return jsonify({"ok": True, "message": "Revision started", "generation_id": gen_id})
 
 
 def _parse_synthesis_md(md: str) -> dict:

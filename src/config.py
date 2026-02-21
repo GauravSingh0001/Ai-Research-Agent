@@ -32,12 +32,13 @@ SEMANTIC_SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/searc
 SEMANTIC_SCHOLAR_API_KEY = os.getenv("SEMANTIC_SCHOLAR_API_KEY")
 SEMANTIC_SCHOLAR_API_KEY_SECONDARY = os.getenv("SEMANTIC_SCHOLAR_API_KEY_SECONDARY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-GPT_MODEL = os.getenv("GPT_MODEL", "meta-llama/Llama-2-70b-chat-hf")  # Valid HF model
-HF_BASE_URL = "https://router.huggingface.co/v1"  # Use HF router endpoint
+GPT_MODEL = os.getenv("GPT_MODEL", "meta-llama/Llama-3.1-8B-Instruct")  # HF Router compatible
+HF_BASE_URL = "https://router.huggingface.co/v1"  # Use HF router endpoint (recommended)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+COHERE_MODEL = os.getenv("COHERE_MODEL", "command-r-plus")  # Primary provider model
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Search Configuration

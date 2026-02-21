@@ -14,6 +14,7 @@ import json
 import re
 import math
 import os
+import concurrent.futures
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 from collections import Counter
@@ -467,20 +468,29 @@ class PaperAnalyzer:
 
         print("\n[ANALYSIS] Starting Milestone 2 pipeline…")
 
-        # Phase 1: Per-paper analysis
-        print(f"[ANALYSIS] Phase 1: Analyzing {len(self.papers)} papers…")
-        processed = []
-        for i, paper in enumerate(self.papers):
-            try:
-                result = self.analyze_paper(paper, i)
-                processed.append(result)
-                self.results["metadata"]["successful_analyses"] += 1
-                valid_count = sum(1 for v in result['section_validation'].values() if v)
-                print(f"  [{i+1}/{len(self.papers)}] '{paper.get('title','?')[:50]}' "
-                      f"— {valid_count}/{len(SECTION_LABELS)} sections, "
-                      f"{len(result['key_findings'])} findings")
-            except Exception as e:
-                logger.error(f"[ANALYSIS] Error on paper {i}: {e}")
+        # Phase 1: Per-paper analysis (PARALLEL)
+        print(f"[ANALYSIS] Phase 1: Analyzing {len(self.papers)} papers (parallel)…")
+        processed = [None] * len(self.papers)
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            futures = {executor.submit(self.analyze_paper, paper, i): i 
+                      for i, paper in enumerate(self.papers)}
+            
+            for future in concurrent.futures.as_completed(futures):
+                i = futures[future]
+                try:
+                    result = future.result()
+                    processed[i] = result
+                    self.results["metadata"]["successful_analyses"] += 1
+                    valid_count = sum(1 for v in result['section_validation'].values() if v)
+                    print(f"  [{i+1}/{len(self.papers)}] '{self.papers[i].get('title','?')[:50]}' "
+                          f"— {valid_count}/{len(SECTION_LABELS)} sections, "
+                          f"{len(result['key_findings'])} findings")
+                except Exception as e:
+                    logger.error(f"[ANALYSIS] Error on paper {i}: {e}")
+                    processed[i] = None
+        
+        processed = [p for p in processed if p is not None]
 
         self.results['papers'] = processed
 
