@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-22T00:16:08.308264",
+  "benchmarks": {
+    "cache": {
+      "first_run_time": 0,
+      "cache_miss_time": 0.0,
+      "cache_hit_time": 0.0,
+      "cache_hit_speedup": 0.0,
+      "cache_size_mb": 0.03
+    },
+    "synthesis": {
+      "total_time": 28.169,
+      "startup_time": 3.764,
+      "generation_time": 24.404,
+      "sections_generated": 10
+    },
+    "parallelization": {
+      "papers_count": 8,
+      "estimated_sequential_analysis": 2.0,
+      "estimated_parallel_analysis": 0.57,
+      "estimated_analysis_speedup": 3.48,
+      "estimated_sequential_synthesis": 64,
+      "estimated_parallel_synthesis": 18.4,
+      "estimated_synthesis_speedup": 3.48,
+      "total_estimated_speedup": 3.48
+    },
+    "provider_ordering": {
+      "old_order": "Gemini → HuggingFace → Cohere",
+      "new_order": "Cohere → Gemini → HuggingFace",
+      "gemini_rate_limit_penalty_s": 15,
+      "avoided_per_synthesis": 4.5
+    }
+  },
+  "metrics": {},
+  "cache_stats": {}
+}
