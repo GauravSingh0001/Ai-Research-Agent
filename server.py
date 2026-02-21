@@ -594,6 +594,156 @@ def api_export_markdown():
     return send_file(md_file, as_attachment=True, download_name="research_synthesis.md", mimetype="text/markdown")
 
 
+@app.route("/api/export/pdf")
+def api_export_pdf():
+    """
+    Generate and return PDF of the research synthesis.
+    
+    Attempts server-side PDF generation. If unavailable, returns 503 error,
+    which triggers frontend to use browser print-to-PDF fallback (which has
+    comprehensive academic styling: Georgia serif, 14px, 1.8 line-height).
+    
+    Cache-busting: Frontend includes ?t=${Date.now()} in request URL.
+    """
+    # Check if synthesis exists
+    folder  = _latest_output_folder()
+    md_file = (folder / "Research_Synthesis.md") if folder else RESEARCH_SYNTHESIS_FILE
+    if not md_file or not md_file.exists():
+        md_file = RESEARCH_SYNTHESIS_FILE
+    if not md_file.exists():
+        return jsonify({"error": "No synthesis found"}), 404
+    
+    # Try to generate PDF using reportlab if available
+    try:
+        from reportlab.lib.pagesizes import letter, A4
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.units import inch
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+        from reportlab.lib import colors
+        from reportlab.pdfgen import canvas
+        import markdown
+        
+        # Read markdown content
+        markdown_content = md_file.read_text(encoding='utf-8')
+        
+        # Create PDF file path
+        pdf_file = BASE_DIR / "output" / f"research_synthesis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+        pdf_file.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Create PDF document with academic styling
+        doc = SimpleDocTemplate(
+            str(pdf_file),
+            pagesize=letter,
+            rightMargin=0.75*inch,
+            leftMargin=0.75*inch,
+            topMargin=0.75*inch,
+            bottomMargin=0.75*inch,
+            title="Research Synthesis",
+            author="AI Research Agent",
+            subject="Academic Research Synthesis"
+        )
+        
+        # Build styles for academic formatting
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(
+            name='BodyFont',
+            fontName='Times-Roman',
+            fontSize=12,
+            leading=18,  # 1.8x line height
+            alignment=4   # Justified
+        ))
+        
+        styles.add(ParagraphStyle(
+            name='Heading1Font',
+            fontName='Times-Bold',
+            fontSize=18,
+            leading=22,
+            spaceAfter=12,
+            textColor=colors.HexColor('#3730a3'),
+            pageBreakBefore=False
+        ))
+        
+        styles.add(ParagraphStyle(
+            name='Heading2Font',
+            fontName='Times-Bold',
+            fontSize=14,
+            leading=16,
+            spaceAfter=10,
+            textColor=colors.HexColor('#3730a3'),
+            pageBreakBefore=False
+        ))
+        
+        # Parse markdown and build story
+        story = []
+        lines = markdown_content.split('\n')
+        
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            
+            if line.startswith('# '):
+                # Top-level heading
+                title = line.replace('# ', '').strip()
+                story.append(Paragraph(title, styles['Heading1Font']))
+                story.append(Spacer(1, 0.2*inch))
+            elif line.startswith('## '):
+                # Section heading
+                title = line.replace('## ', '').strip()
+                story.append(Paragraph(title, styles['Heading2Font']))
+                story.append(Spacer(1, 0.15*inch))
+            elif line.startswith('### '):
+                # Subsection heading
+                title = line.replace('### ', '').strip()
+                story.append(Paragraph(title, styles['Heading3']))
+                story.append(Spacer(1, 0.1*inch))
+            elif line.strip().startswith('- ') or line.strip().startswith('* '):
+                # Bullet point - convert to paragraph with indent
+                item = line.strip().lstrip('- *').strip()
+                story.append(Paragraph(f"• {item}", styles['Normal']))
+            elif line.strip() == '':
+                # Blank line - add spacer
+                story.append(Spacer(1, 0.1*inch))
+            else:
+                # Regular paragraph
+                if line.strip():
+                    story.append(Paragraph(line.strip(), styles['BodyFont']))
+                    story.append(Spacer(1, 0.08*inch))
+            
+            i += 1
+        
+        # Add page break at end
+        story.append(PageBreak())
+        
+        # Build PDF
+        doc.build(story)
+        
+        logger.info(f"[PDF] Generated: {pdf_file}")
+        return send_file(
+            str(pdf_file),
+            as_attachment=True,
+            download_name=f"research_synthesis_{datetime.now().strftime('%Y%m%d')}.pdf",
+            mimetype="application/pdf"
+        )
+    
+    except ImportError as e:
+        # reportlab not available - return informative error
+        logger.warning(f"[PDF] reportlab not available: {e}. Frontend will use browser print fallback.")
+        return jsonify({
+            "error": "Server-side PDF generation unavailable",
+            "message": "Browser print-to-PDF fallback will be used with academic styling",
+            "fallback_styling": "Georgia serif, 14px, 1.8 line-height, justified"
+        }), 503
+    
+    except Exception as e:
+        # Other errors
+        logger.error(f"[PDF] Generation failed: {e}")
+        return jsonify({
+            "error": "PDF generation error",
+            "message": str(e),
+            "fallback": "Browser print mechanism will be used"
+        }), 503
+
+
 # ── Run ───────────────────────────────────────────────────
 # Export app for Vercel serverless functions
 # Vercel will use this directly without calling app.run()
