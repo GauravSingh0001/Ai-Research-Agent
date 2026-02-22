@@ -483,6 +483,10 @@ function renderAcademicFormat(data, container) {
         { key: 'discussion', parsed: p.discussion, label: 'Discussion', icon: '💬' },
         { key: 'conclusion', parsed: p.conclusion, label: 'Conclusion', icon: '🎯' },
         { key: 'references', parsed: p.references, label: 'References', icon: '📚' },
+        // NEW: Critique & Review sections
+        { key: 'critique', parsed: sections.critique, label: 'Academic Critique & Review', icon: '🔍' },
+        { key: 'suggestions', parsed: sections.suggestions, label: 'Expert Suggestions', icon: '💡' },
+        { key: 'final_report', parsed: sections.final_report, label: 'Final Report Bundle', icon: '📋' },
     ];
 
     sectionDefs.forEach(({ key, parsed, label, icon }) => {
@@ -720,6 +724,9 @@ function renderBentoGrid(sections, parsed) {
         { key: 'results_synthesis', label: 'Results', parsed: parsed.results },
         { key: 'discussion', label: 'Discussion', parsed: parsed.discussion },
         { key: 'conclusion', label: 'Conclusion', parsed: parsed.conclusion },
+        // NEW: Critique & Review sections in bento grid
+        { key: 'critique', label: 'Critique', parsed: sections.critique || '' },
+        { key: 'final_report', label: 'Final Report', parsed: sections.final_report || '' },
     ];
 
     // FIX: Show more content in bento cells (was 180 chars, now 350)
@@ -809,11 +816,16 @@ function updatePaperBadge() {
     }
 }
 
+// ── SYNTHESIS STATE ────────────────────────────────────────
+let currentSynthesisId = null;
+let synthesisTimedOut = false;  // Track if synthesis timed out
+
 // ── SYNTHESIS TRIGGER ──────────────────────────────────────
 // FIX: Added 90s timeout with countdown so user knows it's working
 async function runSynthesis() {
     if (state.isSynthesizing) return;
     state.isSynthesizing = true;
+    synthesisTimedOut = false;  // Reset timeout flag
 
     const overlay = document.getElementById('loading-overlay');
     const overlayLabel = overlay?.querySelector('.loading-label') || overlay?.querySelector('p');
@@ -828,21 +840,32 @@ async function runSynthesis() {
     }, 1000);
 
     try {
-        await apiFetch('/synthesis/run', { method: 'POST' });
+        const result = await apiFetch('/synthesis/run', { method: 'POST' });
+        currentSynthesisId = result.generation_id;  // Track the current synthesis ID
         showToast('AI synthesis started — Cohere/Gemini generating sections…', 'info', 5000);
         startSynthesisPoller();
     } catch (e) {
         clearInterval(countdownInterval);
         if (overlay) overlay.classList.add('hidden');
         state.isSynthesizing = false;
+        synthesisTimedOut = false;
         showToast(`Synthesis error: ${e.message}`, 'error');
         return;
     }
 
     // FIX: Auto-stop overlay after 90s so UI doesn't get stuck
+    // AND stop the poller to prevent conflicting messages
     setTimeout(() => {
         clearInterval(countdownInterval);
         if (state.isSynthesizing) {
+            synthesisTimedOut = true;  // Mark timeout occurred
+            
+            // Stop the poller immediately
+            if (state.synthesisPoller) {
+                clearInterval(state.synthesisPoller);
+                state.synthesisPoller = null;
+            }
+            
             if (overlay) overlay.classList.add('hidden');
             state.isSynthesizing = false;
             showToast('Synthesis is taking longer than expected. Check server logs.', 'error', 6000);
@@ -951,21 +974,43 @@ function renderAnalysisTab(data) {
 function startSynthesisPoller() {
     if (state.synthesisPoller) return;
     state.synthesisPoller = setInterval(async () => {
+        // Don't poll if timeout has already been triggered
+        if (synthesisTimedOut) {
+            clearInterval(state.synthesisPoller);
+            state.synthesisPoller = null;
+            return;
+        }
+        
         try {
             const data = await apiFetch('/synthesis');
-            if (!data.running) {
-                clearInterval(state.synthesisPoller);
-                state.synthesisPoller = null;
-                state.isSynthesizing = false;
-                const overlay = document.getElementById('loading-overlay');
-                if (overlay) overlay.classList.add('hidden');
-                if (data.done || data.parsed?.abstract) {
+            
+            // Only update if this is from the current synthesis run
+            if (data.generation_id === currentSynthesisId) {
+                // Check for server-side errors
+                if (!data.running && data.error) {
+                    clearInterval(state.synthesisPoller);
+                    state.synthesisPoller = null;
+                    state.isSynthesizing = false;
+                    const overlay = document.getElementById('loading-overlay');
+                    if (overlay) overlay.classList.add('hidden');
+                    showToast(`Synthesis failed: ${data.error}`, 'error', 6000);
+                    return;
+                }
+                
+                // Synthesis is complete
+                if (!data.running && (data.done || data.parsed?.abstract)) {
+                    clearInterval(state.synthesisPoller);
+                    state.synthesisPoller = null;
+                    state.isSynthesizing = false;
+                    const overlay = document.getElementById('loading-overlay');
+                    if (overlay) overlay.classList.add('hidden');
                     state.synthesis = data;
                     renderSynthesisView(data);
                     showToast('✨ Synthesis complete!', 'success', 4000);
                 }
             }
         } catch (_) {
+            // Network error or API down - don't crash, just stop polling
             clearInterval(state.synthesisPoller);
             state.synthesisPoller = null;
             state.isSynthesizing = false;
@@ -1017,48 +1062,224 @@ async function runCritique() {
 async function exportPDF() {
     showToast('Preparing PDF download…', 'info', 3000);
     try {
-        // Try server-side PDF endpoint first
-        const res = await fetch(`${API}/export/pdf?_=${Date.now()}`);
-        if (res.ok) {
+        // Try server-side PDF endpoint first with cache-busting timestamp
+        console.log('[PDF] Attempting server-side PDF generation (cache-busting enabled)');
+        const res = await fetch(`${API}/export/pdf?t=${Date.now()}`, {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
+        
+        if (res.ok && res.headers.get('content-type')?.includes('pdf')) {
             const blob = await res.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `research_synthesis_${Date.now()}.pdf`;
+            a.download = `research_synthesis_${new Date().toISOString().slice(0,10)}.pdf`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('PDF downloaded!', 'success');
+            console.log('[PDF] Server PDF downloaded successfully');
+            showToast('✓ PDF downloaded!', 'success');
             return;
         }
-    } catch (_) {}
+    } catch (error) {
+        console.warn('[PDF] Server PDF failed:', error.message);
+    }
 
-    // Fallback: browser print-to-PDF of the synthesis content
-    showToast('Using browser print for PDF (server PDF not available)', 'info', 3000);
-    const data = await apiFetch('/synthesis').catch(() => null);
+    // Fallback: browser print-to-PDF with enhanced rendering
+    console.log('[PDF] Falling back to browser print mechanism');
+    showToast('Using browser print for PDF (server PDF not available)', 'info', 4000);
+    
+    const data = await apiFetch('/synthesis').catch(e => {
+        console.error('[PDF] Failed to fetch synthesis:', e);
+        return null;
+    });
+    
     if (!data || !data.markdown) {
         showToast('No synthesis content to export. Run synthesis first.', 'error');
         return;
     }
 
+    // Render with enhanced academic styling for print
     const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-        <!DOCTYPE html><html><head>
-        <title>Research Synthesis</title>
-        <style>
-            body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; color: #1a1a2e; line-height: 1.8; font-size: 14px; }
-            h1 { font-size: 22px; border-bottom: 2px solid #3730a3; padding-bottom: 8px; }
-            h2 { font-size: 17px; color: #3730a3; margin-top: 30px; }
-            h3 { font-size: 14px; color: #555; }
-            p { margin: 12px 0; }
-            strong { color: #1a1a2e; }
-            @media print { body { margin: 20px; } }
-        </style></head><body>
-        <pre style="white-space:pre-wrap;font-family:Georgia,serif;font-size:14px">${data.markdown}</pre>
-        </body></html>`);
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Research Synthesis Report</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                
+                html, body { 
+                    width: 100%; 
+                    height: 100%; 
+                }
+                
+                body { 
+                    font-family: "Georgia", "Times New Roman", serif; 
+                    color: #1a1a2e;
+                    line-height: 1.8;
+                    font-size: 12pt;
+                    padding: 0.75in;
+                    max-width: 8.5in;
+                    margin: 0 auto;
+                }
+                
+                h1 { 
+                    font-size: 24pt;
+                    font-weight: bold;
+                    margin: 24pt 0 12pt 0;
+                    border-bottom: 2pt solid #3730a3;
+                    padding-bottom: 8pt;
+                    page-break-after: avoid;
+                }
+                
+                h2 { 
+                    font-size: 16pt;
+                    font-weight: bold;
+                    color: #3730a3;
+                    margin: 18pt 0 10pt 0;
+                    page-break-after: avoid;
+                }
+                
+                h3 { 
+                    font-size: 13pt;
+                    font-weight: bold;
+                    color: #555;
+                    margin: 12pt 0 8pt 0;
+                    page-break-after: avoid;
+                }
+                
+                p { 
+                    margin: 10pt 0;
+                    text-align: justify;
+                }
+                
+                strong, b { 
+                    font-weight: bold;
+                    color: #1a1a2e;
+                }
+                
+                em, i { 
+                    font-style: italic;
+                }
+                
+                ul, ol { 
+                    margin: 10pt 0 10pt 20pt;
+                    page-break-inside: avoid;
+                }
+                
+                li { 
+                    margin: 4pt 0;
+                }
+                
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 12pt 0;
+                    page-break-inside: avoid;
+                }
+                
+                th {
+                    background-color: #f0f0f0;
+                    border: 1pt solid #999;
+                    padding: 6pt;
+                    text-align: left;
+                    font-weight: bold;
+                }
+                
+                td {
+                    border: 1pt solid #999;
+                    padding: 6pt;
+                }
+                
+                a {
+                    color: #3730a3;
+                    text-decoration: none;
+                }
+                
+                code {
+                    font-family: "Courier New", monospace;
+                    font-size: 10pt;
+                    background-color: #f5f5f5;
+                    padding: 2pt 4pt;
+                    border-radius: 3px;
+                }
+                
+                blockquote {
+                    margin: 12pt 20pt;
+                    padding: 8pt 12pt;
+                    border-left: 3pt solid #3730a3;
+                    background-color: #f9f9f9;
+                    font-style: italic;
+                }
+                
+                hr {
+                    border: none;
+                    border-top: 1pt solid #ccc;
+                    margin: 24pt 0;
+                    page-break-after: avoid;
+                }
+                
+                @media print {
+                    body { 
+                        margin: 0.5in;
+                        padding: 0;
+                        max-width: 100%;
+                    }
+                    
+                    a { 
+                        color: #000; 
+                        text-decoration: underline;
+                    }
+                    
+                    h1, h2, h3 { 
+                        page-break-after: avoid; 
+                    }
+                    
+                    ul, ol, table { 
+                        page-break-inside: avoid; 
+                    }
+                    
+                    p {
+                        orphans: 3;
+                        widows: 3;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <pre style="white-space:pre-wrap;font-family:Georgia,serif;font-size:12pt;line-height:1.8">${escapeHtml(data.markdown)}</pre>
+        </body>
+        </html>
+    `;
+    
+    printWindow.document.write(htmlContent);
     printWindow.document.close();
-    setTimeout(() => printWindow.print(), 500);
+    
+    setTimeout(() => {
+        console.log('[PDF] Launching print dialog');
+        printWindow.print();
+    }, 500);
+}
+
+// Helper function to escape HTML special characters
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // ── REPORTS VIEW ───────────────────────────────────────────
