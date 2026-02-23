@@ -11,8 +11,12 @@
       "dest": "/api/index.py"
     },
     {
+      "src": "/(app\\.js|styles\\.css|index\\.html|.*\\.(png|svg|ico|json|jpg))$",
+      "dest": "/dashboard/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/api/index.py"
     }
   ],
   "env": {
