@@ -1,0 +1,3 @@
+• In this article, we present PokéLLMon, a new benchmark enriched with fictional game knowledge and characterized by the intense, dynamic, and adversarial gameplay of Pokémon battles, setting new challenges for the development of grounding and reasoning techniques in interactive environments.
+
+• The implementation of our benchmark is released at: https://github.com/git-disl/PokeLLMon.

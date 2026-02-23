@@ -2,641 +2,661 @@
   "matrix": [
     [
       1.0,
-      0.0084,
-      0.106,
-      0.0293,
-      0.023,
-      0.1027,
-      0.0194,
-      0.0245
+      0.0674,
+      0.1377,
+      0.067,
+      0.0036,
+      0.0549,
+      0.0695,
+      0.087
     ],
     [
-      0.0084,
+      0.0674,
       1.0,
-      0.0229,
-      0.0709,
-      0.0616,
-      0.0296,
-      0.0457,
-      0.0798
+      0.2018,
+      0.0258,
+      0.0073,
+      0.0232,
+      0.0408,
+      0.0172
     ],
     [
-      0.106,
-      0.0229,
+      0.1377,
+      0.2018,
       1.0,
-      0.0446,
-      0.0239,
-      0.1066,
-      0.0201,
-      0.0254
+      0.0491,
+      0.0402,
+      0.0065,
+      0.0233,
+      0.0168
     ],
     [
-      0.0293,
-      0.0709,
-      0.0446,
+      0.067,
+      0.0258,
+      0.0491,
       1.0,
-      0.0607,
-      0.0432,
-      0.2872,
-      0.0956
+      0.0153,
+      0.0226,
+      0.0262,
+      0.0213
     ],
     [
-      0.023,
-      0.0616,
-      0.0239,
-      0.0607,
+      0.0036,
+      0.0073,
+      0.0402,
+      0.0153,
       1.0,
-      0.0329,
-      0.0884,
-      0.0532
+      0.0222,
+      0.0174,
+      0.0075
     ],
     [
-      0.1027,
-      0.0296,
-      0.1066,
-      0.0432,
-      0.0329,
+      0.0549,
+      0.0232,
+      0.0065,
+      0.0226,
+      0.0222,
       1.0,
-      0.049,
-      0.0246
+      0.0593,
+      0.0526
     ],
     [
-      0.0194,
-      0.0457,
-      0.0201,
-      0.2872,
-      0.0884,
-      0.049,
+      0.0695,
+      0.0408,
+      0.0233,
+      0.0262,
+      0.0174,
+      0.0593,
       1.0,
-      0.0403
+      0.0301
     ],
     [
-      0.0245,
-      0.0798,
-      0.0254,
-      0.0956,
-      0.0532,
-      0.0246,
-      0.0403,
+      0.087,
+      0.0172,
+      0.0168,
+      0.0213,
+      0.0075,
+      0.0526,
+      0.0301,
       1.0
     ]
   ],
   "pairs": [
     {
-      "paper_a_idx": 3,
-      "paper_b_idx": 6,
-      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.2872
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 5,
-      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "similarity": 0.1066
+      "paper_a_idx": 1,
+      "paper_b_idx": 2,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "similarity": 0.2018
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 2,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "similarity": 0.106
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 5,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "similarity": 0.1027
-    },
-    {
-      "paper_a_idx": 3,
-      "paper_b_idx": 7,
-      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0956
-    },
-    {
-      "paper_a_idx": 4,
-      "paper_b_idx": 6,
-      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.0884
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 7,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0798
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 3,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "similarity": 0.0709
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 4,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "similarity": 0.0616
-    },
-    {
-      "paper_a_idx": 3,
-      "paper_b_idx": 4,
-      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "similarity": 0.0607
-    },
-    {
-      "paper_a_idx": 4,
-      "paper_b_idx": 7,
-      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0532
-    },
-    {
-      "paper_a_idx": 5,
-      "paper_b_idx": 6,
-      "paper_a_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.049
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 6,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.0457
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 3,
-      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "similarity": 0.0446
-    },
-    {
-      "paper_a_idx": 3,
-      "paper_b_idx": 5,
-      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "similarity": 0.0432
-    },
-    {
-      "paper_a_idx": 6,
-      "paper_b_idx": 7,
-      "paper_a_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0403
-    },
-    {
-      "paper_a_idx": 4,
-      "paper_b_idx": 5,
-      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "similarity": 0.0329
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 5,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "similarity": 0.0296
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 3,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "similarity": 0.0293
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 7,
-      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0254
-    },
-    {
-      "paper_a_idx": 5,
-      "paper_b_idx": 7,
-      "paper_a_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0246
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "similarity": 0.1377
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 7,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "similarity": 0.0245
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 4,
-      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "similarity": 0.0239
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 4,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "similarity": 0.023
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 2,
-      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
-      "paper_b_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "similarity": 0.0229
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 6,
-      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.0201
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.087
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 6,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "similarity": 0.0194
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0695
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 1,
-      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "paper_b_title": "Movie Gen: A Cast of Media Foundation Models",
-      "similarity": 0.0084
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "similarity": 0.0674
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 3,
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "similarity": 0.067
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 6,
+      "paper_a_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0593
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 5,
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "similarity": 0.0549
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 7,
+      "paper_a_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0526
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 3,
+      "paper_a_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "paper_b_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "similarity": 0.0491
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 6,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0408
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 4,
+      "paper_a_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "paper_b_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "similarity": 0.0402
+    },
+    {
+      "paper_a_idx": 6,
+      "paper_b_idx": 7,
+      "paper_a_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0301
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 6,
+      "paper_a_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0262
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 3,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "similarity": 0.0258
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 6,
+      "paper_a_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0233
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 5,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "similarity": 0.0232
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 5,
+      "paper_a_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "paper_b_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "similarity": 0.0226
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 5,
+      "paper_a_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "paper_b_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "similarity": 0.0222
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 7,
+      "paper_a_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0213
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 6,
+      "paper_a_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "paper_b_title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "similarity": 0.0174
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 7,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0172
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 7,
+      "paper_a_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0168
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 4,
+      "paper_a_title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "paper_b_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "similarity": 0.0153
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 7,
+      "paper_a_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "paper_b_title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "similarity": 0.0075
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 4,
+      "paper_a_title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "paper_b_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "similarity": 0.0073
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 5,
+      "paper_a_title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "paper_b_title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "similarity": 0.0065
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 4,
+      "paper_a_title": "Pokémon Red via Reinforcement Learning",
+      "paper_b_title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "similarity": 0.0036
     }
   ],
   "top_terms": [
     {
       "paper_idx": 0,
-      "title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "title": "Pokémon Red via Reinforcement Learning",
       "top_terms": [
         {
-          "term": "computer",
-          "score": 0.313
+          "term": "long",
+          "score": 0.063
         },
         {
-          "term": "simulating",
-          "score": 0.313
+          "term": "agent",
+          "score": 0.0543
         },
         {
-          "term": "urban",
-          "score": 0.313
+          "term": "red",
+          "score": 0.0501
         },
         {
-          "term": "growth",
-          "score": 0.313
+          "term": "completes",
+          "score": 0.0501
         },
         {
-          "term": "detroit",
-          "score": 0.313
+          "term": "reinforcement",
+          "score": 0.042
         },
         {
-          "term": "region",
-          "score": 0.313
+          "term": "challenges",
+          "score": 0.042
         },
         {
-          "term": "abstract",
-          "score": 0.2264
+          "term": "first",
+          "score": 0.0362
         },
         {
-          "term": "movie",
-          "score": 0.125
+          "term": "potential",
+          "score": 0.0362
+        },
+        {
+          "term": "learning",
+          "score": 0.0318
+        },
+        {
+          "term": "like",
+          "score": 0.0318
         }
       ]
     },
     {
       "paper_idx": 1,
-      "title": "Movie Gen: A Cast of Media Foundation Models",
+      "title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
       "top_terms": [
         {
-          "term": "video",
-          "score": 0.1399
+          "term": "reasoning",
+          "score": 0.099
         },
         {
-          "term": "generation",
-          "score": 0.1252
+          "term": "knowledge",
+          "score": 0.099
         },
         {
-          "term": "models",
-          "score": 0.0755
+          "term": "grounding",
+          "score": 0.0945
         },
         {
-          "term": "training",
-          "score": 0.07
+          "term": "llms",
+          "score": 0.0945
         },
         {
-          "term": "media",
-          "score": 0.0626
+          "term": "benchmark",
+          "score": 0.0709
         },
         {
-          "term": "videos",
-          "score": 0.0626
+          "term": "techniques",
+          "score": 0.0709
         },
         {
-          "term": "audio",
-          "score": 0.0525
+          "term": "existing",
+          "score": 0.0709
         },
         {
-          "term": "gen",
-          "score": 0.0417
+          "term": "battles",
+          "score": 0.0594
         },
         {
-          "term": "cast",
-          "score": 0.0417
+          "term": "environments",
+          "score": 0.0594
         },
         {
-          "term": "foundation",
-          "score": 0.0417
+          "term": "requirements",
+          "score": 0.0472
         }
       ]
     },
     {
       "paper_idx": 2,
-      "title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
       "top_terms": [
         {
-          "term": "naturalistic",
-          "score": 0.313
+          "term": "pokellmon",
+          "score": 0.0999
         },
         {
-          "term": "open",
-          "score": 0.313
+          "term": "battles",
+          "score": 0.0999
         },
         {
-          "term": "source",
-          "score": 0.313
+          "term": "battle",
+          "score": 0.0799
         },
         {
-          "term": "optical",
-          "score": 0.313
+          "term": "human",
+          "score": 0.069
         },
         {
-          "term": "flow",
-          "score": 0.313
+          "term": "agent",
+          "score": 0.069
         },
         {
-          "term": "evaluation",
-          "score": 0.2264
+          "term": "parity",
+          "score": 0.0477
         },
         {
-          "term": "abstract",
-          "score": 0.2264
+          "term": "generation",
+          "score": 0.0477
         },
         {
-          "term": "movie",
-          "score": 0.125
+          "term": "strategies",
+          "score": 0.04
+        },
+        {
+          "term": "knowledge",
+          "score": 0.04
+        },
+        {
+          "term": "win",
+          "score": 0.04
         }
       ]
     },
     {
       "paper_idx": 3,
-      "title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
       "top_terms": [
         {
-          "term": "recommendation",
-          "score": 0.0744
+          "term": "team",
+          "score": 0.1348
         },
         {
-          "term": "hybrid",
-          "score": 0.0533
+          "term": "metagame",
+          "score": 0.1156
         },
         {
-          "term": "number",
-          "score": 0.0533
+          "term": "balance",
+          "score": 0.0963
         },
         {
-          "term": "conversion",
-          "score": 0.0533
+          "term": "builder",
+          "score": 0.077
         },
         {
-          "term": "cosine",
-          "score": 0.0533
+          "term": "agents",
+          "score": 0.0646
         },
         {
-          "term": "proposed",
-          "score": 0.0533
+          "term": "model",
+          "score": 0.0385
         },
         {
-          "term": "top",
-          "score": 0.0533
+          "term": "diversity",
+          "score": 0.0385
         },
         {
-          "term": "rated",
-          "score": 0.0533
+          "term": "employed",
+          "score": 0.0385
         },
         {
-          "term": "movies",
-          "score": 0.0514
+          "term": "teams",
+          "score": 0.0385
         },
         {
-          "term": "movie",
-          "score": 0.0496
+          "term": "outcome",
+          "score": 0.0385
         }
       ]
     },
     {
       "paper_idx": 4,
-      "title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
       "top_terms": [
         {
-          "term": "dubbing",
-          "score": 0.1565
+          "term": "dwarfs",
+          "score": 0.1216
         },
         {
-          "term": "prosody",
-          "score": 0.0522
+          "term": "stellar",
+          "score": 0.0972
         },
         {
-          "term": "duration",
-          "score": 0.0522
+          "term": "host",
+          "score": 0.0972
         },
         {
-          "term": "consistency",
-          "score": 0.0522
+          "term": "companions",
+          "score": 0.0972
         },
         {
-          "term": "stage",
-          "score": 0.0522
+          "term": "speckle",
+          "score": 0.0729
         },
         {
-          "term": "phoneme",
-          "score": 0.0522
+          "term": "within",
+          "score": 0.0729
         },
         {
-          "term": "learning",
-          "score": 0.0503
+          "term": "planets",
+          "score": 0.0729
         },
         {
-          "term": "movie",
-          "score": 0.0417
+          "term": "dwarf",
+          "score": 0.0729
         },
         {
-          "term": "pronunciation",
-          "score": 0.0348
+          "term": "known",
+          "score": 0.0729
         },
         {
-          "term": "align",
-          "score": 0.0348
+          "term": "rate",
+          "score": 0.0703
         }
       ]
     },
     {
       "paper_idx": 5,
-      "title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
       "top_terms": [
         {
-          "term": "proposing",
-          "score": 0.2782
+          "term": "routes",
+          "score": 0.1608
         },
         {
-          "term": "sentiment",
-          "score": 0.2782
+          "term": "nature",
+          "score": 0.1378
         },
         {
-          "term": "bert",
-          "score": 0.2782
+          "term": "experiment",
+          "score": 0.0689
         },
         {
-          "term": "xlnet",
-          "score": 0.2782
+          "term": "people",
+          "score": 0.0689
         },
         {
-          "term": "reviews",
-          "score": 0.2782
+          "term": "route",
+          "score": 0.0689
         },
         {
-          "term": "analysis",
-          "score": 0.2012
+          "term": "walking",
+          "score": 0.0459
         },
         {
-          "term": "abstract",
-          "score": 0.2012
+          "term": "field",
+          "score": 0.0459
         },
         {
-          "term": "model",
-          "score": 0.1764
+          "term": "lbgs",
+          "score": 0.0459
         },
         {
-          "term": "movie",
-          "score": 0.1111
+          "term": "popular",
+          "score": 0.0459
+        },
+        {
+          "term": "urban",
+          "score": 0.0459
         }
       ]
     },
     {
       "paper_idx": 6,
-      "title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
       "top_terms": [
         {
-          "term": "recommendation",
-          "score": 0.1111
+          "term": "physics",
+          "score": 0.1276
         },
         {
-          "term": "deep",
-          "score": 0.1031
+          "term": "study",
+          "score": 0.0668
         },
         {
-          "term": "multimodal",
-          "score": 0.0884
+          "term": "unite",
+          "score": 0.0638
+        },
+        {
+          "term": "student",
+          "score": 0.0638
         },
         {
           "term": "learning",
-          "score": 0.0852
+          "score": 0.0506
         },
         {
-          "term": "system",
-          "score": 0.0494
+          "term": "teaching",
+          "score": 0.0478
         },
         {
-          "term": "data",
-          "score": 0.0467
+          "term": "students",
+          "score": 0.0478
         },
         {
-          "term": "filtering",
-          "score": 0.0442
+          "term": "acceptance",
+          "score": 0.0478
         },
         {
-          "term": "movie",
-          "score": 0.0353
+          "term": "game",
+          "score": 0.0399
         },
         {
-          "term": "personalized",
-          "score": 0.032
-        },
-        {
-          "term": "information",
-          "score": 0.0295
+          "term": "through",
+          "score": 0.0346
         }
       ]
     },
     {
       "paper_idx": 7,
-      "title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
       "top_terms": [
         {
-          "term": "movienet",
-          "score": 0.1773
+          "term": "advertising",
+          "score": 0.1565
         },
         {
-          "term": "understanding",
-          "score": 0.1551
+          "term": "location",
+          "score": 0.132
         },
         {
-          "term": "dataset",
-          "score": 0.0743
+          "term": "lba",
+          "score": 0.1043
         },
         {
-          "term": "holistic",
-          "score": 0.0665
+          "term": "businesses",
+          "score": 0.1043
         },
         {
-          "term": "movie",
-          "score": 0.0531
+          "term": "locative",
+          "score": 0.0522
         },
         {
-          "term": "story",
-          "score": 0.0443
+          "term": "project",
+          "score": 0.0522
         },
         {
-          "term": "long",
-          "score": 0.0443
+          "term": "local",
+          "score": 0.0522
         },
         {
-          "term": "annotations",
-          "score": 0.0443
+          "term": "game",
+          "score": 0.0391
         },
         {
-          "term": "tags",
-          "score": 0.0443
+          "term": "research",
+          "score": 0.0377
         },
         {
-          "term": "video",
-          "score": 0.0371
+          "term": "games",
+          "score": 0.0331
         }
       ]
     }
   ],
   "paper_titles": [
-    "A Computer Movie Simulating Urban Growth in the Detroit Region",
-    "Movie Gen: A Cast of Media Foundation Models",
-    "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-    "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-    "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-    "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-    "Multimodal Movie Recommendation System Using Deep Learning",
-    "MovieNet: A Holistic Dataset for Movie Understanding"
+    "Pokémon Red via Reinforcement Learning",
+    "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+    "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+    "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+    "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+    "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+    "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+    "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games"
   ]
 }

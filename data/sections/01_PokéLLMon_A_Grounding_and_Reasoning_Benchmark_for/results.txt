@@ -1,0 +1,1 @@
+Empirical evaluations demonstrate that existing LLMs lack game knowledge and struggle in Pokémon battles.

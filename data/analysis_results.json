@@ -1,417 +1,32 @@
 {
   "metadata": {
-    "generated_at": "2026-02-23T03:15:25.353033",
+    "generated_at": "2026-02-23T19:10:12.571808",
     "total_papers": 8,
     "successful_analyses": 8
   },
   "papers": [
     {
       "id": 0,
-      "title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "year": 1970,
+      "title": "Pokémon Red via Reinforcement Learning",
+      "year": 2025,
       "authors": [
-        "W. Tobler"
+        "Marco Pleines",
+        "Daniel Addis",
+        "David Rubinstein",
+        "Frank Zimmer",
+        "Mike Preuss",
+        "Peter Whidden"
       ],
-      "venue": "",
-      "citations": 9417,
-      "url": "https://www.semanticscholar.org/paper/ad0189d70aabe6a57138a9ed32ec852fae7363a7",
+      "venue": "2025 IEEE Conference on Games (CoG)",
+      "citations": 3,
+      "url": "https://www.semanticscholar.org/paper/819273505769a0b431d7a32fcc9944223212b50d",
       "source": "semantic_scholar",
       "has_pdf": false,
       "sections": {
-        "abstract": "No abstract",
+        "abstract": "We present a Deep Reinforcement Learning (DRL) agent that successfully completes the first several hours of Pokémon Red, a classic Game Boy JRPG that exposes significant challenges as a testbed for agents, including multitasking, long horizons of tens of thousands of steps, hard exploration, and a vast array of potential policies. Our agent completes an initial segment of the game, up to Cerulean City, a location requiring progression through two cities, battle-filled passages, a maze-like cave, and defeating the first gym leader. Our experiments include various ablations that reveal vulnerabilities in reward shaping. We argue that long-form games like Pokémon hold strong potential for future research, presenting long-term coherent reasoning challenges absent from simpler arcade games.",
         "background": "",
         "objective": "",
-        "methods": "",
-        "results": "",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": false,
-        "methods": false,
-        "results": false,
-        "conclusion": false
-      },
-      "key_findings": [
-        "No abstract"
-      ],
-      "methodology": {
-        "approaches": []
-      },
-      "text_length": 11
-    },
-    {
-      "id": 1,
-      "title": "Movie Gen: A Cast of Media Foundation Models",
-      "year": 2024,
-      "authors": [
-        "Adam Polyak",
-        "Amit Zohar",
-        "Andrew Brown",
-        "Andros Tjandra",
-        "Animesh Sinha",
-        "Ann Lee",
-        "Apoorv Vyas",
-        "Bowen Shi",
-        "Chih-Yao Ma",
-        "Ching-Yao Chuang",
-        "David Yan",
-        "Dhruv Choudhary",
-        "Dingkang Wang",
-        "Geet Sethi",
-        "Guan Pang",
-        "Haoyu Ma",
-        "Ishan Misra",
-        "Ji Hou",
-        "Jialiang Wang",
-        "K. Jagadeesh",
-        "Kunpeng Li",
-        "Luxin Zhang",
-        "Mannat Singh",
-        "Mary Williamson",
-        "Matt Le",
-        "Matthew Yu",
-        "Mitesh Kumar Singh",
-        "Peizhao Zhang",
-        "Peter Vajda",
-        "Quentin Duval",
-        "Rohit Girdhar",
-        "Roshan Sumbaly",
-        "Sai Saketh Rambhatla",
-        "Sam S. Tsai",
-        "S. Azadi",
-        "Samyak Datta",
-        "Sanyuan Chen",
-        "Sean Bell",
-        "Sharadh Ramaswamy",
-        "Shelly Sheynin",
-        "Siddharth Bhattacharya",
-        "Simran Motwani",
-        "Tao Xu",
-        "Tianhe Li",
-        "Tingbo Hou",
-        "Wei-Ning Hsu",
-        "Xi Yin",
-        "Xiaoliang Dai",
-        "Yaniv Taigman",
-        "Yaqiao Luo",
-        "Yen-Cheng Liu",
-        "Yi-Chiao Wu",
-        "Yue Zhao",
-        "Yuval Kirstain",
-        "Zecheng He",
-        "Zijian He",
-        "Albert Pumarola",
-        "Ali K. Thabet",
-        "Artsiom Sanakoyeu",
-        "Arun Mallya",
-        "Baishan Guo",
-        "Boris Araya",
-        "Breena Kerr",
-        "Carleigh Wood",
-        "Ce Liu",
-        "Cen Peng",
-        "Dimitry Vengertsev",
-        "Edgar Schonfeld",
-        "Elliot Blanchard",
-        "Felix Juefei-Xu",
-        "Fraylie Nord",
-        "Jeff Liang",
-        "John Hoffman",
-        "Jonas Kohler",
-        "Kaolin Fire",
-        "Karthik Sivakumar",
-        "Lawrence Chen",
-        "Licheng Yu",
-        "Luya Gao",
-        "Markos Georgopoulos",
-        "Rashel Moritz",
-        "Sara K. Sampson",
-        "Shikai Li",
-        "Simone Parmeggiani",
-        "Steve Fine",
-        "T. Fowler",
-        "Vladan Petrovic",
-        "Yuming Du"
-      ],
-      "venue": "",
-      "citations": 420,
-      "url": "https://www.semanticscholar.org/paper/ed92a7be6b2acc36baf0ed43454a97dbade0c893",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "",
-        "background": "",
-        "objective": "We show multiple technical innovations and simplifications on the architecture, latent spaces, training objectives and recipes, data curation, evaluation protocols, parallelization techniques, and inference optimizations that allow us to reap the benefits of scaling pre-training data, model size, and training compute for training large scale media generation models.",
-        "methods": "We present Movie Gen, a cast of foundation models that generates high-quality, 1080p HD videos with different aspect ratios and synchronized audio. Our models set a new state-of-the-art on multiple tasks: text-to-video synthesis, video personalization, video editing, video-to-audio generation, and text-to-audio generation. Our largest video generation model is a 30B parameter transformer trained with a maximum context length of 73K video tokens, corresponding to a generated video of 16 seconds at 16 frames-per-second. We hope this paper helps the research community to accelerate progress and innovation in media generation models. All videos from this paper are available at https://go.fb.me/MovieGenResearchVideos.",
-        "results": "We also show additional capabilities such as precise instruction-based video editing and generation of personalized videos based on a user's image.",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": true,
-        "methods": true,
-        "results": true,
-        "conclusion": false
-      },
-      "key_findings": [
-        "Our models set a new state-of-the-art on multiple tasks: text-to-video synthesis, video personalization, video editing, video-to-audio generation, and text-to-audio generation."
-      ],
-      "methodology": {
-        "approaches": [
-          "We present Movie Gen, a cast of foundation models that generates high-quality, 1080p HD videos with different aspect ratios and synchronized audio.",
-          "Our models set a new state-of-the-art on multiple tasks: text-to-video synthesis, video personalization, video editing, video-to-audio generation, and text-to-audio generation.",
-          "Our largest video generation model is a 30B parameter transformer trained with a maximum context length of 73K video tokens, corresponding to a generated video of 16 seconds at 16 frames-per-second.",
-          "We show multiple technical innovations and simplifications on the architecture, latent spaces, training objectives and recipes, data curation, evaluation protocols, parallelization techniques, and inference optimizations that allow us to reap the benefits of scaling pre-training data, model size, and training compute for training large scale media generation models.",
-          "We hope this paper helps the research community to accelerate progress and innovation in media generation models."
-        ]
-      },
-      "text_length": 1239
-    },
-    {
-      "id": 2,
-      "title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "year": 2012,
-      "authors": [
-        "Daniel J. Butler",
-        "Jonas Wulff",
-        "G. Stanley",
-        "Michael J. Black"
-      ],
-      "venue": "European Conference on Computer Vision",
-      "citations": 2240,
-      "url": "https://www.semanticscholar.org/paper/7d53f0c87c8ab0de6f3e74515e3ffaf3fab40c62",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "No abstract",
-        "background": "",
-        "objective": "",
-        "methods": "",
-        "results": "",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": false,
-        "methods": false,
-        "results": false,
-        "conclusion": false
-      },
-      "key_findings": [
-        "No abstract"
-      ],
-      "methodology": {
-        "approaches": []
-      },
-      "text_length": 11
-    },
-    {
-      "id": 3,
-      "title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "year": 2024,
-      "authors": [
-        "Md Rokibul Hasan",
-        "Janatul Ferdous MSc"
-      ],
-      "venue": "Journal of Computer Science and Technology Studies",
-      "citations": 66,
-      "url": "https://www.semanticscholar.org/paper/24b7cb415dce3e94871851c78541f47c6394a5ef",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "",
-        "background": "",
-        "objective": "This research proposed a hybrid movie recommendation system that integrates both text-to-number conversion and cosine similarity approaches to predict the most top-rated and desired movies for the targeted users. The proposed movie recommendation employed the Alternating Least Squares (ALS) algorithm to reinforce the accuracy of movie recommendations. The performance analysis and evaluation were undertaken by employing the widely used \"TMDB 5000 Movie Dataset\" from the Kaggle dataset. Overall, the proposed hybrid movie recommendation system demonstrated promising results in predicting top-rated movies and offering personalized and accurate recommendations to users.",
-        "methods": "This research explored movie recommendation systems based on predicting top-rated and suitable movies for users. Two experiments were conducted, categorizing the dataset into distinct modules, and the outcomes were contrasted with state-of-the-art models. The first experiment attained a Root Mean Squared Error (RMSE) of 0.97613, while the second experiment expanded predictions to 4800 movies, culminating in a substantially minimized RMSE of 0.8951, portraying a 97% accuracy enhancement. The findings underscore the essence of parameter selection in text-to-number conversion and cosine and the gap for other systems to maintain user preferences for comprehensive and precise data gathering.",
-        "results": "",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": true,
-        "methods": true,
-        "results": false,
-        "conclusion": false
-      },
-      "key_findings": [
-        "The proposed movie recommendation employed the Alternating Least Squares (ALS) algorithm to reinforce the accuracy of movie recommendations.",
-        "The performance analysis and evaluation were undertaken by employing the widely used \"TMDB 5000 Movie Dataset\" from the Kaggle dataset.",
-        "Two experiments were conducted, categorizing the dataset into distinct modules, and the outcomes were contrasted with state-of-the-art models.",
-        "The first experiment attained a Root Mean Squared Error (RMSE) of 0.97613, while the second experiment expanded predictions to 4800 movies, culminating in a substantially minimized RMSE of 0.8951, portraying a 97% accuracy enhancement.",
-        "Overall, the proposed hybrid movie recommendation system demonstrated promising results in predicting top-rated movies and offering personalized and accurate recommendations to users."
-      ],
-      "methodology": {
-        "approaches": [
-          "This research explored movie recommendation systems based on predicting top-rated and suitable movies for users.",
-          "This research proposed a hybrid movie recommendation system that integrates both text-to-number conversion and cosine similarity approaches to predict the most top-rated and desired movies for the targeted users.",
-          "The proposed movie recommendation employed the Alternating Least Squares (ALS) algorithm to reinforce the accuracy of movie recommendations.",
-          "Two experiments were conducted, categorizing the dataset into distinct modules, and the outcomes were contrasted with state-of-the-art models.",
-          "The findings underscore the essence of parameter selection in text-to-number conversion and cosine and the gap for other systems to maintain user preferences for comprehensive and precise data gathering."
-        ]
-      },
-      "text_length": 1369
-    },
-    {
-      "id": 4,
-      "title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "year": 2024,
-      "authors": [
-        "Zhedong Zhang",
-        "Liang Li",
-        "Gaoxiang Cong",
-        "Haibing Yin",
-        "Yuhan Gao",
-        "C. Yan",
-        "Anton van den Hengel",
-        "Yuankai Qi"
-      ],
-      "venue": "ACM Multimedia",
-      "citations": 49,
-      "url": "https://www.semanticscholar.org/paper/a71b39d43b90ed57d6f61fd09570b9c3c4289858",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "",
-        "background": "Considering the limited scale of the movie dubbing datasets (due to copyright) and the interference from background noise, directly learning from movie dubbing datasets limits the pronunciation quality of learned models.",
-        "objective": "Movie Dubbing aims to convert scripts into speeches that align with the given movie clip in both temporal and emotional aspects while preserving the vocal timbre of one brief reference audio. To address this problem, we propose a two-stage dubbing method that allows the model to first learn pronunciation knowledge before practicing it in movie dubbing.",
-        "methods": "In the first stage, we introduce a multi-task approach to pre-train a phoneme encoder on a large-scale text-speech corpus for learning clear and natural phoneme pronunciations. For the second stage, we devise a prosody consistency learning module to bridge the emotional expression with the phoneme-level dubbing prosody attributes (pitch and energy). Finally, we design a duration consistency reasoning module to align the dubbing duration with the lip movement. Extensive experiments demonstrate that our method outperforms several state-of-the-art methods on two primary benchmarks. The demos are available at https://speaker2dubber.github.io/.",
-        "results": "The wide variations in emotion, pace, and environment that dubbed speech must exhibit to achieve real alignment make dubbing a complex task.",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": true,
-        "objective": true,
-        "methods": true,
-        "results": true,
-        "conclusion": false
-      },
-      "key_findings": [
-        "Extensive experiments demonstrate that our method outperforms several state-of-the-art methods on two primary benchmarks."
-      ],
-      "methodology": {
-        "approaches": [
-          "Considering the limited scale of the movie dubbing datasets (due to copyright) and the interference from background noise, directly learning from movie dubbing datasets limits the pronunciation quality of learned models.",
-          "To address this problem, we propose a two-stage dubbing method that allows the model to first learn pronunciation knowledge before practicing it in movie dubbing.",
-          "In the first stage, we introduce a multi-task approach to pre-train a phoneme encoder on a large-scale text-speech corpus for learning clear and natural phoneme pronunciations.",
-          "Extensive experiments demonstrate that our method outperforms several state-of-the-art methods on two primary benchmarks."
-        ]
-      },
-      "text_length": 1364
-    },
-    {
-      "id": 5,
-      "title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "year": 2024,
-      "authors": [
-        "Mian Muhammad Danyal",
-        "S. Khan",
-        "Muzammil Khan",
-        "Subhan Ullah",
-        "Faheem Mehmood",
-        "Ijaz Ali"
-      ],
-      "venue": "Multimedia tools and applications",
-      "citations": 37,
-      "url": "https://www.semanticscholar.org/paper/14f2aff3a046015d0850f988dd5a661ad3edff92",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "No abstract",
-        "background": "",
-        "objective": "",
-        "methods": "",
-        "results": "",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": false,
-        "methods": false,
-        "results": false,
-        "conclusion": false
-      },
-      "key_findings": [
-        "No abstract"
-      ],
-      "methodology": {
-        "approaches": []
-      },
-      "text_length": 11
-    },
-    {
-      "id": 6,
-      "title": "Multimodal Movie Recommendation System Using Deep Learning",
-      "year": 2023,
-      "authors": [
-        "Yongheng Mu",
-        "Yun Wu"
-      ],
-      "venue": "Mathematics",
-      "citations": 79,
-      "url": "https://www.semanticscholar.org/paper/f6fbc035aa6b04fa384fa993d1703e0c1ad00688",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "",
-        "background": "",
-        "objective": "",
-        "methods": "Recommendation systems, the best way to deal with information overload, are widely utilized to provide users with personalized content and services with high efficiency. Many recommendation algorithms have been researched and deployed extensively in various e-commerce applications, including the movie streaming services over the last decade. However, sparse data cold-start problems are often encountered in many movie recommendation systems. In this paper, we reported a personalized multimodal movie recommendation system based on multimodal data analysis and deep learning. The real-world MovieLens datasets were selected to test the effectiveness of our new recommendation algorithm. With the input information, the hidden features of the movies and the users were mined using deep learning to build a deep-learning network algorithm model for training to further predict movie scores. Compared with the traditional collaborative filtering algorithms, such as user-based collaborative filtering (User-CF), item-based content-based filtering (Item-CF), and singular-value decomposition (SVD) approaches, the multimodal movie recommendation system using deep learning could provide better personalized recommendation results. Meanwhile, the sparse data problem was alleviated to a certain degree. We suggest that the recommendation system can be improved through the combination of the deep-learning technology and the multimodal data analysis.",
-        "results": "With a learning rate of 0.001, the root mean squared error (RMSE) scores achieved 0.9908 and 0.9096 for test sets of MovieLens 100 K and 1 M datasets, respectively. The scoring prediction results show improved accuracy after incorporating the potential features and connections in multimodal data with deep-learning technology.",
-        "conclusion": ""
-      },
-      "section_validation": {
-        "abstract": false,
-        "background": false,
-        "objective": false,
-        "methods": true,
-        "results": true,
-        "conclusion": false
-      },
-      "key_findings": [
-        "Recommendation systems, the best way to deal with information overload, are widely utilized to provide users with personalized content and services with high efficiency.",
-        "With a learning rate of 0.001, the root mean squared error (RMSE) scores achieved 0.9908 and 0.9096 for test sets of MovieLens 100 K and 1 M datasets, respectively.",
-        "The scoring prediction results show improved accuracy after incorporating the potential features and connections in multimodal data with deep-learning technology.",
-        "We suggest that the recommendation system can be improved through the combination of the deep-learning technology and the multimodal data analysis."
-      ],
-      "methodology": {
-        "approaches": [
-          "Recommendation systems, the best way to deal with information overload, are widely utilized to provide users with personalized content and services with high efficiency.",
-          "Many recommendation algorithms have been researched and deployed extensively in various e-commerce applications, including the movie streaming services over the last decade.",
-          "However, sparse data cold-start problems are often encountered in many movie recommendation systems.",
-          "In this paper, we reported a personalized multimodal movie recommendation system based on multimodal data analysis and deep learning.",
-          "The real-world MovieLens datasets were selected to test the effectiveness of our new recommendation algorithm."
-        ]
-      },
-      "text_length": 1776
-    },
-    {
-      "id": 7,
-      "title": "MovieNet: A Holistic Dataset for Movie Understanding",
-      "year": 2020,
-      "authors": [
-        "Qingqiu Huang",
-        "Yu Xiong",
-        "Anyi Rao",
-        "Jiaze Wang",
-        "Dahua Lin"
-      ],
-      "venue": "European Conference on Computer Vision",
-      "citations": 289,
-      "url": "https://www.semanticscholar.org/paper/0732df185bdfcb9c908ec30bb441252593f58875",
-      "source": "semantic_scholar",
-      "has_pdf": false,
-      "sections": {
-        "abstract": "Recent years have seen remarkable advances in visual understanding. However, how to understand a story-based long video with artistic styles, e.g. movie, remains challenging. In this paper, we introduce MovieNet -- a holistic dataset for movie understanding. MovieNet contains 1,100 movies with a large amount of multi-modal data, e.g. trailers, photos, plot descriptions, etc. Besides, different aspects of manual annotations are provided in MovieNet, including 1.1M characters with bounding boxes and identities, 42K scene boundaries, 2.5K aligned description sentences, 65K tags of place and action, and 92K tags of cinematic style. To the best of our knowledge, MovieNet is the largest dataset with richest annotations for comprehensive movie understanding. Based on MovieNet, we set up several benchmarks for movie understanding from different angles.",
-        "background": "",
-        "objective": "",
-        "methods": "Extensive experiments are executed on these benchmarks to show the immeasurable value of MovieNet and the gap of current approaches towards comprehensive movie understanding. We believe that such a holistic dataset would promote the researches on story-based long video understanding and beyond. MovieNet will be published in compliance with regulations at this https URL.",
+        "methods": "Our environment wrapper, training algorithm, human replay data, and pretrained agent are available at (REDACTED FOR REVIEW).",
         "results": "",
         "conclusion": ""
       },
@@ -424,149 +39,445 @@
         "conclusion": false
       },
       "key_findings": [
-        "Based on MovieNet, we set up several benchmarks for movie understanding from different angles.",
-        "Extensive experiments are executed on these benchmarks to show the immeasurable value of MovieNet and the gap of current approaches towards comprehensive movie understanding."
+        "We argue that long-form games like Pokémon hold strong potential for future research, presenting long-term coherent reasoning challenges absent from simpler arcade games.",
+        "Our environment wrapper, training algorithm, human replay data, and pretrained agent are available at (REDACTED FOR REVIEW)."
       ],
       "methodology": {
         "approaches": [
-          "Extensive experiments are executed on these benchmarks to show the immeasurable value of MovieNet and the gap of current approaches towards comprehensive movie understanding."
+          "Our environment wrapper, training algorithm, human replay data, and pretrained agent are available at (REDACTED FOR REVIEW)."
         ]
       },
-      "text_length": 1229
+      "text_length": 921
+    },
+    {
+      "id": 1,
+      "title": "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "year": 2025,
+      "authors": [
+        "Sihao Hu",
+        "Tiansheng Huang",
+        "Gaowen Liu",
+        "R. Kompella",
+        "Ling Liu"
+      ],
+      "venue": "ACM Transactions on Internet Technology",
+      "citations": 1,
+      "url": "https://www.semanticscholar.org/paper/769a6941b3e8728ba99c9de1a8f9b768e27a76db",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "",
+        "background": "",
+        "objective": "",
+        "methods": "Developing grounding techniques for LLMs poses two requirements for interactive environments, i.e., (i) the presence of rich knowledge beyond the scope of existing LLMs and (ii) the complexity of tasks that require strategic reasoning. Existing environments fail to meet both requirements due to their simplicity or reliance on commonsense knowledge already encoded in LLMs for interaction. In this article, we present PokéLLMon, a new benchmark enriched with fictional game knowledge and characterized by the intense, dynamic, and adversarial gameplay of Pokémon battles, setting new challenges for the development of grounding and reasoning techniques in interactive environments. We investigate grounding techniques that leverage feedback and game knowledge, and provide a thorough analysis of reasoning methods from a new perspective of action consistency. Additionally, we introduce higher-level reasoning challenges when playing against human players. The implementation of our benchmark is released at: https://github.com/git-disl/PokeLLMon.",
+        "results": "Empirical evaluations demonstrate that existing LLMs lack game knowledge and struggle in Pokémon battles.",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": false,
+        "background": false,
+        "objective": false,
+        "methods": true,
+        "results": true,
+        "conclusion": false
+      },
+      "key_findings": [
+        "In this article, we present PokéLLMon, a new benchmark enriched with fictional game knowledge and characterized by the intense, dynamic, and adversarial gameplay of Pokémon battles, setting new challenges for the development of grounding and reasoning techniques in interactive environments.",
+        "The implementation of our benchmark is released at: https://github.com/git-disl/PokeLLMon."
+      ],
+      "methodology": {
+        "approaches": [
+          "Developing grounding techniques for LLMs poses two requirements for interactive environments, i.e., (i) the presence of rich knowledge beyond the scope of existing LLMs and (ii) the complexity of tasks that require strategic reasoning.",
+          "In this article, we present PokéLLMon, a new benchmark enriched with fictional game knowledge and characterized by the intense, dynamic, and adversarial gameplay of Pokémon battles, setting new challenges for the development of grounding and reasoning techniques in interactive environments.",
+          "We investigate grounding techniques that leverage feedback and game knowledge, and provide a thorough analysis of reasoning methods from a new perspective of action consistency."
+        ]
+      },
+      "text_length": 1154
+    },
+    {
+      "id": 2,
+      "title": "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "year": 2024,
+      "authors": [
+        "Sihao Hu",
+        "Tiansheng Huang",
+        "Ling Liu"
+      ],
+      "venue": "arXiv.org",
+      "citations": 17,
+      "url": "https://www.semanticscholar.org/paper/5cb8fc293567f4f2930712a3bf7dec97b4dd1776",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "",
+        "background": "",
+        "objective": "",
+        "methods": "",
+        "results": "We introduce PokeLLMon, the first LLM-embodied agent that achieves human-parity performance in tactical battle games, as demonstrated in Pokemon battles. The design of PokeLLMon incorporates three key strategies: (i) In-context reinforcement learning that instantly consumes text-based feedback derived from battles to iteratively refine the policy; (ii) Knowledge-augmented generation that retrieves external knowledge to counteract hallucination and enables the agent to act timely and properly; (iii) Consistent action generation to mitigate the panic switching phenomenon when the agent faces a powerful opponent and wants to elude the battle. We show that online battles against human demonstrates PokeLLMon's human-like battle strategies and just-in-time decision making, achieving 49% of win rate in the Ladder competitions and 56% of win rate in the invited battles. Our implementation and playable battle logs are available at: https://github.com/git-disl/PokeLLMon.",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": false,
+        "background": false,
+        "objective": false,
+        "methods": false,
+        "results": true,
+        "conclusion": false
+      },
+      "key_findings": [
+        "We introduce PokeLLMon, the first LLM-embodied agent that achieves human-parity performance in tactical battle games, as demonstrated in Pokemon battles.",
+        "We show that online battles against human demonstrates PokeLLMon's human-like battle strategies and just-in-time decision making, achieving 49% of win rate in the Ladder competitions and 56% of win rate in the invited battles."
+      ],
+      "methodology": {
+        "approaches": []
+      },
+      "text_length": 975
+    },
+    {
+      "id": 3,
+      "title": "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "year": 2024,
+      "authors": [
+        "Simão Reis",
+        "Rita Novais",
+        "L. Reis",
+        "N. Lau"
+      ],
+      "venue": "IEEE Transactions on Games",
+      "citations": 7,
+      "url": "https://www.semanticscholar.org/paper/e1f28cbc197020bca263fe3add70211f10736ea1",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "Metagame balance is a crucial task in game development, and automation of this process could assist game developers by vastly reducing time costs.",
+        "background": "",
+        "objective": "We explore and evaluate a metagame balance model over the recently proposed VGC AI Competition Framework. We propose an adversarial model where team builder agents try to maximize their win rate by narrowing to the most optimal team configurations, resulting in a reduction of the diversity of Pokémon employed, while a balancing agent readapts the Pokémon inner attributes to incentivize the team builder agents to incorporate a greater variety of Pokémon into their teams increasing the metagame's overall diversity and balance. Furthermore, we develop multiple team builder agents divided into two groups: the first group assumes that individual Pokémon advantages are the primary factor to determine the outcome of game matches; the second group also exploits the implicit synergy between teammates. These agents make use of metagaming, linear optimization, and evolutionary search to find strong combinations against the current metagame. The strongest team builder is faced against the team metagame balance agent for its evaluation. Deep learning is also employed to predict the outcome of matches and recommend constructive elements of teams.",
+        "methods": "",
+        "results": "",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": true,
+        "background": false,
+        "objective": true,
+        "methods": false,
+        "results": false,
+        "conclusion": false
+      },
+      "key_findings": [
+        "The strongest team builder is faced against the team metagame balance agent for its evaluation.",
+        "Deep learning is also employed to predict the outcome of matches and recommend constructive elements of teams."
+      ],
+      "methodology": {
+        "approaches": [
+          "We explore and evaluate a metagame balance model over the recently proposed VGC AI Competition Framework.",
+          "We propose an adversarial model where team builder agents try to maximize their win rate by narrowing to the most optimal team configurations, resulting in a reduction of the diversity of Pokémon employed, while a balancing agent readapts the Pokémon inner attributes to incentivize the team builder agents to incorporate a greater variety of Pokémon into their teams increasing the metagame's overall diversity and balance."
+        ]
+      },
+      "text_length": 1297
+    },
+    {
+      "id": 4,
+      "title": "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "year": 2024,
+      "authors": [
+        "C. Clark",
+        "G. V. van Belle",
+        "E. Horch",
+        "D. Ciardi",
+        "K. von Braun",
+        "B. Skiff",
+        "J. Winters",
+        "M. Lund",
+        "M. Everett",
+        "Z. Hartman",
+        "Joe Llama"
+      ],
+      "venue": "Astronomical Journal",
+      "citations": 5,
+      "url": "https://www.semanticscholar.org/paper/de7c038f943f016454c3d1209e46c1ddb2205066",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "M dwarfs are ubiquitous in our Galaxy, and the rate at which they host stellar companions, and the properties of these companions, provide a window into the formation and evolution of the star(s), and of any planets that they may host. The Pervasive Overview of “Kompanions” of Every M dwarf in Our Neighborhood (POKEMON) speckle survey of nearby M dwarfs is volume limited from M0V through M9V out to 15 pc, with additional targets at larger distances. In total, 1125 stars were observed, and 455 of these are within the volume-limited, 15 pc sample of M-dwarf primaries. When we combine the speckle observations with known companions from the literature, we find that the stellar multiplicity rate of M dwarfs within 15 pc is 23.5% ± 2.0%, and that the companion rate is 28.8% ± 2.1%. We also find that the projected separation distribution for multiples that are known to host planets peaks at 198 au, while the distribution for multiples that are not yet known to host planets peaks at 5.57 au.",
+        "background": "",
+        "objective": "",
+        "methods": "This result suggests that the presence of close-in stellar companions inhibits the formation of M-dwarf planetary systems, similar to what has been found for FGK stars.",
+        "results": "",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": true,
+        "background": false,
+        "objective": false,
+        "methods": true,
+        "results": false,
+        "conclusion": false
+      },
+      "key_findings": [
+        "When we combine the speckle observations with known companions from the literature, we find that the stellar multiplicity rate of M dwarfs within 15 pc is 23.5% ± 2.0%, and that the companion rate is 28.8% ± 2.1%."
+      ],
+      "methodology": {
+        "approaches": [
+          "This result suggests that the presence of close-in stellar companions inhibits the formation of M-dwarf planetary systems, similar to what has been found for FGK stars."
+        ]
+      },
+      "text_length": 1167
+    },
+    {
+      "id": 5,
+      "title": "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "year": 2024,
+      "authors": [
+        "Samuli Laato",
+        "Sampsa Rauti",
+        "Bastian Kordyaka",
+        "Konstantinos Papangelis",
+        "Sangwon Jung",
+        "Timo Nummenmaa",
+        "Juho Hamari"
+      ],
+      "venue": "Proc. ACM Hum. Comput. Interact.",
+      "citations": 3,
+      "url": "https://www.semanticscholar.org/paper/b48fd7aefa9cc936920aeedfd954b240d6103470",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "There are numerous benefits from regularly walking in nature, and today's mobile technologies have the potential to encourage people to do so.",
+        "background": "",
+        "objective": "",
+        "methods": "",
+        "results": "Past research has showed that gamified map-based apps and location-based games (LBGs) have the capability to incentivize people to go to nature areas in cities and beyond. In this study, we explored LBGs' potential to bring people to nature by conducting a field experiment with a new mechanic called Routes in the popular LBG Pokémon GO. Prior to the Route feature's launch, we created altogether 13 Routes of various lengths in both city and nature landscapes. We collected numerical in-game data of how many times each Route was walked and deployed a survey (n=67) for Pokémon GO players in the area where the Routes were made. The findings suggest that proximity to population concentrations and in-game rewards are key drivers of Route popularity.",
+        "conclusion": "Players' motivators to choose nature Routes over urban Routes were limited to outside-the-game factors such as scenery, and overall in our experiment the urban Routes turned out to be more popular."
+      },
+      "section_validation": {
+        "abstract": true,
+        "background": false,
+        "objective": false,
+        "methods": false,
+        "results": true,
+        "conclusion": true
+      },
+      "key_findings": [
+        "Past research has showed that gamified map-based apps and location-based games (LBGs) have the capability to incentivize people to go to nature areas in cities and beyond."
+      ],
+      "methodology": {
+        "approaches": []
+      },
+      "text_length": 1093
+    },
+    {
+      "id": 6,
+      "title": "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "year": 2024,
+      "authors": [
+        "J. M. Sanchez"
+      ],
+      "venue": "Schrödinger: Journal of Physics Education",
+      "citations": 3,
+      "url": "https://www.semanticscholar.org/paper/0c5b0329032e73afa9089e9e6b3ca8a7d0b4a144",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "",
+        "background": "",
+        "objective": "Purpose of this study: This study aims to improve student learning outcomes and engagement by investigating the integration of Pokémon Unite into Physics instruction.. Students' good experiences are further clarified through qualitative analysis, highlighting themes like immersive learning environments, collaborative problem-solving, personalized learning, enhanced motivation and interest, and real-world application of physics principles.",
+        "methods": "Methodology: In this mixed-methods study, thirty Cebu City 12th graders were taught motion-related physics principles via Pokémon Unite. The game's acceptability and efficacy were evaluated using surveys and interviews. The data was analyzed using descriptive statistics and thematic analysis, guaranteeing truthful responses and data integrity.",
+        "results": "Main Findings: Results showed high student acceptance, bolstered by the game’s engaging gameplay and skillful use of Physics concepts. Students praised the game’s enjoyment, relevance, effectiveness, and engagement as a satisfying tool reflected in Physics teaching. These results highlight the potential of digital game-based learning in physics education and suggest additional studies and innovative strategies to improve student outcomes. Novelty/Originality of this study: This study showed that Pokémon Unite is a useful teaching tool for Physics and has a high student acceptance and participation level. Through digital game-based learning, it provides fresh perspectives on individualized instruction, group problem-solving, and the practical application of physics ideas.",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": false,
+        "background": false,
+        "objective": true,
+        "methods": true,
+        "results": true,
+        "conclusion": false
+      },
+      "key_findings": [
+        "Main Findings: Results showed high student acceptance, bolstered by the game’s engaging gameplay and skillful use of Physics concepts.",
+        "Novelty/Originality of this study: This study showed that Pokémon Unite is a useful teaching tool for Physics and has a high student acceptance and participation level."
+      ],
+      "methodology": {
+        "approaches": [
+          "Methodology: In this mixed-methods study, thirty Cebu City 12th graders were taught motion-related physics principles via Pokémon Unite.",
+          "The game's acceptability and efficacy were evaluated using surveys and interviews."
+        ]
+      },
+      "text_length": 1573
+    },
+    {
+      "id": 7,
+      "title": "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games",
+      "year": 2024,
+      "authors": [
+        "John Dunham",
+        "Jiangnan Xu",
+        "Konstantinos Papangelis",
+        "Nicolas J. Lalone",
+        "Michael Saker",
+        "David Schwartz"
+      ],
+      "venue": "Games Res. Pract.",
+      "citations": 2,
+      "url": "https://www.semanticscholar.org/paper/1852c0fc113d409ca87af85b77e14962e264550e",
+      "source": "semantic_scholar",
+      "has_pdf": false,
+      "sections": {
+        "abstract": "Traditional location-based advertising (LBA), such as billboards and signage, has long been a staple of direct-to-consumer advertising. In recent years, however, the prominence and popularity of location-based games have made digital LBA even more appealing. This article draws on an original research project devised to explore a notable gap in the literature on locative media: the impacts of LBA on small businesses in the location-based game Pokémon GO. The project was conducted between August and October 2021, employing semi-structured interviews with 35 businesses leveraging Niantic’s sponsored location LBA. Our findings indicate that (1) participant businesses found location-based game advertising to be rewarding, (2) LGA can act as an amenity offered by the business, and (3) local community is an essential factor for success in location-based game advertising.",
+        "background": "",
+        "objective": "",
+        "methods": "",
+        "results": "In sum, this research demonstrates that local businesses could successfully utilize LGBs like Pokémon GO to advertise themselves.",
+        "conclusion": ""
+      },
+      "section_validation": {
+        "abstract": true,
+        "background": false,
+        "objective": false,
+        "methods": false,
+        "results": true,
+        "conclusion": false
+      },
+      "key_findings": [
+        "Our findings indicate that (1) participant businesses found location-based game advertising to be rewarding, (2) LGA can act as an amenity offered by the business, and (3) local community is an essential factor for success in location-based game advertising.",
+        "In sum, this research demonstrates that local businesses could successfully utilize LGBs like Pokémon GO to advertise themselves."
+      ],
+      "methodology": {
+        "approaches": []
+      },
+      "text_length": 1006
     }
   ],
   "cross_paper_analysis": {
     "common_keywords": {
-      "movie": 30,
-      "recommendation": 14,
-      "learning": 13,
-      "video": 10,
-      "data": 9,
-      "dubbing": 9,
-      "movienet": 8,
-      "models": 7,
-      "system": 7,
-      "dataset": 7
+      "game": 19,
+      "learning": 9,
+      "agent": 9,
+      "location": 9,
+      "battles": 8,
+      "physics": 8,
+      "knowledge": 7,
+      "rate": 7,
+      "team": 7,
+      "routes": 7
     },
     "year_distribution": {
-      "1970": 1,
-      "2024": 4,
-      "2012": 1,
-      "2023": 1,
-      "2020": 1
+      "2025": 2,
+      "2024": 6
     },
     "citation_analysis": {
-      "average": 1574.6,
-      "max": 9417,
-      "min": 37,
-      "total": 12597
+      "average": 5.1,
+      "max": 17,
+      "min": 1,
+      "total": 41
     },
     "research_trends": [
-      "Focus on 'movie'",
-      "Focus on 'recommendation'",
-      "Focus on 'learning'"
+      "Focus on 'game'",
+      "Focus on 'learning'",
+      "Focus on 'agent'"
     ]
   },
   "key_themes": [
-    "movie",
-    "recommendation",
+    "game",
     "learning",
-    "video",
-    "data"
+    "agent",
+    "location",
+    "battles"
   ],
-  "tfidf_vocabulary_size": 408,
+  "tfidf_vocabulary_size": 553,
   "similarity": {
     "matrix": [
       [
         1.0,
-        0.0084,
-        0.106,
-        0.0293,
-        0.023,
-        0.1027,
-        0.0194,
-        0.0245
+        0.0674,
+        0.1377,
+        0.067,
+        0.0036,
+        0.0549,
+        0.0695,
+        0.087
       ],
       [
-        0.0084,
+        0.0674,
         1.0,
-        0.0229,
-        0.0709,
-        0.0616,
-        0.0296,
-        0.0457,
-        0.0798
+        0.2018,
+        0.0258,
+        0.0073,
+        0.0232,
+        0.0408,
+        0.0172
       ],
       [
-        0.106,
-        0.0229,
+        0.1377,
+        0.2018,
         1.0,
-        0.0446,
-        0.0239,
-        0.1066,
-        0.0201,
-        0.0254
+        0.0491,
+        0.0402,
+        0.0065,
+        0.0233,
+        0.0168
       ],
       [
-        0.0293,
-        0.0709,
-        0.0446,
+        0.067,
+        0.0258,
+        0.0491,
         1.0,
-        0.0607,
-        0.0432,
-        0.2872,
-        0.0956
+        0.0153,
+        0.0226,
+        0.0262,
+        0.0213
       ],
       [
-        0.023,
-        0.0616,
-        0.0239,
-        0.0607,
+        0.0036,
+        0.0073,
+        0.0402,
+        0.0153,
         1.0,
-        0.0329,
-        0.0884,
-        0.0532
+        0.0222,
+        0.0174,
+        0.0075
       ],
       [
-        0.1027,
-        0.0296,
-        0.1066,
-        0.0432,
-        0.0329,
+        0.0549,
+        0.0232,
+        0.0065,
+        0.0226,
+        0.0222,
         1.0,
-        0.049,
-        0.0246
+        0.0593,
+        0.0526
       ],
       [
-        0.0194,
-        0.0457,
-        0.0201,
-        0.2872,
-        0.0884,
-        0.049,
+        0.0695,
+        0.0408,
+        0.0233,
+        0.0262,
+        0.0174,
+        0.0593,
         1.0,
-        0.0403
+        0.0301
       ],
       [
-        0.0245,
-        0.0798,
-        0.0254,
-        0.0956,
-        0.0532,
-        0.0246,
-        0.0403,
+        0.087,
+        0.0172,
+        0.0168,
+        0.0213,
+        0.0075,
+        0.0526,
+        0.0301,
         1.0
       ]
     ],
     "paper_titles": [
-      "A Computer Movie Simulating Urban Growth in the Detroit Region",
-      "Movie Gen: A Cast of Media Foundation Models",
-      "A Naturalistic Open Source Movie for Optical Flow Evaluation",
-      "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
-      "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
-      "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
-      "Multimodal Movie Recommendation System Using Deep Learning",
-      "MovieNet: A Holistic Dataset for Movie Understanding"
+      "Pokémon Red via Reinforcement Learning",
+      "PokéLLMon: A Grounding and Reasoning Benchmark for Large Language Models in Pokémon Battles",
+      "PokeLLMon: A Human-Parity Agent for Pokemon Battles with Large Language Models",
+      "An Adversarial Approach for Automated Pokémon Team Building and Metagame Balance",
+      "The POKEMON Speckle Survey of Nearby M Dwarfs. III. The Stellar Multiplicity Rate of M Dwarfs within 15 pc",
+      "Gamification of walking in nature: A field experiment with Pokémon GO Routes",
+      "Teaching Motion Concepts through Pokemon Unite: Students’ Acceptance and Experiences",
+      "Pokémon GO as an Advertising Platform: The Case for Locative Advertising in Location-based Games"
     ]
   }
 }

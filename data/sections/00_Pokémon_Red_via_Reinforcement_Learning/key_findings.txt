@@ -1,0 +1,3 @@
+• We argue that long-form games like Pokémon hold strong potential for future research, presenting long-term coherent reasoning challenges absent from simpler arcade games.
+
+• Our environment wrapper, training algorithm, human replay data, and pretrained agent are available at (REDACTED FOR REVIEW).

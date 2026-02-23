@@ -1,0 +1,5 @@
+• This article aims to develop a color image encryption algorithm that enhances security while optimizing computational efficiency.
+
+• By overcoming the dimensional limitations inherent in the single Logistic map, this approach extends the system to a 2-D framework, significantly increasing the complexity of chaotic behavior and improving its unpredictability.
+
+• Experimental results demonstrate that the proposed encryption algorithm achieves high security and reduces computation time by approximately 83.3%.

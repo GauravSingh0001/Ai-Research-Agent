@@ -1,0 +1,1 @@
+Being essential in animation creation, colorizing anime line drawings is usually a tedious and time-consuming manual task. Reference-based line drawing colorization provides an intuitive way to automatically colorize target line drawings using reference images.

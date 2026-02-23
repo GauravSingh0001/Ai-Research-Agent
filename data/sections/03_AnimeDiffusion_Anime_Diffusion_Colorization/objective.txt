@@ -1,0 +1,1 @@
+In this article, a new AnimeDiffusion approach is proposed via hybrid diffusions for the automatic colorization of anime face line drawings. Extensive experiments and user studies have demonstrated that our proposed AnimeDiffusion outperforms state-of-the-art GAN-based methods and another diffusion-based model, both quantitatively and qualitatively.

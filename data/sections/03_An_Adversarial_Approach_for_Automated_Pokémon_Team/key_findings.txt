@@ -1,0 +1,3 @@
+• The strongest team builder is faced against the team metagame balance agent for its evaluation.
+
+• Deep learning is also employed to predict the outcome of matches and recommend constructive elements of teams.

@@ -1,0 +1,1 @@
+Metagame balance is a crucial task in game development, and automation of this process could assist game developers by vastly reducing time costs.

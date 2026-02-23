@@ -4,17 +4,21 @@ Bridges the dashboard frontend to the Python AI backend.
 Last updated: 2026-02-23 - Fixed werkezeug compatibility for Vercel
 
 Endpoints:
-  GET  /api/status              — health check + current state
-  POST /api/search              — search papers via Semantic Scholar
-  GET  /api/papers              — load saved papers from data/papers.json
-  POST /api/pipeline/run        — run analysis pipeline on saved papers
-  GET  /api/pipeline/status     — get pipeline stage statuses
-  GET  /api/synthesis           — load latest synthesis (md + sections)
-  POST /api/synthesis/run       — trigger full synthesis generation
-  GET  /api/reports             — list all archived output folders
-  GET  /api/reports/<folder>    — get a specific report's data
-  GET  /api/export/apa          — download APA references as .txt
-  GET  /api/export/bib          — download BibTeX file
+  GET    /api/status              — health check + current state
+  POST   /api/search              — search papers via Semantic Scholar
+  GET    /api/papers              — load saved papers from data/papers.json
+  POST   /api/pipeline/run        — run analysis pipeline on saved papers
+  GET    /api/pipeline/status     — get pipeline stage statuses
+  GET    /api/synthesis           — load latest synthesis (md + sections)
+  POST   /api/synthesis/run       — trigger full synthesis generation
+  POST   /api/synthesis/revise    — revise synthesis with user instruction
+  GET    /api/reports             — list all archived output folders
+  GET    /api/reports/<folder>    — get a specific report's data
+  GET    /api/export/apa          — download APA references as .txt
+  GET    /api/export/bib          — download BibTeX file
+  GET    /api/export/pdf          — download PDF of synthesis
+  POST   /api/chat                — AI chat about loaded papers/synthesis
+  DELETE /api/chat                — clear chat history
 """
 
 import sys
@@ -364,16 +368,8 @@ def api_pipeline_status():
 def _run_synthesis_thread(gen_id):
     try:
         writer = ResearchWriter()
+        # generate_complete_document() already runs critique + final_report bundling internally
         writer.generate_complete_document()
-        
-        # NEW: Generate Critique and Final Report for the sidebar/export
-        # Explicitly call these to populate writer.output_sections
-        try:
-            writer.generate_critique()
-            writer.generate_final_report()
-            logger.info("[SYNTHESIS-THREAD] Critique and Final Report generated")
-        except Exception as ce:
-            logger.warning(f"[SYNTHESIS-THREAD] Sidebar content generation failed: {ce}")
 
         # Only mark as done if this is still the active generation
         with _state_lock:
@@ -382,10 +378,13 @@ def _run_synthesis_thread(gen_id):
                 synthesis_state["last_run"] = datetime.now().isoformat()
                 # Copy sections to state for the API
                 synthesis_state["output_sections"] = writer.output_sections.copy()
-                
+
                 # Add PDF path to generated files
                 synthesis_state["generated_files"] = [
-                    {"name": "Full Synthesis Report (PDF)", "url": "/api/export/pdf", "type": "pdf"}
+                    {"name": "Full Synthesis Report (PDF)", "url": "/api/export/pdf", "type": "pdf"},
+                    {"name": "Synthesis Markdown", "url": "/api/export/markdown", "type": "md"},
+                    {"name": "BibTeX References", "url": "/api/export/bib", "type": "bib"},
+                    {"name": "APA 7th References", "url": "/api/export/apa", "type": "txt"},
                 ]
     except Exception as e:
         logger.error(f"Synthesis error: {e}")
@@ -905,6 +904,349 @@ def api_export_pdf():
             "message": str(e),
             "fallback": "Browser print mechanism will be used"
         }), 503
+
+
+# ── Quality Assessment ────────────────────────────────────
+
+@app.route("/api/quality")
+def api_quality():
+    """
+    Assess the quality of the current synthesis using Vedanth-inspired
+    ContentReviewer metrics: clarity, coherence, academic_tone, completeness,
+    citation quality, and overall score.  Returns actionable suggestions.
+    """
+    # Load synthesis
+    folder  = _latest_output_folder()
+    md_file = (folder / "Research_Synthesis.md") if folder else RESEARCH_SYNTHESIS_FILE
+    if not md_file or not md_file.exists():
+        md_file = RESEARCH_SYNTHESIS_FILE
+    if not md_file.exists():
+        return jsonify({"error": "No synthesis found. Run synthesis first."}), 404
+
+    text = md_file.read_text(encoding="utf-8")
+
+    # ── Basic statistics ──────────────────────────────────
+    words     = text.split()
+    sentences = [s.strip() for s in re.split(r'[.!?]+', text) if s.strip()]
+    word_count    = len(words)
+    sentence_count = len(sentences)
+    avg_sent_len   = word_count / sentence_count if sentence_count > 0 else 0
+
+    # ── Section presence ─────────────────────────────────
+    sections_found = {
+        "abstract":    bool(re.search(r'## Abstract', text, re.I)),
+        "introduction":bool(re.search(r'## 1?\. Introduction', text, re.I)),
+        "methods":     bool(re.search(r'## \d+\. Method', text, re.I)),
+        "results":     bool(re.search(r'## \d+\. Results', text, re.I)),
+        "discussion":  bool(re.search(r'## \d+\. Discussion', text, re.I)),
+        "conclusion":  bool(re.search(r'## \d+\. Conclusion', text, re.I)),
+        "references":  bool(re.search(r'## References', text, re.I)),
+        "critique":    bool(re.search(r'## Academic Critique|## Critique', text, re.I)),
+    }
+    section_score = sum(sections_found.values()) / len(sections_found)
+
+    # ── Clarity score (sentence length + transitions) ──
+    transition_words = ['however', 'therefore', 'furthermore', 'moreover',
+                        'consequently', 'additionally', 'nevertheless']
+    trans_count = sum(1 for w in transition_words if w in text.lower())
+    clarity = min(1.0, 0.6 + (0.1 if 15 <= avg_sent_len <= 28 else 0) + min(0.3, trans_count * 0.04))
+
+    # ── Academic tone score ──────────────────────────────
+    academic_vocab = ['analysis', 'methodology', 'significant', 'findings',
+                      'research', 'study', 'empirical', 'synthesis', 'hypothesis',
+                      'framework', 'theoretical', 'implications', 'systematic']
+    informal_words = ['really', 'very', 'quite', 'pretty', 'sort of', 'kind of', "doesn't", "can't", "won't"]
+    acad_count  = sum(1 for w in academic_vocab if w in text.lower())
+    inform_count = sum(1 for w in informal_words if w in text.lower())
+    academic_tone = max(0.0, min(1.0, 0.65 + min(0.25, acad_count * 0.02) - min(0.15, inform_count * 0.05)))
+
+    # ── Coherence (logical connectors + paragraphs) ──────
+    connectors = ['because', 'since', 'therefore', 'thus', 'consequently',
+                  'as a result', 'in contrast', 'on the other hand']
+    conn_count  = sum(1 for c in connectors if c in text.lower())
+    paragraphs  = [p for p in text.split('\n\n') if p.strip()]
+    coherence   = min(1.0, 0.65 + min(0.2, conn_count * 0.025) + (0.15 if len(paragraphs) > 5 else 0))
+
+    # ── Citation quality ─────────────────────────────────
+    citation_patterns = [r'\(\d{4}\)', r'\[.*?\]', r'\(.*?,\s*\d{4}.*?\)', r'et al\.']
+    has_citations = any(re.search(pat, text) for pat in citation_patterns)
+    citation_score = 0.9 if has_citations else 0.4
+
+    # ── Completeness ─────────────────────────────────────
+    completeness = min(1.0, 0.5 * section_score + 0.3 * min(1.0, word_count / 2000) + 0.2)
+
+    # ── Overall (weighted) ───────────────────────────────
+    overall = round(
+        clarity * 0.20 + academic_tone * 0.25 + coherence * 0.20 +
+        completeness * 0.20 + citation_score * 0.15, 3
+    )
+
+    # ── Actionable suggestions ───────────────────────────
+    suggestions = []
+    if clarity < 0.75:
+        suggestions.append({"type": "clarity", "severity": "medium",
+            "text": "Add transition words (however, therefore, furthermore) to improve logical flow between sentences."})
+    if academic_tone < 0.75:
+        suggestions.append({"type": "academic_tone", "severity": "high",
+            "text": "Strengthen academic vocabulary: replace informal phrases with precise scientific terminology."})
+    if not sections_found["critique"]:
+        suggestions.append({"type": "completeness", "severity": "medium",
+            "text": "Run Critique & Revise to add an AI-generated academic review section."})
+    if not has_citations:
+        suggestions.append({"type": "citations", "severity": "high",
+            "text": "In-text citations are missing. Ensure all major claims cite authors and years in APA 7th format."})
+    if word_count < 1500:
+        suggestions.append({"type": "length", "severity": "medium",
+            "text": f"Document is short ({word_count} words). Consider expanding the Results Synthesis or Discussion section."})
+    if not sections_found["discussion"]:
+        suggestions.append({"type": "structure", "severity": "high",
+            "text": "Discussion section missing. Add interpretation of results and comparison with prior literature."})
+    if coherence < 0.75:
+        suggestions.append({"type": "coherence", "severity": "low",
+            "text": "Strengthen logical connectors between paragraphs to improve argument flow."})
+    if not suggestions:
+        suggestions.append({"type": "quality", "severity": "low",
+            "text": "Document meets academic quality standards. Consider running a final peer review."})
+
+    return jsonify({
+        "word_count":     word_count,
+        "sentence_count": sentence_count,
+        "avg_sentence_length": round(avg_sent_len, 1),
+        "sections_found": sections_found,
+        "scores": {
+            "clarity":       round(clarity, 3),
+            "academic_tone": round(academic_tone, 3),
+            "coherence":     round(coherence, 3),
+            "completeness":  round(completeness, 3),
+            "citations":     round(citation_score, 3),
+            "overall":       overall,
+        },
+        "overall_percent": round(overall * 100, 1),
+        "grade": "A" if overall >= 0.85 else "B" if overall >= 0.75 else "C" if overall >= 0.65 else "D",
+        "suggestions": suggestions,
+    })
+
+
+@app.route("/api/export/docx")
+def api_export_docx():
+    """Export synthesis as a Word document (.docx) via python-docx."""
+    folder  = _latest_output_folder()
+    md_file = (folder / "Research_Synthesis.md") if folder else RESEARCH_SYNTHESIS_FILE
+    if not md_file or not md_file.exists():
+        md_file = RESEARCH_SYNTHESIS_FILE
+    if not md_file.exists():
+        return jsonify({"error": "No synthesis found"}), 404
+
+    md_text = md_file.read_text(encoding="utf-8")
+
+    try:
+        from docx import Document as DocxDocument
+        from docx.shared import Pt, RGBColor, Inches
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+        doc = DocxDocument()
+        # Page margins
+        section = doc.sections[0]
+        section.left_margin   = Inches(1.0)
+        section.right_margin  = Inches(1.0)
+        section.top_margin    = Inches(1.0)
+        section.bottom_margin = Inches(1.0)
+
+        for line in md_text.split('\n'):
+            stripped = line.strip()
+            if stripped.startswith('# '):
+                h = doc.add_heading(stripped[2:], level=0)
+                h.runs[0].font.color.rgb = RGBColor(0x1a, 0x1a, 0x2e)
+            elif stripped.startswith('## '):
+                doc.add_heading(stripped[3:], level=1)
+            elif stripped.startswith('### '):
+                doc.add_heading(stripped[4:], level=2)
+            elif stripped.startswith('- ') or stripped.startswith('* '):
+                doc.add_paragraph(stripped[2:], style='List Bullet')
+            elif re.match(r'^\d+\.\s', stripped):
+                doc.add_paragraph(re.sub(r'^\d+\.\s', '', stripped), style='List Number')
+            elif stripped == '---':
+                doc.add_paragraph('─' * 60)
+            elif stripped:
+                p = doc.add_paragraph()
+                # Handle bold (**text**) and italic (*text*)
+                parts = re.split(r'(\*\*.*?\*\*|\*.*?\*)', stripped)
+                for part in parts:
+                    if part.startswith('**') and part.endswith('**'):
+                        run = p.add_run(part[2:-2])
+                        run.bold = True
+                    elif part.startswith('*') and part.endswith('*'):
+                        run = p.add_run(part[1:-1])
+                        run.italic = True
+                    else:
+                        p.add_run(part)
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+        buf = io.BytesIO()
+        doc.save(buf)
+        buf.seek(0)
+        return send_file(
+            buf,
+            as_attachment=True,
+            download_name=f"research_synthesis_{datetime.now().strftime('%Y%m%d')}.docx",
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+
+    except ImportError:
+        # Fallback: styled HTML download
+        html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Research Synthesis</title>
+<style>body{{font-family:Georgia,serif;max-width:750px;margin:40px auto;line-height:1.8;font-size:14px;color:#1a1a2e}}
+h1{{font-size:24px;border-bottom:2px solid #3730a3;padding-bottom:8px}}
+h2{{color:#3730a3;font-size:18px}}h3{{color:#555;font-size:15px}}
+p{{margin:10px 0;text-align:justify}}</style></head><body>
+<pre style="white-space:pre-wrap;font-family:Georgia,serif">{md_text}</pre>
+</body></html>"""
+        return send_file(
+            io.BytesIO(html.encode("utf-8")),
+            as_attachment=True,
+            download_name="research_synthesis.html",
+            mimetype="text/html"
+        )
+    except Exception as e:
+        logger.error(f"[DOCX] Export failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+# ── Chat ──────────────────────────────────────────────────
+# In-memory chat history (per server session)
+_chat_history = []   # List of {"role": "user"|"assistant", "content": str}
+_chat_lock = threading.Lock()
+
+MAX_CHAT_HISTORY = 20  # Keep last N messages for context
+
+def _build_chat_context() -> str:
+    """Build a concise research context string from loaded papers + synthesis."""
+    context_parts = []
+
+    # Papers context
+    try:
+        if PAPERS_DATA_FILE.exists():
+            papers = json.loads(PAPERS_DATA_FILE.read_text(encoding="utf-8"))
+            if papers:
+                context_parts.append("## Loaded Research Papers")
+                for i, p in enumerate(papers[:6], 1):
+                    title = p.get("title", "Unknown")
+                    authors = ", ".join(p.get("authors", [])[:3]) if isinstance(p.get("authors"), list) else str(p.get("authors", ""))
+                    year = p.get("year", "n.d.")
+                    abstract = (p.get("abstract") or "")[:300]
+                    findings = "; ".join(p.get("key_findings", [])[:3]) if p.get("key_findings") else ""
+                    context_parts.append(
+                        f"{i}. **{title}** ({authors}, {year})\n"
+                        f"   Abstract: {abstract}…\n"
+                        + (f"   Key Findings: {findings}" if findings else "")
+                    )
+    except Exception:
+        pass
+
+    # Synthesis context (first 2000 chars)
+    try:
+        if RESEARCH_SYNTHESIS_FILE.exists():
+            synthesis_text = RESEARCH_SYNTHESIS_FILE.read_text(encoding="utf-8")[:2000]
+            context_parts.append("## Current Synthesis Summary")
+            context_parts.append(synthesis_text + "…")
+    except Exception:
+        pass
+
+    return "\n\n".join(context_parts) if context_parts else "No papers or synthesis loaded yet."
+
+
+@app.route("/api/chat", methods=["POST", "DELETE"])
+def api_chat():
+    """
+    POST: Chat with AI about the loaded papers/synthesis.
+          Body: {"message": "your question", "use_context": true}
+    DELETE: Clear the chat history.
+    """
+    global _chat_history
+
+    if request.method == "DELETE":
+        with _chat_lock:
+            _chat_history = []
+        return jsonify({"status": "cleared", "message": "Chat history cleared."})
+
+    # POST — handle new message
+    data = request.get_json(force=True, silent=True) or {}
+    user_message = (data.get("message") or "").strip()
+    use_context = data.get("use_context", True)
+
+    if not user_message:
+        return jsonify({"error": "No message provided"}), 400
+
+    # Append user message to history
+    with _chat_lock:
+        _chat_history.append({"role": "user", "content": user_message})
+        # Trim history
+        if len(_chat_history) > MAX_CHAT_HISTORY:
+            _chat_history = _chat_history[-MAX_CHAT_HISTORY:]
+        history_snapshot = list(_chat_history)
+
+    # Build system prompt
+    research_context = _build_chat_context() if use_context else ""
+    system_prompt = (
+        "You are an expert AI research assistant specializing in academic literature analysis. "
+        "You help researchers understand, compare, and synthesize academic papers.\n\n"
+        "Your responses should be:\n"
+        "- Grounded in the paper data provided (do not hallucinate citations)\n"
+        "- Concise yet comprehensive\n"
+        "- Written in clear academic English\n"
+        "- Formatted with markdown when helpful (bullet points, bold key terms)\n\n"
+        + (f"## Research Context (Papers & Synthesis)\n{research_context}" if research_context else "")
+    )
+
+    # Build conversation prompt from history
+    history_text = ""
+    for msg in history_snapshot[:-1]:  # exclude the latest user message
+        role_label = "User" if msg["role"] == "user" else "Assistant"
+        history_text += f"\n{role_label}: {msg['content']}"
+
+    full_prompt = (
+        f"{history_text}\n\nUser: {user_message}\n\nAssistant:"
+        if history_text
+        else f"User: {user_message}\n\nAssistant:"
+    )
+
+    # Generate response via AIEngine
+    try:
+        from src.ai_engine import AIEngine
+        ai = AIEngine()
+        result = ai.generate(full_prompt, system_prompt=system_prompt, max_tokens=800)
+        if result.get("status") == "success" and result.get("text"):
+            reply = result["text"].strip()
+        else:
+            reply = (
+                "I'm sorry, I couldn't generate a response right now. "
+                f"Error: {result.get('error', 'Unknown AI error')}. "
+                "Please ensure your API keys are configured correctly."
+            )
+    except Exception as e:
+        logger.error(f"[CHAT] AI generation failed: {e}")
+        reply = f"Chat error: {str(e)}. Please check server logs."
+
+    # Store assistant reply
+    with _chat_lock:
+        _chat_history.append({"role": "assistant", "content": reply})
+        if len(_chat_history) > MAX_CHAT_HISTORY:
+            _chat_history = _chat_history[-MAX_CHAT_HISTORY:]
+
+    return jsonify({
+        "reply": reply,
+        "history_length": len(_chat_history),
+        "papers_context_available": PAPERS_DATA_FILE.exists(),
+        "synthesis_context_available": RESEARCH_SYNTHESIS_FILE.exists(),
+    })
+
+
+@app.route("/api/chat/history", methods=["GET"])
+def api_chat_history():
+    """Return the current chat history."""
+    with _chat_lock:
+        return jsonify({"history": list(_chat_history)})
 
 
 # ── Run ───────────────────────────────────────────────────

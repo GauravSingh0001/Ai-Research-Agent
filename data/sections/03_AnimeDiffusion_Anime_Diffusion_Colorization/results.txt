@@ -1,0 +1,1 @@
+Our AnimeDiffusion generates colorization results with semantic correspondence and color consistency.

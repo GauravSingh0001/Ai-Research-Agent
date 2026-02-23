@@ -13,7 +13,7 @@
 
 'use strict';
 
-const API = window.location.origin + '/api';
+const API = '/api';
 
 // ── STATE ──────────────────────────────────────────────────
 const state = {
@@ -70,27 +70,6 @@ async function apiFetch(path, options = {}) {
             showToast('Cannot reach API server. Is server.py running?', 'error', 6000);
         }
         throw e;
-    }
-}
-
-// FIX: Helper to download files with proper filenames
-async function downloadFile(url, fileName) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(response.statusText);
-
-        const blob = await response.blob();
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = fileName || url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
-
-        showToast(`✓ Downloaded: ${fileName}`, 'success', 3000);
-    } catch (e) {
-        showToast(`Download failed: ${e.message}`, 'error', 4000);
     }
 }
 
@@ -155,7 +134,8 @@ function setFormat(fmt) {
 function switchView(viewName) {
     document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
     const target = document.getElementById(`view-${viewName}`);
-    if (target) target.style.display = viewName === 'synthesis' ? 'flex' : 'block';
+    const flexViews = ['synthesis', 'chat', 'quality'];
+    if (target) target.style.display = flexViews.includes(viewName) ? 'flex' : 'block';
 
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
@@ -171,10 +151,12 @@ function switchView(viewName) {
     if (viewName === 'extraction') loadPipelineView();
     if (viewName === 'synthesis') loadSynthesisView();
     if (viewName === 'reports') loadReportsView();
+    if (viewName === 'chat') loadChatView();
+    if (viewName === 'quality') loadQualityView();
 }
 
 function updateStepper(viewName) {
-    const stepMap = { search: 1, extraction: 2, synthesis: 4, reports: 5 };
+    const stepMap = { search: 1, extraction: 2, synthesis: 4, reports: 5, chat: 5, quality: 5 };
     const current = stepMap[viewName] || 4;
     document.querySelectorAll('.step').forEach(step => {
         const n = parseInt(step.dataset.step);
@@ -463,33 +445,7 @@ function renderSynthesisView(data) {
         renderBentoGrid(data.sections, p);
     }
 
-    // NEW: Render research artefacts (PDFs, etc.)
-    renderArtefacts(data.generated_files);
-
     updatePaperBadge();
-}
-
-function renderArtefacts(files) {
-    const list = document.getElementById('artefacts-list');
-    if (!list) return;
-
-    if (!files || !files.length) {
-        list.innerHTML = `<div class="empty-state" style="padding: 10px; font-size: 12px;">Run synthesis to generate files.</div>`;
-        return;
-    }
-
-    list.innerHTML = files.map(file => `
-        <div class="artefact-item" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(55, 48, 163, 0.05); border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(55, 48, 163, 0.1);">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 18px;">${file.type === 'pdf' ? '📄' : '📁'}</span>
-                <div>
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text-primary);">${file.name}</div>
-                    <div style="font-size: 11px; color: var(--text-secondary);">${file.type.toUpperCase()} Report</div>
-                </div>
-            </div>
-            <a href="${API}${file.url}" target="_blank" class="download-btn-small" style="background: var(--accent-primary); color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; text-decoration: none; font-weight: 600;">Download</a>
-        </div>
-    `).join('');
 }
 
 // FIX: Full content rendering with format modes
@@ -521,7 +477,7 @@ function renderSynthesisContent(data, format) {
 
 function renderAcademicFormat(data, container) {
     const p = data.parsed || {};
-    const sections = data.sections || data.output_sections || {};
+    const sections = data.sections || {};
 
     const sectionDefs = [
         { key: 'introduction', parsed: p.introduction, label: 'Introduction', icon: '📖' },
@@ -530,41 +486,16 @@ function renderAcademicFormat(data, container) {
         { key: 'discussion', parsed: p.discussion, label: 'Discussion', icon: '💬' },
         { key: 'conclusion', parsed: p.conclusion, label: 'Conclusion', icon: '🎯' },
         { key: 'references', parsed: p.references, label: 'References', icon: '📚' },
-        // FIX: Render Critique & Review sections from output_sections
+        // NEW: Critique & Review sections
         { key: 'critique', parsed: sections.critique, label: 'Academic Critique & Review', icon: '🔍' },
-        { key: 'suggestions', parsed: sections.suggestions, label: 'Expert Suggestions for Improvement', icon: '💡' },
-        { key: 'final_report', parsed: sections.final_report, label: 'Final Report Bundle (JSON)', icon: '📋' },
+        { key: 'suggestions', parsed: sections.suggestions, label: 'Expert Suggestions', icon: '💡' },
+        { key: 'final_report', parsed: sections.final_report, label: 'Final Report Bundle', icon: '📋' },
     ];
 
     sectionDefs.forEach(({ key, parsed, label, icon }) => {
         const content = sections[key] || parsed || '';
         if (!content || content.length < 10) return;
-
-        // Special handling for final_report (JSON) and critique (long text)
-        if (key === 'final_report') {
-            try {
-                const reportObj = typeof content === 'string' ? JSON.parse(content) : content;
-                const reportHtml = `
-                    <div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:14px;font-size:12px;line-height:1.6;color:#aab">
-                        <strong style="color:#818cf8">📊 Report Metadata</strong><br/>
-                        Papers Reviewed: <strong>${reportObj.metadata?.papers_reviewed || 'N/A'}</strong><br/>
-                        AI Provider: <strong>${reportObj.metadata?.ai_provider || 'N/A'}</strong><br/>
-                        Generated: <strong>${new Date(reportObj.metadata?.generated_at).toLocaleDateString()}</strong><br/>
-                        <br/>
-                        <strong style="color:#818cf8">📈 Quality Metrics</strong><br/>
-                        Coverage Score: <strong>${reportObj.quality_metrics?.coverage_score || 'N/A'}%</strong><br/>
-                        Academic Standards: <strong>${reportObj.quality_metrics?.academic_standards || 'APA 7th'}</strong>
-                    </div>`;
-                injectSectionRaw(container, key, reportHtml);
-            } catch (_) {
-                injectSection(container, key, label, icon, content);
-            }
-        } else if (key === 'critique') {
-            // Critique should show structured feedback
-            injectSection(container, key, label, icon, content);
-        } else {
-            injectSection(container, key, label, icon, content);
-        }
+        injectSection(container, key, label, icon, content);
     });
 }
 
@@ -891,7 +822,6 @@ function updatePaperBadge() {
 // ── SYNTHESIS STATE ────────────────────────────────────────
 let currentSynthesisId = null;
 let synthesisTimedOut = false;  // Track if synthesis timed out
-let lastSynthesisMarkdown = '';  // FIX: Track previous markdown to detect content changes
 
 // ── SYNTHESIS TRIGGER ──────────────────────────────────────
 // FIX: Added 90s timeout with countdown so user knows it's working
@@ -1070,61 +1000,16 @@ function startSynthesisPoller() {
                     return;
                 }
 
-                // FIX: Enhanced revision detection - check both revised_markdown AND synthesis_ready
-                const hasNewRevision = data.revised_markdown && data.revised_markdown.length > 100;
-                const contentChanged = data.markdown && data.markdown !== lastSynthesisMarkdown;
-                const isReady = data.synthesis_ready === true;  // FIX: Use explicit synthesis_ready flag
-
-                if (!data.running && hasNewRevision && contentChanged) {
+                // Synthesis is complete
+                if (!data.running && (data.done || data.parsed?.abstract)) {
                     clearInterval(state.synthesisPoller);
                     state.synthesisPoller = null;
                     state.isSynthesizing = false;
                     const overlay = document.getElementById('loading-overlay');
                     if (overlay) overlay.classList.add('hidden');
-
-                    // Track that we've seen this markdown
-                    lastSynthesisMarkdown = data.markdown || '';
-
-                    // Update state with revised content
-                    state.synthesis = data;
-                    // Update the editor to show the revised markdown
-                    renderSynthesisView(data);
-                    showToast('✨ Revision complete! Content updated.', 'success', 4000);
-                    return;
-                }
-
-                // Synthesis is complete (use synthesis_ready flag for clarity)
-                if (isReady && contentChanged) {
-                    clearInterval(state.synthesisPoller);
-                    state.synthesisPoller = null;
-                    state.isSynthesizing = false;
-                    const overlay = document.getElementById('loading-overlay');
-                    if (overlay) overlay.classList.add('hidden');
-
-                    // Track that we've seen this markdown
-                    lastSynthesisMarkdown = data.markdown || '';
-
                     state.synthesis = data;
                     renderSynthesisView(data);
-
-                    // FIX: Also update generated_files display in reports view if visible
-                    if (state.currentView === 'reports') {
-                        loadReportsView();
-                    }
-
                     showToast('✨ Synthesis complete!', 'success', 4000);
-                    return;
-                }
-
-                // Fallback: If synthesis_ready is true but no explicit change detected, still render
-                if (isReady && !state.synthesis) {
-                    state.synthesis = data;
-                    renderSynthesisView(data);
-
-                    // FIX: Also update reports if currently viewing
-                    if (state.currentView === 'reports') {
-                        loadReportsView();
-                    }
                 }
             }
         } catch (_) {
@@ -1158,16 +1043,10 @@ async function runCritique() {
     btn.innerHTML = `<svg viewBox="0 0 18 18" fill="none" style="animation:spin 1s linear infinite"><path d="M9 2a7 7 0 017 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Revising…`;
 
     try {
-        const result = await apiFetch('/synthesis/revise', {
+        await apiFetch('/synthesis/revise', {
             method: 'POST',
             body: JSON.stringify({ instruction })
         });
-
-        // FIX: Capture the generation_id from the result to track session
-        if (result && result.generation_id) {
-            currentSynthesisId = result.generation_id;
-        }
-
         showToast('Revision started! Takes ~60 seconds.', 'info', 5000);
         startSynthesisPoller();
         if (input) input.value = '';
@@ -1413,60 +1292,22 @@ async function loadReportsView() {
     grid.innerHTML = skeletons(3, 'report');
 
     try {
-        // Fetch archived reports
-        const reportsData = await apiFetch('/reports');
-        state.reports = reportsData.reports || [];
-
-        // Also fetch current synthesis to get generated_files
-        const synthData = await apiFetch('/synthesis');
-        const generatedFiles = synthData.generated_files || [];
-
-        renderReports(state.reports, generatedFiles);
+        const data = await apiFetch('/reports');
+        state.reports = data.reports || [];
+        renderReports(state.reports);
     } catch (e) {
         grid.innerHTML = `<div class="empty-state">⚠️ Could not load reports: ${e.message}</div>`;
     }
 }
 
-function renderReports(reports, generatedFiles = []) {
+function renderReports(reports) {
     const grid = document.getElementById('reports-grid');
     if (!grid) return;
-
-    let html = '';
-
-    // Show generated files from current synthesis session if available
-    if (generatedFiles && generatedFiles.length > 0) {
-        html += `
-        <div class="report-card" style="background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3)">
-          <div class="report-card-header">
-            <div>
-              <div class="report-title">📥 Current Session Exports</div>
-              <div class="report-meta">${generatedFiles.length} file${generatedFiles.length === 1 ? '' : 's'} generated</div>
-            </div>
-            <span class="report-status ready">✓ Ready</span>
-          </div>
-          <div style="margin-top:12px">
-            ${generatedFiles.map(f => {
-            // Construct proper download URL (handle both relative and absolute paths)
-            const downloadUrl = f.url.startsWith('http') ? f.url : (API + f.url);
-            const fileName = f.name.replace(/\s+/g, '_');
-            const fileIcon = f.type === 'pdf' ? '📄' : '📁';
-            return `
-              <a href="${downloadUrl}" onclick="event.preventDefault(); downloadFile('${downloadUrl}', '${fileName}')" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(79,142,247,0.1);border-radius:6px;text-decoration:none;color:#4f8ef7;font-size:13px;margin-bottom:6px;transition:background 0.2s;cursor:pointer" onmouseover="this.style.background='rgba(79,142,247,0.2)'" onmouseout="this.style.background='rgba(79,142,247,0.1)'">
-                <span>${fileIcon}</span>
-                <span>${f.name}</span>
-                ${f.size ? `<span style="font-size:11px;color:#999;margin-left:auto">${(f.size / 1024 / 1024).toFixed(1)}MB</span>` : ''}
-              </a>`;
-        }).join('')}
-          </div>
-        </div>`;
-    }
-
-    if (!reports.length && (!generatedFiles || generatedFiles.length === 0)) {
-        grid.innerHTML = html || `<div class="empty-state">No reports yet. Run a synthesis to generate one.</div>`;
+    if (!reports.length) {
+        grid.innerHTML = `<div class="empty-state">No reports yet. Run a synthesis to generate one.</div>`;
         return;
     }
-
-    html += reports.map(r => `
+    grid.innerHTML = reports.map(r => `
     <div class="report-card" onclick="openReport('${r.id}')">
       <div class="report-card-header">
         <div>
@@ -1495,8 +1336,6 @@ function renderReports(reports, generatedFiles = []) {
         </button>
       </div>
     </div>`).join('');
-
-    grid.innerHTML = html;
 }
 
 async function openReport(id) {
@@ -1598,7 +1437,330 @@ function skeletons(n, type = 'search') {
     </div>`).join('');
 }
 
+// ── CHAT ───────────────────────────────────────────────
+let _chatIsBusy = false;
+
+function loadChatView() {
+    // Load existing history from server on view switch
+    apiFetch('/chat/history').then(data => {
+        const history = data.history || [];
+        if (history.length > 0) {
+            // Clear welcome suggestions (keep welcome msg text) and replay history
+            const win = document.getElementById('chat-window');
+            if (!win) return;
+            // Remove old user/ai injected messages (not the welcome)
+            win.querySelectorAll('.chat-msg:not(#chat-welcome)').forEach(el => el.remove());
+            history.forEach(msg => {
+                appendChatMessage(msg.role === 'user' ? 'user' : 'ai', msg.content, false);
+            });
+        }
+        updateChatContextBadge();
+    }).catch(() => { updateChatContextBadge(); });
+}
+
+function updateChatContextBadge() {
+    apiFetch('/status').then(data => {
+        const badge = document.getElementById('chat-context-badge');
+        if (!badge) return;
+        const hasPapers = data.papers_loaded > 0;
+        const hasSynth = data.synthesis_ready;
+        if (hasPapers && hasSynth) {
+            badge.textContent = '📄 Context: Papers + Synthesis';
+            badge.style.color = '#10B981';
+            badge.style.borderColor = 'rgba(16,185,129,0.3)';
+        } else if (hasPapers) {
+            badge.textContent = `📄 Context: ${data.papers_loaded} Papers`;
+            badge.style.color = '#F59E0B';
+            badge.style.borderColor = 'rgba(245,158,11,0.3)';
+        } else {
+            badge.textContent = '⚠️ No papers loaded';
+            badge.style.color = '#f87171';
+            badge.style.borderColor = 'rgba(239,68,68,0.3)';
+        }
+    }).catch(() => { });
+}
+
+/** Convert simple markdown to safe HTML for chat bubbles */
+function markdownToHtml(text) {
+    return text
+        // Bold
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Italic
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        // Inline code
+        .replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:4px;font-size:12px">$1</code>')
+        // Bullet lists (lines starting with "- " or "* ")
+        .replace(/^[*-] (.+)/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+        // Numbered lists
+        .replace(/^\d+\. (.+)/gm, '<li>$1</li>')
+        // Line breaks → paragraphs
+        .split('\n\n').map(para => para.trim() ? `<p>${para.replace(/\n/g, '<br>')}</p>` : '').join('');
+}
+
+function appendChatMessage(role, content, scroll = true) {
+    const win = document.getElementById('chat-window');
+    if (!win) return;
+
+    const isUser = role === 'user';
+    const div = document.createElement('div');
+    div.className = `chat-msg ${isUser ? 'chat-msg-user' : 'chat-msg-ai'}`;
+
+    const avatarSvg = isUser
+        ? `<svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 18c0-4 3-6 7-6s7 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`
+        : `<svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+    const bubbleHtml = isUser
+        ? `<p>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`
+        : (content.length > 100 ? markdownToHtml(content) : `<p>${content}</p>`);
+
+    div.innerHTML = `
+        <div class="chat-avatar">${avatarSvg}</div>
+        <div class="chat-bubble">${bubbleHtml}</div>
+    `;
+
+    win.appendChild(div);
+    if (scroll) win.scrollTop = win.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const win = document.getElementById('chat-window');
+    if (!win || document.getElementById('chat-typing')) return;
+
+    const div = document.createElement('div');
+    div.className = 'chat-msg chat-msg-ai';
+    div.id = 'chat-typing-row';
+    div.innerHTML = `
+        <div class="chat-avatar">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="chat-bubble" style="padding:14px 18px;">
+          <div class="chat-typing" id="chat-typing">
+            <div class="chat-typing-dot"></div>
+            <div class="chat-typing-dot"></div>
+            <div class="chat-typing-dot"></div>
+          </div>
+        </div>
+    `;
+    win.appendChild(div);
+    win.scrollTop = win.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const el = document.getElementById('chat-typing-row');
+    if (el) el.remove();
+}
+
+async function sendChatMessage() {
+    if (_chatIsBusy) return;
+
+    const input = document.getElementById('chat-input');
+    const message = (input?.value || '').trim();
+    if (!message) {
+        if (input) input.focus();
+        return;
+    }
+
+    const useContext = document.getElementById('chat-use-context')?.checked !== false;
+
+    // Clear input & lock
+    input.value = '';
+    input.style.height = 'auto';
+    _chatIsBusy = true;
+    const sendBtn = document.getElementById('chat-send-btn');
+    if (sendBtn) sendBtn.style.opacity = '0.5';
+
+    // Append user message
+    appendChatMessage('user', message);
+    showTypingIndicator();
+
+    try {
+        const data = await apiFetch('/chat', {
+            method: 'POST',
+            body: JSON.stringify({ message, use_context: useContext }),
+        });
+
+        removeTypingIndicator();
+        appendChatMessage('ai', data.reply || 'No response generated.');
+    } catch (e) {
+        removeTypingIndicator();
+        appendChatMessage('ai', `⚠️ Error: ${e.message}. Check that the server is running and API keys are configured.`);
+    } finally {
+        _chatIsBusy = false;
+        if (sendBtn) sendBtn.style.opacity = '1';
+        if (input) input.focus();
+    }
+}
+
+function sendChatSuggestion(text) {
+    const input = document.getElementById('chat-input');
+    if (input) {
+        input.value = text;
+        sendChatMessage();
+    }
+}
+
+async function clearChat() {
+    try {
+        await apiFetch('/chat', { method: 'DELETE' });
+        const win = document.getElementById('chat-window');
+        if (!win) return;
+        // Remove all messages except the welcome one
+        win.querySelectorAll('.chat-msg:not(#chat-welcome)').forEach(el => el.remove());
+        showToast('Chat history cleared', 'success', 2000);
+    } catch (e) {
+        showToast('Failed to clear chat: ' + e.message, 'error');
+    }
+}
+
+function handleChatKeydown(event) {
+    // Enter (without Shift) = send; Shift+Enter = newline
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+    }
+}
+
+// ── QUALITY ASSESSMENT ─────────────────────────────────────
+
+function loadQualityView() {
+    // Auto-run quality check if synthesis exists
+    const empty = document.getElementById('quality-empty');
+    const results = document.getElementById('quality-results');
+    // Only auto-run if results panel is currently hidden (first load)
+    if (results && results.style.display === 'none' && empty && empty.style.display !== 'none') {
+        // Check if synthesis exists before auto-running
+        apiFetch('/synthesis').then(d => {
+            if (d.markdown && d.markdown.length > 100) {
+                runQualityCheck();
+            }
+        }).catch(() => { });
+    }
+}
+
+async function runQualityCheck() {
+    const btn = document.getElementById('quality-run-btn');
+    const loading = document.getElementById('quality-loading');
+    const empty = document.getElementById('quality-empty');
+    const results = document.getElementById('quality-results');
+
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Analyzing…'; }
+    if (loading) loading.style.display = 'flex';
+    if (empty) empty.style.display = 'none';
+    if (results) results.style.display = 'none';
+
+    try {
+        const data = await apiFetch('/quality');
+        renderQualityResults(data);
+    } catch (e) {
+        // Show error state
+        if (empty) {
+            empty.style.display = 'flex';
+            empty.innerHTML = `<div style="font-size:40px;margin-bottom:12px">⚠️</div>
+                <p style="color:#ef4444">${e.message.includes('404') ? 'No synthesis found. Run synthesis first.' : 'Quality check failed: ' + e.message}</p>`;
+        }
+        showToast(`Quality check: ${e.message}`, 'error');
+    } finally {
+        if (loading) loading.style.display = 'none';
+        if (btn) { btn.disabled = false; btn.textContent = '⚡ Run Quality Check'; }
+    }
+}
+
+function renderQualityResults(data) {
+    const results = document.getElementById('quality-results');
+    if (!results) return;
+
+    // ── Gauge ──────────────────────────────────────────────
+    const arc = document.getElementById('quality-gauge-arc');
+    const scoreNum = document.getElementById('quality-score-num');
+    const grade = document.getElementById('quality-grade');
+    const pct = data.overall_percent || 0;
+    const circumference = 2 * Math.PI * 50; // r=50 → ~314
+    if (arc) arc.setAttribute('stroke-dasharray', `${(pct / 100) * circumference} ${circumference}`);
+    if (scoreNum) scoreNum.textContent = `${pct}%`;
+    if (grade) {
+        grade.textContent = `Grade ${data.grade}`;
+        const gradeColors = { A: '#10B981', B: '#6366f1', C: '#F59E0B', D: '#EF4444' };
+        grade.style.color = gradeColors[data.grade] || '#888';
+    }
+
+    // ── Metric bars ────────────────────────────────────────
+    const barsEl = document.getElementById('quality-metric-bars');
+    if (barsEl && data.scores) {
+        const metrics = [
+            { key: 'clarity', label: 'Clarity', color: '#4F8EF7' },
+            { key: 'academic_tone', label: 'Academic Tone', color: '#7B61FF' },
+            { key: 'coherence', label: 'Coherence', color: '#10B981' },
+            { key: 'completeness', label: 'Completeness', color: '#F59E0B' },
+            { key: 'citations', label: 'Citations', color: '#EC4899' },
+        ];
+        barsEl.innerHTML = metrics.map(m => {
+            const val = Math.round((data.scores[m.key] || 0) * 100);
+            return `
+            <div style="display:grid;grid-template-columns:110px 1fr 40px;gap:8px;align-items:center">
+              <div style="font-size:11px;color:#aab">${m.label}</div>
+              <div style="height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden">
+                <div style="height:100%;width:${val}%;background:${m.color};border-radius:3px;transition:width 1s ease"></div>
+              </div>
+              <div style="font-size:11px;color:${m.color};font-weight:600;text-align:right">${val}%</div>
+            </div>`;
+        }).join('');
+    }
+
+    // ── Stats row ──────────────────────────────────────────
+    const statsEl = document.getElementById('quality-stats-row');
+    if (statsEl) {
+        const stats = [
+            { label: 'Word Count', value: (data.word_count || 0).toLocaleString() },
+            { label: 'Sentences', value: (data.sentence_count || 0).toLocaleString() },
+            { label: 'Avg Sentence Length', value: `${data.avg_sentence_length || 0} words` },
+        ];
+        statsEl.innerHTML = stats.map(s => `
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+              border-radius:12px;padding:14px 16px;text-align:center">
+              <div style="font-size:22px;font-weight:700;color:#e0e0f0;margin-bottom:4px">${s.value}</div>
+              <div style="font-size:10px;text-transform:uppercase;color:#666;letter-spacing:.05em">${s.label}</div>
+            </div>`).join('');
+    }
+
+    // ── Section checklist ──────────────────────────────────
+    const secGrid = document.getElementById('quality-sections-grid');
+    if (secGrid && data.sections_found) {
+        secGrid.innerHTML = Object.entries(data.sections_found).map(([key, found]) => {
+            const label = key.charAt(0).toUpperCase() + key.slice(1);
+            return `
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;
+              background:rgba(${found ? '16,185,129' : '239,68,68'},0.08);
+              border:1px solid rgba(${found ? '16,185,129' : '239,68,68'},0.2);
+              border-radius:8px;font-size:12px;color:${found ? '#34d399' : '#f87171'}">
+              ${found ? '✓' : '✗'} ${label}
+            </div>`;
+        }).join('');
+    }
+
+    // ── Suggestions ────────────────────────────────────────
+    const suggestEl = document.getElementById('quality-suggestions');
+    if (suggestEl && data.suggestions) {
+        const severityColors = { high: '#ef4444', medium: '#F59E0B', low: '#10B981' };
+        const severityBg = { high: 'rgba(239,68,68,0.08)', medium: 'rgba(245,158,11,0.08)', low: 'rgba(16,185,129,0.08)' };
+        const severityBorder = { high: 'rgba(239,68,68,0.25)', medium: 'rgba(245,158,11,0.25)', low: 'rgba(16,185,129,0.25)' };
+        suggestEl.innerHTML = data.suggestions.map(s => `
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
+              background:${severityBg[s.severity]};border:1px solid ${severityBorder[s.severity]};
+              border-radius:10px;">
+              <span style="flex-shrink:0;font-size:10px;text-transform:uppercase;font-weight:700;
+                color:${severityColors[s.severity]};margin-top:2px;min-width:42px">${s.severity}</span>
+              <span style="font-size:13px;color:#bbc;line-height:1.6">${s.text}</span>
+            </div>`).join('');
+    }
+
+    // Show results
+    results.style.display = 'flex';
+    showToast(`Quality check complete — Grade ${data.grade} (${pct}%)`, 'success', 3000);
+}
+
 // ── KEYBOARD SHORTCUTS ─────────────────────────────────────
+
 document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();

@@ -1,0 +1,3 @@
+• Extensive evaluations using both automated metrics and human evaluations demonstrate that AnimeGamer outperforms existing methods in various aspects of the gaming experience.
+
+• Codes and checkpoints are available at https://github.com/TencentARC/AnimeGamer.
