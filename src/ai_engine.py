@@ -124,8 +124,8 @@ class AIEngine:
                 try:
                     full_message = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
                     response = self.cohere_client.chat(
-                        message=full_message,
-                        model=COHERE_MODEL
+                        model=COHERE_MODEL,
+                        messages=[{"role": "user", "content": full_message}]
                     )
                     self.provider = "Cohere"
                     return {"text": response.message.content[0].text, "status": "success", "provider": "Cohere", "error": None}

@@ -6,6 +6,7 @@ Results Synthesis, Discussion, Conclusion, and APA References.
 
 import json
 import re
+import time
 from datetime import datetime
 from typing import List, Dict, Any
 
@@ -119,11 +120,14 @@ class ResearchWriter:
         return "\n\n".join(parts)
 
     def _ai_or_fallback(self, prompt: str, fallback: str, max_tokens: int = 1024) -> str:
-        """Call AI with prompt; return fallback string if AI unavailable or fails."""
+        """Call AI with prompt; return fallback string if AI unavailable or fails.
+        Includes a 2s breather between calls to avoid Gemini 429 rate limit errors.
+        """
         if self.ai and self.ai.provider != "None":
             try:
                 result = self.ai.generate(prompt, system_prompt=SYSTEM_PROMPT, max_tokens=max_tokens)
                 if result.get("status") == "success" and result.get("text"):
+                    time.sleep(2)  # Rate-limit breather: avoids Gemini 429 between sections
                     return result["text"]
             except BaseException as e:
                 logger.warning(f"AI generation failed ({type(e).__name__}): {str(e)[:100]}, using fallback")
@@ -578,10 +582,19 @@ class ResearchWriter:
         results      = _safe_run(self.generate_results_synthesis,    "Results")
         discussion   = _safe_run(self.generate_discussion,           "Discussion")
         conclusion   = _safe_run(self.generate_conclusion,           "Conclusion")
-        references   = _safe_run(self.generate_references,           "References")
+
+        # generate_references() returns a dict {"text": str, "cite_keys": dict}
+        # Extract only the text string for document assembly to prevent TypeError:
+        # "sequence item N: expected str instance, dict found"
+        refs_result  = _safe_run(self.generate_references,           "References")
+        if isinstance(refs_result, dict):
+            references_text = refs_result.get("text", "")
+        else:
+            references_text = str(refs_result)  # already a string (e.g. fallback error message)
+
         bibtex       = _safe_run(self.generate_bibtex,               "BibTeX")
 
-        # Assemble full document
+        # Assemble full document — every item in doc_parts MUST be a string
         doc_parts = [
             f"# AI-Generated Research Synthesis Report",
             f"**Topic:** {topic_str.title()}  ",
@@ -591,30 +604,34 @@ class ResearchWriter:
             "---",
 
             "## Abstract",
-            abstract,
+            str(abstract),
             "---",
 
             "## 1. Introduction",
-            introduction,
+            str(introduction),
 
             "## 2. Methodological Comparison",
-            methods,
+            str(methods),
 
             "## 3. Results Synthesis",
-            results,
+            str(results),
 
             "## 4. Discussion",
-            discussion,
+            str(discussion),
 
             "## 5. Conclusion & Future Implications",
-            conclusion,
+            str(conclusion),
             "---",
 
             "## References",
-            references,
+            references_text,
         ]
 
-        full_doc = "\n\n".join(doc_parts)
+        # Safe join: guarantee all items are strings (belt-and-suspenders guard)
+        full_doc = "\n\n".join(
+            str(s["text"]) if isinstance(s, dict) and "text" in s else str(s)
+            for s in doc_parts
+        )
 
         # Store synthesis_report alias for pipeline compatibility
         self.output_sections["synthesis_report"] = full_doc
