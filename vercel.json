@@ -1,23 +1,23 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "api/index.py",
-            "use": "@vercel/python@3.1.0",
-            "config": {
-                "pythonVersion": "3.11",
-                "maxLambdaSize": "250mb"
-            }
+    "functions": {
+        "api/index.py": {
+            "runtime": "python3.12",
+            "maxDuration": 30
         }
-    ],
+    },
     "routes": [
         {
             "src": "/api/(.*)",
             "dest": "/api/index.py"
         },
         {
+            "src": "/(.*\\.(js|css|png|svg|ico|json)$)",
+            "dest": "/dashboard/$1"
+        },
+        {
             "src": "/(.*)",
-            "dest": "/dashboard/index.html"
+            "dest": "/api/index.py"
         }
     ],
     "env": {
