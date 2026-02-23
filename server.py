@@ -1,6 +1,7 @@
 """
 AI Paper Reviewer — Flask API Server
 Bridges the dashboard frontend to the Python AI backend.
+Last updated: 2026-02-23 - Fixed werkezeug compatibility for Vercel
 
 Endpoints:
   GET  /api/status              — health check + current state
