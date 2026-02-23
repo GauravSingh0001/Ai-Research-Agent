@@ -67,14 +67,7 @@
           </svg>
           Synthesis Workspace
         </button>
-        <button class="nav-item" id="nav-reports" onclick="switchView('reports')" aria-current="false">
-          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
-            <path d="M5 3h10a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="currentColor"
-              stroke-width="1.5" />
-            <path d="M7 8h6M7 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-          </svg>
-          Final Reports
-        </button>
+
       </nav>
     </aside>
 
@@ -103,7 +96,7 @@
             </svg>
             <span class="notif-dot"></span>
           </button>
-          
+
         </div>
       </header>
 
@@ -236,6 +229,14 @@
                 <div class="themes-cloud" id="themes-cloud">
                   <!-- Themes will be injected by app.js -->
                 </div>
+
+                <div class="similarity-header" style="margin-top:20px">
+                  <span>Research Artefacts</span>
+                </div>
+                <div class="artefacts-list" id="artefacts-list" style="padding: 10px 16px;">
+                  <div class="empty-state" style="padding: 10px; font-size: 12px;">Run synthesis to generate files.
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -318,14 +319,7 @@
           </div>
         </section>
 
-        <!-- VIEW: REPORTS -->
-        <section class="view" id="view-reports" style="display:none">
-          <div class="view-header">
-            <h1 class="view-title">Final Reports</h1>
-            <button class="btn-primary" onclick="exportAPA()">Export APA 7th Ed.</button>
-          </div>
-          <div class="reports-grid" id="reports-grid"></div>
-        </section>
+
 
       </main>
 
@@ -352,17 +346,8 @@
           </svg>
           <div class="step active" data-step="4" onclick="switchView('synthesis')"><span class="step-num">4</span><span
               class="step-label">Synthesis</span></div>
-          <svg class="step-arrow" viewBox="0 0 8 12" fill="none">
-            <path d="M2 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-          <div class="step" data-step="5" onclick="switchView('reports')"><span class="step-num">5</span><span
-              class="step-label">Review</span></div>
         </div>
         <div class="bottom-actions">
-          <input type="text" id="revision-input" class="revision-input"
-            placeholder="Type suggestion (e.g. 'Add more quantitative results')..." />
-
           <button class="btn-export" id="export-btn" onclick="exportAPA()">
             <svg viewBox="0 0 18 18" fill="none">
               <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -371,19 +356,14 @@
             </svg>
             Export APA References
           </button>
-          <button class="btn-export" onclick="exportPDF()" style="background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.35);color:#818cf8;">
+          <button class="btn-export" onclick="exportPDF()"
+            style="background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.35);color:#818cf8;">
             <svg viewBox="0 0 18 18" fill="none">
-              <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="2" y="13" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9 2v10M5 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <rect x="2" y="13" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
             </svg>
             Export PDF
-          </button>
-          <button class="btn-critique" id="critique-btn" onclick="runCritique()">
-            <svg viewBox="0 0 18 18" fill="none">
-              <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5" />
-              <path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-            Critique &amp; Revise
           </button>
         </div>
       </footer>

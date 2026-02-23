@@ -19,8 +19,11 @@ Endpoints:
 import sys
 import json
 import threading
+import uuid
 import time
 import re
+import io
+import os
 from pathlib import Path
 from datetime import datetime
 from flask import Flask, jsonify, request, send_file, abort, send_from_directory
@@ -51,7 +54,12 @@ logger.info("--- STARTING VERCEL DEPLOYMENT (Fix Applied) ---")
 
 
 app = Flask(__name__)
-CORS(app)  # Allow dashboard (file://) to call the API
+# Read allowed origins from env var for production flexibility
+# Default allows localhost and file:// for local development
+_cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+CORS(app, origins=_cors_origins)
+if "*" in _cors_origins:
+    logger.warning("[SERVER] CORS is open to all origins. Set CORS_ORIGINS env var in production.")
 
 # ── In-memory pipeline state ──────────────────────────────
 pipeline_state = {
@@ -75,30 +83,44 @@ synthesis_state = {
     "last_run": None,
     "generation_id": None,  # Track which synthesis run is active
     "started_at": None,  # Track when synthesis started
+    "revised_markdown": None,  # Store the revised markdown for revision polling
+    "output_sections": {},    # Store sections like critique, suggestions
+    "generated_files": [],     # Store links to PDFs or other reports
 }
+
+# Thread safety lock for all shared state mutations
+_state_lock = threading.Lock()
 
 # ── Helpers ───────────────────────────────────────────────
 def _reset_pipeline():
-    for s in pipeline_state["stages"]:
-        s["status"] = "pending"
-        s["progress"] = 0
-        s["subtitle"] = "Waiting…"
-    pipeline_state["running"] = False
-    pipeline_state["error"] = None
+    with _state_lock:
+        for s in pipeline_state["stages"]:
+            s["status"] = "pending"
+            s["progress"] = 0
+            s["subtitle"] = "Waiting…"
+        pipeline_state["running"] = False
+        pipeline_state["error"] = None
 
 def _reset_synthesis():
     """Reset synthesis state to initial values."""
-    synthesis_state["running"] = False
-    synthesis_state["done"] = False
-    synthesis_state["error"] = None
-    synthesis_state["generation_id"] = None
-    synthesis_state["started_at"] = None
+    with _state_lock:
+        synthesis_state["running"] = False
+        synthesis_state["done"] = False
+        synthesis_state["error"] = None
+        synthesis_state["generation_id"] = None
+        synthesis_state["started_at"] = None
+        synthesis_state["revised_markdown"] = None
+        synthesis_state["output_sections"] = {}
+        synthesis_state["generated_files"] = []
+        synthesis_state["output_sections"] = {}
+        synthesis_state["generated_files"] = []
 
 def _set_stage(idx, status, subtitle, progress):
-    s = pipeline_state["stages"][idx]
-    s["status"] = status
-    s["subtitle"] = subtitle
-    s["progress"] = progress
+    with _state_lock:
+        s = pipeline_state["stages"][idx]
+        s["status"] = status
+        s["subtitle"] = subtitle
+        s["progress"] = progress
 
 def _load_json(path: Path):
     if not path.exists():
@@ -110,8 +132,13 @@ def _load_json(path: Path):
         return None
 
 def _latest_output_folder():
-    """Return the most recently modified output subfolder."""
-    folders = [d for d in OUTPUT_DIR.iterdir() if d.is_dir()]
+    """Return the most recently modified output subfolder, or None if none exist."""
+    if not OUTPUT_DIR.exists() or not OUTPUT_DIR.is_dir():
+        return None
+    try:
+        folders = [d for d in OUTPUT_DIR.iterdir() if d.is_dir()]
+    except OSError:
+        return None
     if not folders:
         return None
     return max(folders, key=lambda d: d.stat().st_mtime)
@@ -141,6 +168,13 @@ def _papers_to_apa(papers):
 
 # ── Static File Serving ────────────────────────────────────
 DASHBOARD_DIR = BASE_DIR / "dashboard"
+if not DASHBOARD_DIR.exists():
+    # Fall back to serving files from project root if dashboard/ doesn't exist
+    DASHBOARD_DIR = BASE_DIR
+    logger.warning(
+        f"[SERVER] 'dashboard/' folder not found. Serving static files from project root: {BASE_DIR}\n"
+        f"         Move index.html, app.js, styles.css into a 'dashboard/' subfolder to suppress this warning."
+    )
 
 @app.route('/')
 def serve_index():
@@ -330,17 +364,37 @@ def _run_synthesis_thread(gen_id):
     try:
         writer = ResearchWriter()
         writer.generate_complete_document()
+        
+        # NEW: Generate Critique and Final Report for the sidebar/export
+        # Explicitly call these to populate writer.output_sections
+        try:
+            writer.generate_critique()
+            writer.generate_final_report()
+            logger.info("[SYNTHESIS-THREAD] Critique and Final Report generated")
+        except Exception as ce:
+            logger.warning(f"[SYNTHESIS-THREAD] Sidebar content generation failed: {ce}")
+
         # Only mark as done if this is still the active generation
-        if synthesis_state["generation_id"] == gen_id:
-            synthesis_state["done"] = True
-            synthesis_state["last_run"] = datetime.now().isoformat()
+        with _state_lock:
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["done"] = True
+                synthesis_state["last_run"] = datetime.now().isoformat()
+                # Copy sections to state for the API
+                synthesis_state["output_sections"] = writer.output_sections.copy()
+                
+                # Add PDF path to generated files
+                synthesis_state["generated_files"] = [
+                    {"name": "Full Synthesis Report (PDF)", "url": "/api/export/pdf", "type": "pdf"}
+                ]
     except Exception as e:
         logger.error(f"Synthesis error: {e}")
-        if synthesis_state["generation_id"] == gen_id:
-            synthesis_state["error"] = str(e)
+        with _state_lock:
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["error"] = str(e)
     finally:
-        if synthesis_state["generation_id"] == gen_id:
-            synthesis_state["running"] = False
+        with _state_lock:
+            if synthesis_state["generation_id"] == gen_id:
+                synthesis_state["running"] = False
 
 
 @app.route("/api/synthesis/run", methods=["POST"])
@@ -351,13 +405,13 @@ def api_synthesis_run():
         return jsonify({"error": "Run the extraction pipeline first."}), 400
 
     # Generate unique ID for this synthesis run to prevent stale data issues
-    import uuid
     gen_id = str(uuid.uuid4())
-    synthesis_state["generation_id"] = gen_id
-    synthesis_state["running"] = True
-    synthesis_state["done"]    = False
-    synthesis_state["error"]   = None
-    synthesis_state["started_at"] = datetime.now().isoformat()
+    with _state_lock:
+        synthesis_state["generation_id"] = gen_id
+        synthesis_state["running"] = True
+        synthesis_state["done"]    = False
+        synthesis_state["error"]   = None
+        synthesis_state["started_at"] = datetime.now().isoformat()
     t = threading.Thread(target=_run_synthesis_thread, args=(gen_id,), daemon=True)
     t.start()
     return jsonify({"ok": True, "message": "Synthesis started", "generation_id": gen_id})
@@ -397,16 +451,23 @@ def api_synthesis():
         except:
             pass
     
+    # synthesis_ready indicates content is ready for display (done and has content)
+    synthesis_ready = synthesis_state["done"] and has_content and not synthesis_state["running"]
+    
     return jsonify({
         "markdown":  md_text,
         "sections":  sections,
         "parsed":    parsed,
         "running":   synthesis_state["running"],
-        "done":      synthesis_state["done"] and has_content,  # Only mark done if files exist
-        "error":     synthesis_state["error"],  # Include error so frontend can display it
+        "done":      synthesis_state["done"] and has_content,
+        "synthesis_ready": synthesis_ready,  # FIX: Add clear readiness flag for polling
+        "error":     synthesis_state["error"],
         "last_run":  synthesis_state["last_run"],
         "generation_id": synthesis_state["generation_id"],
-        "elapsed_seconds": elapsed_seconds,  # For debugging long-running processes
+        "revised_markdown": synthesis_state["revised_markdown"],
+        "output_sections": synthesis_state["output_sections"],
+        "generated_files": synthesis_state["generated_files"],
+        "elapsed_seconds": elapsed_seconds,
     })
 
 
@@ -419,7 +480,6 @@ def api_synthesis_revise():
         return jsonify({"error": "Instruction required"}), 400
         
     def _revise_thread(instr, gen_id):
-        synthesis_state["running"] = True
         try:
             # Initialize ResearchWriter explicitly with analysis data
             writer = ResearchWriter(analysis_file=ANALYSIS_RESULTS_FILE)
@@ -432,28 +492,42 @@ def api_synthesis_revise():
                     writer.output_sections.update(sections_data)
                     logger.info(f"[REVISE] Loaded {len(sections_data)} sections for context preservation")
             
-            writer.revise_document(instr)
-            if synthesis_state["generation_id"] == gen_id:
-                synthesis_state["done"] = True
-                synthesis_state["last_run"] = datetime.now().isoformat()
+            # Perform revision (saves document internally)
+            revised_markdown = writer.revise_document(instr)
+            
+            # Re-parse revised content for the dashboard
+            revised_parsed = _parse_synthesis_md(revised_markdown)
+            
+            # Thread-safe update of synthesis state
+            with _state_lock:
+                if synthesis_state["generation_id"] == gen_id:
+                    synthesis_state["revised_markdown"] = revised_markdown
+                    synthesis_state["output_sections"] = writer.output_sections.copy()
+                    synthesis_state["done"] = True
+                    synthesis_state["last_run"] = datetime.now().isoformat()
+                    # We can also put the parsed result here if needed, 
+                    # but api_synthesis parses it on the fly from the file.
+                    # HOWEVER, since files are written mid-thread, we ensure safety.
         except Exception as e:
             logger.error(f"Revision error: {e}")
-            if synthesis_state["generation_id"] == gen_id:
-                synthesis_state["error"] = str(e)
+            with _state_lock:
+                if synthesis_state["generation_id"] == gen_id:
+                    synthesis_state["error"] = str(e)
         finally:
-            if synthesis_state["generation_id"] == gen_id:
-                synthesis_state["running"] = False
+            with _state_lock:
+                if synthesis_state["generation_id"] == gen_id:
+                    synthesis_state["running"] = False
 
     if synthesis_state["running"]:
         return jsonify({"error": "Synthesis/Revision already in progress"}), 409
 
-    import uuid
     gen_id = str(uuid.uuid4())
-    synthesis_state["generation_id"] = gen_id
-    synthesis_state["running"] = True
-    synthesis_state["done"] = False
-    synthesis_state["error"] = None
-    synthesis_state["started_at"] = datetime.now().isoformat()
+    with _state_lock:
+        synthesis_state["generation_id"] = gen_id
+        synthesis_state["running"] = True
+        synthesis_state["done"] = False
+        synthesis_state["error"] = None
+        synthesis_state["started_at"] = datetime.now().isoformat()
     t = threading.Thread(target=_revise_thread, args=(instruction, gen_id), daemon=True)
     t.start()
     
@@ -490,6 +564,8 @@ def _parse_synthesis_md(md: str) -> dict:
 
 @app.route("/api/reports")
 def api_reports():
+    if not OUTPUT_DIR.exists():
+        return jsonify({"reports": [], "count": 0})
     folders = sorted(
         [d for d in OUTPUT_DIR.iterdir() if d.is_dir()],
         key=lambda d: d.stat().st_mtime,
@@ -512,7 +588,7 @@ def api_reports():
 
         reports.append({
             "id":        folder.name,
-            "title":     folder.name.replace("_", " ").replace("20", "20", 1),
+            "title":     re.sub(r"_\d{8}_\d{6}$", "", folder.name).replace("_", " "),
             "topic":     topic_m.group(1).strip() if topic_m else folder.name,
             "date":      date_m.group(1).strip()  if date_m  else "Unknown",
             "model":     model_m.group(1).strip()  if model_m else "Unknown",
@@ -565,9 +641,13 @@ def api_export_apa():
         return jsonify({"error": "No papers found"}), 404
 
     apa_text = _papers_to_apa(papers)
-    tmp_path = BASE_DIR / "output" / "_apa_export.txt"
-    tmp_path.write_text(apa_text, encoding="utf-8")
-    return send_file(tmp_path, as_attachment=True, download_name="references_APA7.txt", mimetype="text/plain")
+    apa_bytes = apa_text.encode("utf-8")
+    return send_file(
+        io.BytesIO(apa_bytes),
+        as_attachment=True,
+        download_name="references_APA7.txt",
+        mimetype="text/plain"
+    )
 
 
 @app.route("/api/export/bib")
@@ -597,13 +677,13 @@ def api_export_markdown():
 @app.route("/api/export/pdf")
 def api_export_pdf():
     """
-    Generate and return PDF of the research synthesis.
+    Generate and return PDF of the research synthesis with professional Markdown conversion.
     
-    Attempts server-side PDF generation. If unavailable, returns 503 error,
-    which triggers frontend to use browser print-to-PDF fallback (which has
-    comprehensive academic styling: Georgia serif, 14px, 1.8 line-height).
-    
-    Cache-busting: Frontend includes ?t=${Date.now()} in request URL.
+    Features:
+    - Server-side PDF generation using ReportLab
+    - Markdown to PDF conversion (headings, bold, italics, lists)
+    - Clean academic styling without raw symbols
+    - In-memory streaming with proper headers
     """
     # Check if synthesis exists
     folder  = _latest_output_folder()
@@ -615,24 +695,20 @@ def api_export_pdf():
     
     # Try to generate PDF using reportlab if available
     try:
-        from reportlab.lib.pagesizes import letter, A4
+        from reportlab.lib.pagesizes import letter
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
         from reportlab.lib.units import inch
-        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
         from reportlab.lib import colors
-        from reportlab.pdfgen import canvas
-        import markdown
+        import re as regex_module
         
         # Read markdown content
         markdown_content = md_file.read_text(encoding='utf-8')
         
-        # Create PDF file path
-        pdf_file = BASE_DIR / "output" / f"research_synthesis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-        pdf_file.parent.mkdir(parents=True, exist_ok=True)
-        
-        # Create PDF document with academic styling
+        # Create in-memory PDF
+        pdf_buffer = io.BytesIO()
         doc = SimpleDocTemplate(
-            str(pdf_file),
+            pdf_buffer,
             pagesize=letter,
             rightMargin=0.75*inch,
             leftMargin=0.75*inch,
@@ -645,33 +721,69 @@ def api_export_pdf():
         
         # Build styles for academic formatting
         styles = getSampleStyleSheet()
+        
+        # Override default styles
         styles.add(ParagraphStyle(
-            name='BodyFont',
+            name='BodyText',
             fontName='Times-Roman',
-            fontSize=12,
-            leading=18,  # 1.8x line height
-            alignment=4   # Justified
+            fontSize=11,
+            leading=17,  # 1.8x line height
+            alignment=4,  # Justified
+            spaceAfter=10
         ))
         
         styles.add(ParagraphStyle(
-            name='Heading1Font',
+            name='Heading1',
             fontName='Times-Bold',
             fontSize=18,
             leading=22,
             spaceAfter=12,
-            textColor=colors.HexColor('#3730a3'),
-            pageBreakBefore=False
+            textColor=colors.HexColor('#1a1a2e'),
+            pageBreakBefore=False,
+            spaceBefore=6
         ))
         
         styles.add(ParagraphStyle(
-            name='Heading2Font',
+            name='Heading2',
             fontName='Times-Bold',
             fontSize=14,
             leading=16,
             spaceAfter=10,
             textColor=colors.HexColor('#3730a3'),
+            pageBreakBefore=False,
+            spaceBefore=4
+        ))
+        
+        styles.add(ParagraphStyle(
+            name='Heading3',
+            fontName='Times-Bold',
+            fontSize=12,
+            leading=14,
+            spaceAfter=8,
+            textColor=colors.HexColor('#555555'),
             pageBreakBefore=False
         ))
+        
+        # Markdown to ReportLab converter
+        def convert_markdown_to_reportlab(text):
+            """Convert markdown fragments to ReportLab-compatible HTML with tag support."""
+            if not text: return ""
+            # Escape HTML special chars first (but preserve already-safe context)
+            text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            
+            # Bold: **text** → <b>text</b>
+            text = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', text)
+            
+            # Italic: *text* → <i>text</i>
+            text = re.sub(r'\*([^*]+)\*', r'<i>\1</i>', text)
+            
+            # Italics alt: _text_ → <i>text</i>
+            text = re.sub(r'_([^_]+)_', r'<i>\1</i>', text)
+            
+            # Code: `text` → <font face="Courier">text</font>
+            text = re.sub(r'`([^`]+)`', r'<font face="Courier">\1</font>', text)
+            
+            return text.strip()
         
         # Parse markdown and build story
         story = []
@@ -680,46 +792,96 @@ def api_export_pdf():
         i = 0
         while i < len(lines):
             line = lines[i]
+            stripped = line.strip()
             
-            if line.startswith('# '):
-                # Top-level heading
-                title = line.replace('# ', '').strip()
-                story.append(Paragraph(title, styles['Heading1Font']))
+            # Top-level heading (H1)
+            if stripped.startswith('# '):
+                title = stripped.replace('# ', '').strip()
+                clean_title = convert_markdown_to_reportlab(title)
+                para = Paragraph(clean_title, styles['Heading1'])
+                para.allowTags = True
+                story.append(para)
                 story.append(Spacer(1, 0.2*inch))
-            elif line.startswith('## '):
-                # Section heading
-                title = line.replace('## ', '').strip()
-                story.append(Paragraph(title, styles['Heading2Font']))
+            
+            # Section heading (H2)
+            elif stripped.startswith('## '):
+                title = stripped.replace('## ', '').strip()
+                clean_title = convert_markdown_to_reportlab(title)
+                para = Paragraph(clean_title, styles['Heading2'])
+                para.allowTags = True
+                story.append(para)
                 story.append(Spacer(1, 0.15*inch))
-            elif line.startswith('### '):
-                # Subsection heading
-                title = line.replace('### ', '').strip()
-                story.append(Paragraph(title, styles['Heading3']))
+            
+            # Subsection heading (H3)
+            elif stripped.startswith('### '):
+                title = stripped.replace('### ', '').strip()
+                clean_title = convert_markdown_to_reportlab(title)
+                para = Paragraph(clean_title, styles['Heading3'])
+                para.allowTags = True
+                story.append(para)
                 story.append(Spacer(1, 0.1*inch))
-            elif line.strip().startswith('- ') or line.strip().startswith('* '):
-                # Bullet point - convert to paragraph with indent
-                item = line.strip().lstrip('- *').strip()
-                story.append(Paragraph(f"• {item}", styles['Normal']))
-            elif line.strip() == '':
-                # Blank line - add spacer
+            
+            # Bullet points
+            elif stripped.startswith('- ') or stripped.startswith('* '):
+                item = stripped.lstrip('-* ').strip()
+                clean_item = convert_markdown_to_reportlab(item)
+                para = Paragraph(f"• {clean_item}", styles['BodyText'])
+                para.allowTags = True
+                story.append(para)
+                story.append(Spacer(1, 0.05*inch))
+            
+            # Numbered list
+            elif re.match(r'^\d+\.\s', stripped):
+                item = re.sub(r'^\d+\.\s', '', stripped).strip()
+                clean_item = convert_markdown_to_reportlab(item)
+                para = Paragraph(clean_item, styles['BodyText'])
+                para.allowTags = True
+                story.append(para)
+                story.append(Spacer(1, 0.05*inch))
+            
+            # Blank line
+            elif stripped == '':
+                story.append(Spacer(1, 0.08*inch))
+            
+            # Horizontal rule (---)
+            elif stripped == '---' or stripped == '***' or stripped == '___':
                 story.append(Spacer(1, 0.1*inch))
+            
+            # Regular paragraph
             else:
-                # Regular paragraph
-                if line.strip():
-                    story.append(Paragraph(line.strip(), styles['BodyFont']))
-                    story.append(Spacer(1, 0.08*inch))
+                if stripped:
+                    clean_para = convert_markdown_to_reportlab(stripped)
+                    # FIX: Use allowTags=True so HTML tags in markdown are rendered properly
+                    para = Paragraph(clean_para, styles['BodyText'])
+                    para.allowTags = True  # Enable HTML tag rendering
+                    story.append(para)
+                    story.append(Spacer(1, 0.06*inch))
             
             i += 1
-        
-        # Add page break at end
-        story.append(PageBreak())
         
         # Build PDF
         doc.build(story)
         
-        logger.info(f"[PDF] Generated: {pdf_file}")
+        # Reset buffer position for reading
+        pdf_buffer.seek(0)
+        
+        pdf_size = len(pdf_buffer.getvalue())
+        logger.info(f"[PDF] Generated in-memory PDF ({pdf_size} bytes)")
+        
+        # Track in synthesis state
+        with _state_lock:
+            pdf_entry = {
+                "name": f"Research Synthesis PDF",
+                "url": "/api/export/pdf",
+                "type": "pdf",
+                "size": pdf_size,
+                "generated_at": datetime.now().isoformat()
+            }
+            if pdf_entry not in synthesis_state["generated_files"]:
+                synthesis_state["generated_files"].append(pdf_entry)
+        
         return send_file(
-            str(pdf_file),
+            pdf_buffer,
             as_attachment=True,
             download_name=f"research_synthesis_{datetime.now().strftime('%Y%m%d')}.pdf",
             mimetype="application/pdf"

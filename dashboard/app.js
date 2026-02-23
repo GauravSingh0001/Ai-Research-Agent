@@ -73,6 +73,27 @@ async function apiFetch(path, options = {}) {
     }
 }
 
+// FIX: Helper to download files with proper filenames
+async function downloadFile(url, fileName) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.statusText);
+        
+        const blob = await response.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName || url.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+        
+        showToast(`✓ Downloaded: ${fileName}`, 'success', 3000);
+    } catch (e) {
+        showToast(`Download failed: ${e.message}`, 'error', 4000);
+    }
+}
+
 // ── FORMAT TOOLBAR ─────────────────────────────────────────
 // FIX: Blog post format option added
 function injectFormatToolbar() {
@@ -410,7 +431,7 @@ async function loadSynthesisView() {
             state.papers = papersData.papers;
             renderPaperCards(papersData.papers);
         }
-    } catch (_) {}
+    } catch (_) { }
 
     try {
         const data = await apiFetch('/synthesis');
@@ -442,7 +463,33 @@ function renderSynthesisView(data) {
         renderBentoGrid(data.sections, p);
     }
 
+    // NEW: Render research artefacts (PDFs, etc.)
+    renderArtefacts(data.generated_files);
+
     updatePaperBadge();
+}
+
+function renderArtefacts(files) {
+    const list = document.getElementById('artefacts-list');
+    if (!list) return;
+
+    if (!files || !files.length) {
+        list.innerHTML = `<div class="empty-state" style="padding: 10px; font-size: 12px;">Run synthesis to generate files.</div>`;
+        return;
+    }
+
+    list.innerHTML = files.map(file => `
+        <div class="artefact-item" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(55, 48, 163, 0.05); border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(55, 48, 163, 0.1);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 18px;">${file.type === 'pdf' ? '📄' : '📁'}</span>
+                <div>
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text-primary);">${file.name}</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">${file.type.toUpperCase()} Report</div>
+                </div>
+            </div>
+            <a href="${API}${file.url}" target="_blank" class="download-btn-small" style="background: var(--accent-primary); color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; text-decoration: none; font-weight: 600;">Download</a>
+        </div>
+    `).join('');
 }
 
 // FIX: Full content rendering with format modes
@@ -474,7 +521,7 @@ function renderSynthesisContent(data, format) {
 
 function renderAcademicFormat(data, container) {
     const p = data.parsed || {};
-    const sections = data.sections || {};
+    const sections = data.sections || data.output_sections || {};
 
     const sectionDefs = [
         { key: 'introduction', parsed: p.introduction, label: 'Introduction', icon: '📖' },
@@ -483,16 +530,41 @@ function renderAcademicFormat(data, container) {
         { key: 'discussion', parsed: p.discussion, label: 'Discussion', icon: '💬' },
         { key: 'conclusion', parsed: p.conclusion, label: 'Conclusion', icon: '🎯' },
         { key: 'references', parsed: p.references, label: 'References', icon: '📚' },
-        // NEW: Critique & Review sections
+        // FIX: Render Critique & Review sections from output_sections
         { key: 'critique', parsed: sections.critique, label: 'Academic Critique & Review', icon: '🔍' },
-        { key: 'suggestions', parsed: sections.suggestions, label: 'Expert Suggestions', icon: '💡' },
-        { key: 'final_report', parsed: sections.final_report, label: 'Final Report Bundle', icon: '📋' },
+        { key: 'suggestions', parsed: sections.suggestions, label: 'Expert Suggestions for Improvement', icon: '💡' },
+        { key: 'final_report', parsed: sections.final_report, label: 'Final Report Bundle (JSON)', icon: '📋' },
     ];
 
     sectionDefs.forEach(({ key, parsed, label, icon }) => {
         const content = sections[key] || parsed || '';
         if (!content || content.length < 10) return;
-        injectSection(container, key, label, icon, content);
+        
+        // Special handling for final_report (JSON) and critique (long text)
+        if (key === 'final_report') {
+            try {
+                const reportObj = typeof content === 'string' ? JSON.parse(content) : content;
+                const reportHtml = `
+                    <div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:14px;font-size:12px;line-height:1.6;color:#aab">
+                        <strong style="color:#818cf8">📊 Report Metadata</strong><br/>
+                        Papers Reviewed: <strong>${reportObj.metadata?.papers_reviewed || 'N/A'}</strong><br/>
+                        AI Provider: <strong>${reportObj.metadata?.ai_provider || 'N/A'}</strong><br/>
+                        Generated: <strong>${new Date(reportObj.metadata?.generated_at).toLocaleDateString()}</strong><br/>
+                        <br/>
+                        <strong style="color:#818cf8">📈 Quality Metrics</strong><br/>
+                        Coverage Score: <strong>${reportObj.quality_metrics?.coverage_score || 'N/A'}%</strong><br/>
+                        Academic Standards: <strong>${reportObj.quality_metrics?.academic_standards || 'APA 7th'}</strong>
+                    </div>`;
+                injectSectionRaw(container, key, reportHtml);
+            } catch (_) {
+                injectSection(container, key, label, icon, content);
+            }
+        } else if (key === 'critique') {
+            // Critique should show structured feedback
+            injectSection(container, key, label, icon, content);
+        } else {
+            injectSection(container, key, label, icon, content);
+        }
     });
 }
 
@@ -634,7 +706,7 @@ async function renderComparisonView() {
     let simData = null;
     try {
         simData = await apiFetch('/similarity');
-    } catch (_) {}
+    } catch (_) { }
 
     const papers = state.papers.slice(0, 4); // compare up to 4
     if (papers.length < 2) {
@@ -819,6 +891,7 @@ function updatePaperBadge() {
 // ── SYNTHESIS STATE ────────────────────────────────────────
 let currentSynthesisId = null;
 let synthesisTimedOut = false;  // Track if synthesis timed out
+let lastSynthesisMarkdown = '';  // FIX: Track previous markdown to detect content changes
 
 // ── SYNTHESIS TRIGGER ──────────────────────────────────────
 // FIX: Added 90s timeout with countdown so user knows it's working
@@ -859,13 +932,13 @@ async function runSynthesis() {
         clearInterval(countdownInterval);
         if (state.isSynthesizing) {
             synthesisTimedOut = true;  // Mark timeout occurred
-            
+
             // Stop the poller immediately
             if (state.synthesisPoller) {
                 clearInterval(state.synthesisPoller);
                 state.synthesisPoller = null;
             }
-            
+
             if (overlay) overlay.classList.add('hidden');
             state.isSynthesizing = false;
             showToast('Synthesis is taking longer than expected. Check server logs.', 'error', 6000);
@@ -980,10 +1053,10 @@ function startSynthesisPoller() {
             state.synthesisPoller = null;
             return;
         }
-        
+
         try {
             const data = await apiFetch('/synthesis');
-            
+
             // Only update if this is from the current synthesis run
             if (data.generation_id === currentSynthesisId) {
                 // Check for server-side errors
@@ -996,17 +1069,62 @@ function startSynthesisPoller() {
                     showToast(`Synthesis failed: ${data.error}`, 'error', 6000);
                     return;
                 }
+
+                // FIX: Enhanced revision detection - check both revised_markdown AND synthesis_ready
+                const hasNewRevision = data.revised_markdown && data.revised_markdown.length > 100;
+                const contentChanged = data.markdown && data.markdown !== lastSynthesisMarkdown;
+                const isReady = data.synthesis_ready === true;  // FIX: Use explicit synthesis_ready flag
                 
-                // Synthesis is complete
-                if (!data.running && (data.done || data.parsed?.abstract)) {
+                if (!data.running && hasNewRevision && contentChanged) {
                     clearInterval(state.synthesisPoller);
                     state.synthesisPoller = null;
                     state.isSynthesizing = false;
                     const overlay = document.getElementById('loading-overlay');
                     if (overlay) overlay.classList.add('hidden');
+
+                    // Track that we've seen this markdown
+                    lastSynthesisMarkdown = data.markdown || '';
+                    
+                    // Update state with revised content
+                    state.synthesis = data;
+                    // Update the editor to show the revised markdown
+                    renderSynthesisView(data);
+                    showToast('✨ Revision complete! Content updated.', 'success', 4000);
+                    return;
+                }
+
+                // Synthesis is complete (use synthesis_ready flag for clarity)
+                if (isReady && contentChanged) {
+                    clearInterval(state.synthesisPoller);
+                    state.synthesisPoller = null;
+                    state.isSynthesizing = false;
+                    const overlay = document.getElementById('loading-overlay');
+                    if (overlay) overlay.classList.add('hidden');
+                    
+                    // Track that we've seen this markdown
+                    lastSynthesisMarkdown = data.markdown || '';
+                    
                     state.synthesis = data;
                     renderSynthesisView(data);
+                    
+                    // FIX: Also update generated_files display in reports view if visible
+                    if (state.currentView === 'reports') {
+                        loadReportsView();
+                    }
+                    
                     showToast('✨ Synthesis complete!', 'success', 4000);
+                    return;
+                }
+                
+                // Fallback: If synthesis_ready is true but no explicit change detected, still render
+                if (isReady && !state.synthesis) {
+                    state.synthesis = data;
+                    renderSynthesisView(data);
+                    
+                    // FIX: Also update reports if currently viewing
+                    if (state.currentView === 'reports') {
+                        loadReportsView();
+                    }
                 }
             }
         } catch (_) {
@@ -1040,10 +1158,16 @@ async function runCritique() {
     btn.innerHTML = `<svg viewBox="0 0 18 18" fill="none" style="animation:spin 1s linear infinite"><path d="M9 2a7 7 0 017 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Revising…`;
 
     try {
-        await apiFetch('/synthesis/revise', {
+        const result = await apiFetch('/synthesis/revise', {
             method: 'POST',
             body: JSON.stringify({ instruction })
         });
+
+        // FIX: Capture the generation_id from the result to track session
+        if (result && result.generation_id) {
+            currentSynthesisId = result.generation_id;
+        }
+
         showToast('Revision started! Takes ~60 seconds.', 'info', 5000);
         startSynthesisPoller();
         if (input) input.value = '';
@@ -1072,13 +1196,13 @@ async function exportPDF() {
                 'Expires': '0'
             }
         });
-        
+
         if (res.ok && res.headers.get('content-type')?.includes('pdf')) {
             const blob = await res.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `research_synthesis_${new Date().toISOString().slice(0,10)}.pdf`;
+            a.download = `research_synthesis_${new Date().toISOString().slice(0, 10)}.pdf`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1094,12 +1218,12 @@ async function exportPDF() {
     // Fallback: browser print-to-PDF with enhanced rendering
     console.log('[PDF] Falling back to browser print mechanism');
     showToast('Using browser print for PDF (server PDF not available)', 'info', 4000);
-    
+
     const data = await apiFetch('/synthesis').catch(e => {
         console.error('[PDF] Failed to fetch synthesis:', e);
         return null;
     });
-    
+
     if (!data || !data.markdown) {
         showToast('No synthesis content to export. Run synthesis first.', 'error');
         return;
@@ -1260,10 +1384,10 @@ async function exportPDF() {
         </body>
         </html>
     `;
-    
+
     printWindow.document.write(htmlContent);
     printWindow.document.close();
-    
+
     setTimeout(() => {
         console.log('[PDF] Launching print dialog');
         printWindow.print();
@@ -1289,22 +1413,60 @@ async function loadReportsView() {
     grid.innerHTML = skeletons(3, 'report');
 
     try {
-        const data = await apiFetch('/reports');
-        state.reports = data.reports || [];
-        renderReports(state.reports);
+        // Fetch archived reports
+        const reportsData = await apiFetch('/reports');
+        state.reports = reportsData.reports || [];
+        
+        // Also fetch current synthesis to get generated_files
+        const synthData = await apiFetch('/synthesis');
+        const generatedFiles = synthData.generated_files || [];
+        
+        renderReports(state.reports, generatedFiles);
     } catch (e) {
         grid.innerHTML = `<div class="empty-state">⚠️ Could not load reports: ${e.message}</div>`;
     }
 }
 
-function renderReports(reports) {
+function renderReports(reports, generatedFiles = []) {
     const grid = document.getElementById('reports-grid');
     if (!grid) return;
-    if (!reports.length) {
-        grid.innerHTML = `<div class="empty-state">No reports yet. Run a synthesis to generate one.</div>`;
+    
+    let html = '';
+    
+    // Show generated files from current synthesis session if available
+    if (generatedFiles && generatedFiles.length > 0) {
+        html += `
+        <div class="report-card" style="background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3)">
+          <div class="report-card-header">
+            <div>
+              <div class="report-title">📥 Current Session Exports</div>
+              <div class="report-meta">${generatedFiles.length} file${generatedFiles.length === 1 ? '' : 's'} generated</div>
+            </div>
+            <span class="report-status ready">✓ Ready</span>
+          </div>
+          <div style="margin-top:12px">
+            ${generatedFiles.map(f => {
+              // Construct proper download URL (handle both relative and absolute paths)
+              const downloadUrl = f.url.startsWith('http') ? f.url : (API + f.url);
+              const fileName = f.name.replace(/\s+/g, '_');
+              const fileIcon = f.type === 'pdf' ? '📄' : '📁';
+              return `
+              <a href="${downloadUrl}" onclick="event.preventDefault(); downloadFile('${downloadUrl}', '${fileName}')" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(79,142,247,0.1);border-radius:6px;text-decoration:none;color:#4f8ef7;font-size:13px;margin-bottom:6px;transition:background 0.2s;cursor:pointer" onmouseover="this.style.background='rgba(79,142,247,0.2)'" onmouseout="this.style.background='rgba(79,142,247,0.1)'">
+                <span>${fileIcon}</span>
+                <span>${f.name}</span>
+                ${f.size ? `<span style="font-size:11px;color:#999;margin-left:auto">${(f.size / 1024 / 1024).toFixed(1)}MB</span>` : ''}
+              </a>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+    
+    if (!reports.length && (!generatedFiles || generatedFiles.length === 0)) {
+        grid.innerHTML = html || `<div class="empty-state">No reports yet. Run a synthesis to generate one.</div>`;
         return;
     }
-    grid.innerHTML = reports.map(r => `
+    
+    html += reports.map(r => `
     <div class="report-card" onclick="openReport('${r.id}')">
       <div class="report-card-header">
         <div>
@@ -1333,6 +1495,8 @@ function renderReports(reports) {
         </button>
       </div>
     </div>`).join('');
+    
+    grid.innerHTML = html;
 }
 
 async function openReport(id) {
