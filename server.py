@@ -56,9 +56,9 @@ logger.info("--- STARTING VERCEL DEPLOYMENT (Fix Applied) ---")
 
 app = Flask(__name__)
 # Read allowed origins from env var for production flexibility
-# Default allows localhost and file:// for local development
+# Default allows all origins for local development and Render deployment
 _cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
-CORS(app, origins=_cors_origins)
+CORS(app, origins=_cors_origins, supports_credentials=True)
 if "*" in _cors_origins:
     logger.warning("[SERVER] CORS is open to all origins. Set CORS_ORIGINS env var in production.")
 

@@ -2,15 +2,18 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# ── Cloud Environment Detection ───────────────────────────
+# Both Vercel and Render have read-only filesystems; use /tmp for all writes
+IS_CLOUD = bool(os.environ.get("VERCEL") or os.environ.get("RENDER"))
+
 # Base Directories
-# Base Directories
-if os.environ.get("VERCEL"):
+if IS_CLOUD:
     BASE_DIR = Path("/tmp")
     DATA_DIR = BASE_DIR / "data"
     OUTPUT_DIR = BASE_DIR / "output"
-    SRC_DIR = Path(__file__).resolve().parent  # Keep source code location
-    
-    # Ensure directories exist in /tmp
+    SRC_DIR = Path(__file__).resolve().parent  # source code stays in deploy dir
+
+    # Ensure writable directories exist in /tmp
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 else:
@@ -19,13 +22,9 @@ else:
     OUTPUT_DIR = BASE_DIR / "output"
     SRC_DIR = BASE_DIR / "src"
 
-# Load environment variables
-# Load environment variables
-if not os.environ.get("VERCEL"):
+# Load environment variables (cloud platforms inject them automatically)
+if not IS_CLOUD:
     load_dotenv(BASE_DIR / ".env")
-else:
-    # On Vercel, env vars are injected by the platform
-    pass
 
 # API Configuration
 SEMANTIC_SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
