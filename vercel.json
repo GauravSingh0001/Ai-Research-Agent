@@ -2,22 +2,25 @@
   "version": 2,
   "functions": {
     "api/index.py": {
-      "runtime": "python3.12",
-      "maxDuration": 30
+      "runtime": "python3.12"
     }
   },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/index.py"
     },
     {
-      "src": "/(.*\\.(js|css|png|svg|ico|json))$",
-      "dest": "/dashboard/$1"
+      "src": "/(app\\.js|styles\\.css|.*\\.(png|svg|ico|json|jpg))$",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/index.py"
     }
-  ]
+  ],
+  "env": {
+    "PYTHONPATH": ".",
+    "VERCEL": "1"
+  }
 }
