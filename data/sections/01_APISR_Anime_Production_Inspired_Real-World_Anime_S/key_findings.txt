@@ -1,0 +1,1 @@
+• We evaluate our method through extensive experiments on the public benchmark, showing our method outperforms state-of-the-art anime dataset-trained approaches.

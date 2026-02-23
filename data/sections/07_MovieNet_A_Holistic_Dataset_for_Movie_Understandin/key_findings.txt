@@ -1,0 +1,3 @@
+• Based on MovieNet, we set up several benchmarks for movie understanding from different angles.
+
+• Extensive experiments are executed on these benchmarks to show the immeasurable value of MovieNet and the gap of current approaches towards comprehensive movie understanding.

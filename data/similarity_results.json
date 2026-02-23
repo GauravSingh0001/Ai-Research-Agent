@@ -2,661 +2,641 @@
   "matrix": [
     [
       1.0,
-      0.0629,
-      0.0453,
-      0.0566,
-      0.0757,
-      0.0363,
-      0.1223,
-      0.0775
+      0.0084,
+      0.106,
+      0.0293,
+      0.023,
+      0.1027,
+      0.0194,
+      0.0245
     ],
     [
-      0.0629,
+      0.0084,
       1.0,
-      0.034,
-      0.1345,
-      0.1044,
-      0.0257,
-      0.182,
-      0.1173
+      0.0229,
+      0.0709,
+      0.0616,
+      0.0296,
+      0.0457,
+      0.0798
     ],
     [
-      0.0453,
-      0.034,
+      0.106,
+      0.0229,
       1.0,
-      0.0326,
-      0.2711,
-      0.3601,
-      0.0433,
-      0.0433
+      0.0446,
+      0.0239,
+      0.1066,
+      0.0201,
+      0.0254
     ],
     [
-      0.0566,
-      0.1345,
-      0.0326,
+      0.0293,
+      0.0709,
+      0.0446,
       1.0,
-      0.0951,
-      0.0305,
-      0.161,
-      0.1486
+      0.0607,
+      0.0432,
+      0.2872,
+      0.0956
     ],
     [
-      0.0757,
-      0.1044,
-      0.2711,
-      0.0951,
+      0.023,
+      0.0616,
+      0.0239,
+      0.0607,
       1.0,
-      0.3326,
-      0.0855,
-      0.1217
+      0.0329,
+      0.0884,
+      0.0532
     ],
     [
-      0.0363,
-      0.0257,
-      0.3601,
-      0.0305,
-      0.3326,
+      0.1027,
+      0.0296,
+      0.1066,
+      0.0432,
+      0.0329,
       1.0,
-      0.0426,
-      0.028
+      0.049,
+      0.0246
     ],
     [
-      0.1223,
-      0.182,
-      0.0433,
-      0.161,
-      0.0855,
-      0.0426,
+      0.0194,
+      0.0457,
+      0.0201,
+      0.2872,
+      0.0884,
+      0.049,
       1.0,
-      0.152
+      0.0403
     ],
     [
-      0.0775,
-      0.1173,
-      0.0433,
-      0.1486,
-      0.1217,
-      0.028,
-      0.152,
+      0.0245,
+      0.0798,
+      0.0254,
+      0.0956,
+      0.0532,
+      0.0246,
+      0.0403,
       1.0
     ]
   ],
   "pairs": [
     {
+      "paper_a_idx": 3,
+      "paper_b_idx": 6,
+      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.2872
+    },
+    {
       "paper_a_idx": 2,
       "paper_b_idx": 5,
-      "paper_a_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "paper_b_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "similarity": 0.3601
+      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "similarity": 0.1066
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 2,
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "similarity": 0.106
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 5,
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "similarity": 0.1027
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 7,
+      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0956
     },
     {
       "paper_a_idx": 4,
-      "paper_b_idx": 5,
-      "paper_a_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "paper_b_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "similarity": 0.3326
+      "paper_b_idx": 6,
+      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.0884
     },
     {
-      "paper_a_idx": 2,
+      "paper_a_idx": 1,
+      "paper_b_idx": 7,
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0798
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 3,
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "similarity": 0.0709
+    },
+    {
+      "paper_a_idx": 1,
       "paper_b_idx": 4,
-      "paper_a_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "paper_b_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "similarity": 0.2711
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "similarity": 0.0616
+    },
+    {
+      "paper_a_idx": 3,
+      "paper_b_idx": 4,
+      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "similarity": 0.0607
+    },
+    {
+      "paper_a_idx": 4,
+      "paper_b_idx": 7,
+      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0532
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 6,
+      "paper_a_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.049
     },
     {
       "paper_a_idx": 1,
       "paper_b_idx": 6,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.182
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.0457
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 3,
+      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "similarity": 0.0446
     },
     {
       "paper_a_idx": 3,
-      "paper_b_idx": 6,
-      "paper_a_title": "Particle dark matter: Evidence, candidates and constraints",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.161
+      "paper_b_idx": 5,
+      "paper_a_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "similarity": 0.0432
     },
     {
       "paper_a_idx": 6,
       "paper_b_idx": 7,
-      "paper_a_title": "Wave Dark Matter",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.152
+      "paper_a_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0403
     },
     {
-      "paper_a_idx": 3,
-      "paper_b_idx": 7,
-      "paper_a_title": "Particle dark matter: Evidence, candidates and constraints",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.1486
+      "paper_a_idx": 4,
+      "paper_b_idx": 5,
+      "paper_a_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "similarity": 0.0329
     },
     {
       "paper_a_idx": 1,
+      "paper_b_idx": 5,
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "similarity": 0.0296
+    },
+    {
+      "paper_a_idx": 0,
       "paper_b_idx": 3,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "Particle dark matter: Evidence, candidates and constraints",
-      "similarity": 0.1345
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+      "similarity": 0.0293
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 7,
+      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0254
+    },
+    {
+      "paper_a_idx": 5,
+      "paper_b_idx": 7,
+      "paper_a_title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0246
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 7,
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "MovieNet: A Holistic Dataset for Movie Understanding",
+      "similarity": 0.0245
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 4,
+      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "similarity": 0.0239
+    },
+    {
+      "paper_a_idx": 0,
+      "paper_b_idx": 4,
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+      "similarity": 0.023
+    },
+    {
+      "paper_a_idx": 1,
+      "paper_b_idx": 2,
+      "paper_a_title": "Movie Gen: A Cast of Media Foundation Models",
+      "paper_b_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "similarity": 0.0229
+    },
+    {
+      "paper_a_idx": 2,
+      "paper_b_idx": 6,
+      "paper_a_title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.0201
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 6,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.1223
-    },
-    {
-      "paper_a_idx": 4,
-      "paper_b_idx": 7,
-      "paper_a_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.1217
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 7,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.1173
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 4,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "similarity": 0.1044
-    },
-    {
-      "paper_a_idx": 3,
-      "paper_b_idx": 4,
-      "paper_a_title": "Particle dark matter: Evidence, candidates and constraints",
-      "paper_b_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "similarity": 0.0951
-    },
-    {
-      "paper_a_idx": 4,
-      "paper_b_idx": 6,
-      "paper_a_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.0855
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 7,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.0775
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 4,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-      "similarity": 0.0757
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "Multimodal Movie Recommendation System Using Deep Learning",
+      "similarity": 0.0194
     },
     {
       "paper_a_idx": 0,
       "paper_b_idx": 1,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "Cosmology of axion dark matter",
-      "similarity": 0.0629
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 3,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "Particle dark matter: Evidence, candidates and constraints",
-      "similarity": 0.0566
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 2,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "similarity": 0.0453
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 6,
-      "paper_a_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.0433
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 7,
-      "paper_a_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.0433
-    },
-    {
-      "paper_a_idx": 5,
-      "paper_b_idx": 6,
-      "paper_a_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "paper_b_title": "Wave Dark Matter",
-      "similarity": 0.0426
-    },
-    {
-      "paper_a_idx": 0,
-      "paper_b_idx": 5,
-      "paper_a_title": "The Structure of cold dark matter halos",
-      "paper_b_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "similarity": 0.0363
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 2,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "similarity": 0.034
-    },
-    {
-      "paper_a_idx": 2,
-      "paper_b_idx": 3,
-      "paper_a_title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-      "paper_b_title": "Particle dark matter: Evidence, candidates and constraints",
-      "similarity": 0.0326
-    },
-    {
-      "paper_a_idx": 3,
-      "paper_b_idx": 5,
-      "paper_a_title": "Particle dark matter: Evidence, candidates and constraints",
-      "paper_b_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "similarity": 0.0305
-    },
-    {
-      "paper_a_idx": 5,
-      "paper_b_idx": 7,
-      "paper_a_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "paper_b_title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
-      "similarity": 0.028
-    },
-    {
-      "paper_a_idx": 1,
-      "paper_b_idx": 5,
-      "paper_a_title": "Cosmology of axion dark matter",
-      "paper_b_title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-      "similarity": 0.0257
+      "paper_a_title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
+      "paper_b_title": "Movie Gen: A Cast of Media Foundation Models",
+      "similarity": 0.0084
     }
   ],
   "top_terms": [
     {
       "paper_idx": 0,
-      "title": "The Structure of cold dark matter halos",
+      "title": "A Computer Movie Simulating Urban Growth in the Detroit Region",
       "top_terms": [
         {
-          "term": "halos",
-          "score": 0.1058
+          "term": "computer",
+          "score": 0.313
         },
         {
-          "term": "halo",
-          "score": 0.0882
+          "term": "simulating",
+          "score": 0.313
         },
         {
-          "term": "galaxies",
-          "score": 0.0842
+          "term": "urban",
+          "score": 0.313
         },
         {
-          "term": "structure",
-          "score": 0.0631
+          "term": "growth",
+          "score": 0.313
         },
         {
-          "term": "disk",
-          "score": 0.0631
+          "term": "detroit",
+          "score": 0.313
         },
         {
-          "term": "luminosity",
-          "score": 0.0631
+          "term": "region",
+          "score": 0.313
         },
         {
-          "term": "bright",
-          "score": 0.0631
+          "term": "abstract",
+          "score": 0.2264
         },
         {
-          "term": "cold",
-          "score": 0.0421
-        },
-        {
-          "term": "rotation",
-          "score": 0.0421
-        },
-        {
-          "term": "systematically",
-          "score": 0.0421
+          "term": "movie",
+          "score": 0.125
         }
       ]
     },
     {
       "paper_idx": 1,
-      "title": "Cosmology of axion dark matter",
+      "title": "Movie Gen: A Cast of Media Foundation Models",
       "top_terms": [
         {
-          "term": "axion",
-          "score": 0.2332
+          "term": "video",
+          "score": 0.1399
         },
         {
-          "term": "cosmology",
-          "score": 0.1113
+          "term": "generation",
+          "score": 0.1252
         },
         {
-          "term": "present",
-          "score": 0.1113
+          "term": "models",
+          "score": 0.0755
         },
         {
-          "term": "dark",
-          "score": 0.0667
+          "term": "training",
+          "score": 0.07
         },
         {
-          "term": "matter",
-          "score": 0.0667
+          "term": "media",
+          "score": 0.0626
         },
         {
-          "term": "introduction",
-          "score": 0.0556
+          "term": "videos",
+          "score": 0.0626
         },
         {
-          "term": "topical",
-          "score": 0.0556
+          "term": "audio",
+          "score": 0.0525
         },
         {
-          "term": "axions",
-          "score": 0.0556
+          "term": "gen",
+          "score": 0.0417
         },
         {
-          "term": "emphasis",
-          "score": 0.0556
+          "term": "cast",
+          "score": 0.0417
         },
         {
-          "term": "issues",
-          "score": 0.0556
+          "term": "foundation",
+          "score": 0.0417
         }
       ]
     },
     {
       "paper_idx": 2,
-      "title": "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
+      "title": "A Naturalistic Open Source Movie for Optical Flow Evaluation",
       "top_terms": [
         {
-          "term": "wimp",
-          "score": 0.0922
+          "term": "naturalistic",
+          "score": 0.313
         },
         {
-          "term": "lux",
-          "score": 0.0826
+          "term": "open",
+          "score": 0.313
         },
         {
-          "term": "zeplin",
-          "score": 0.0826
+          "term": "source",
+          "score": 0.313
         },
         {
-          "term": "spin",
-          "score": 0.0796
+          "term": "optical",
+          "score": 0.313
         },
         {
-          "term": "dependent",
-          "score": 0.055
+          "term": "flow",
+          "score": 0.313
         },
         {
-          "term": "sections",
-          "score": 0.055
+          "term": "evaluation",
+          "score": 0.2264
         },
         {
-          "term": "first",
-          "score": 0.0461
+          "term": "abstract",
+          "score": 0.2264
         },
         {
-          "term": "experiment",
-          "score": 0.0461
-        },
-        {
-          "term": "above",
-          "score": 0.0461
-        },
-        {
-          "term": "search",
-          "score": 0.0398
+          "term": "movie",
+          "score": 0.125
         }
       ]
     },
     {
       "paper_idx": 3,
-      "title": "Particle dark matter: Evidence, candidates and constraints",
+      "title": "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
       "top_terms": [
         {
-          "term": "particle",
-          "score": 0.1211
+          "term": "recommendation",
+          "score": 0.0744
         },
         {
-          "term": "evidence",
-          "score": 0.0963
+          "term": "hybrid",
+          "score": 0.0533
         },
         {
-          "term": "discuss",
-          "score": 0.0963
+          "term": "number",
+          "score": 0.0533
         },
         {
-          "term": "models",
-          "score": 0.0963
+          "term": "conversion",
+          "score": 0.0533
         },
         {
-          "term": "candidates",
-          "score": 0.0807
+          "term": "cosine",
+          "score": 0.0533
         },
         {
-          "term": "constraints",
-          "score": 0.0807
+          "term": "proposed",
+          "score": 0.0533
         },
         {
-          "term": "experimental",
-          "score": 0.0807
+          "term": "top",
+          "score": 0.0533
         },
         {
-          "term": "dark",
-          "score": 0.0769
+          "term": "rated",
+          "score": 0.0533
         },
         {
-          "term": "matter",
-          "score": 0.0769
+          "term": "movies",
+          "score": 0.0514
         },
         {
-          "term": "article",
-          "score": 0.0482
+          "term": "movie",
+          "score": 0.0496
         }
       ]
     },
     {
       "paper_idx": 4,
-      "title": "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
+      "title": "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
       "top_terms": [
         {
-          "term": "pandax",
-          "score": 0.0849
+          "term": "dubbing",
+          "score": 0.1565
         },
         {
-          "term": "commissioning",
-          "score": 0.0849
+          "term": "prosody",
+          "score": 0.0522
         },
         {
-          "term": "tonne",
-          "score": 0.0849
+          "term": "duration",
+          "score": 0.0522
         },
         {
-          "term": "dark",
-          "score": 0.0678
+          "term": "consistency",
+          "score": 0.0522
         },
         {
-          "term": "matter",
-          "score": 0.0678
+          "term": "stage",
+          "score": 0.0522
         },
         {
-          "term": "search",
-          "score": 0.0614
+          "term": "phoneme",
+          "score": 0.0522
         },
         {
-          "term": "results",
-          "score": 0.0614
+          "term": "learning",
+          "score": 0.0503
         },
         {
-          "term": "data",
-          "score": 0.0538
+          "term": "movie",
+          "score": 0.0417
         },
         {
-          "term": "run",
-          "score": 0.0424
+          "term": "pronunciation",
+          "score": 0.0348
         },
         {
-          "term": "interactions",
-          "score": 0.0424
+          "term": "align",
+          "score": 0.0348
         }
       ]
     },
     {
       "paper_idx": 5,
-      "title": "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
+      "title": "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
       "top_terms": [
         {
-          "term": "ton",
-          "score": 0.1318
+          "term": "proposing",
+          "score": 0.2782
         },
         {
-          "term": "energy",
-          "score": 0.0552
+          "term": "sentiment",
+          "score": 0.2782
         },
         {
-          "term": "wimp",
-          "score": 0.0552
+          "term": "bert",
+          "score": 0.2782
         },
         {
-          "term": "search",
-          "score": 0.0477
+          "term": "xlnet",
+          "score": 0.2782
         },
         {
-          "term": "exposure",
-          "score": 0.0477
+          "term": "reviews",
+          "score": 0.2782
         },
         {
-          "term": "background",
-          "score": 0.0477
+          "term": "analysis",
+          "score": 0.2012
         },
         {
-          "term": "gev",
-          "score": 0.0477
+          "term": "abstract",
+          "score": 0.2012
         },
         {
-          "term": "collected",
-          "score": 0.0329
+          "term": "model",
+          "score": 0.1764
         },
         {
-          "term": "lngs",
-          "score": 0.0329
-        },
-        {
-          "term": "region",
-          "score": 0.0329
+          "term": "movie",
+          "score": 0.1111
         }
       ]
     },
     {
       "paper_idx": 6,
-      "title": "Wave Dark Matter",
+      "title": "Multimodal Movie Recommendation System Using Deep Learning",
       "top_terms": [
         {
-          "term": "wave",
-          "score": 0.1178
+          "term": "recommendation",
+          "score": 0.1111
         },
         {
-          "term": "interference",
-          "score": 0.0589
+          "term": "deep",
+          "score": 0.1031
         },
         {
-          "term": "broglie",
+          "term": "multimodal",
+          "score": 0.0884
+        },
+        {
+          "term": "learning",
+          "score": 0.0852
+        },
+        {
+          "term": "system",
+          "score": 0.0494
+        },
+        {
+          "term": "data",
+          "score": 0.0467
+        },
+        {
+          "term": "filtering",
           "score": 0.0442
         },
         {
-          "term": "dark",
-          "score": 0.0412
+          "term": "movie",
+          "score": 0.0353
         },
         {
-          "term": "matter",
-          "score": 0.0412
-        },
-        {
-          "term": "axion",
-          "score": 0.037
-        },
-        {
-          "term": "particles",
+          "term": "personalized",
           "score": 0.032
         },
         {
-          "term": "physics",
-          "score": 0.0295
-        },
-        {
-          "term": "phenomenology",
-          "score": 0.0295
-        },
-        {
-          "term": "average",
+          "term": "information",
           "score": 0.0295
         }
       ]
     },
     {
       "paper_idx": 7,
-      "title": "New Horizons: Scalar and Vector Ultralight Dark Matter",
+      "title": "MovieNet: A Holistic Dataset for Movie Understanding",
       "top_terms": [
         {
-          "term": "scalar",
-          "score": 0.0894
+          "term": "movienet",
+          "score": 0.1773
         },
         {
-          "term": "vector",
-          "score": 0.0894
+          "term": "understanding",
+          "score": 0.1551
         },
         {
-          "term": "strategies",
-          "score": 0.0894
+          "term": "dataset",
+          "score": 0.0743
         },
         {
-          "term": "dark",
-          "score": 0.0893
+          "term": "holistic",
+          "score": 0.0665
         },
         {
-          "term": "matter",
-          "score": 0.0893
+          "term": "movie",
+          "score": 0.0531
         },
         {
-          "term": "ultralight",
-          "score": 0.075
+          "term": "story",
+          "score": 0.0443
         },
         {
-          "term": "quantum",
-          "score": 0.075
+          "term": "long",
+          "score": 0.0443
         },
         {
-          "term": "detection",
-          "score": 0.0567
+          "term": "annotations",
+          "score": 0.0443
         },
         {
-          "term": "horizons",
-          "score": 0.0447
+          "term": "tags",
+          "score": 0.0443
         },
         {
-          "term": "last",
-          "score": 0.0447
+          "term": "video",
+          "score": 0.0371
         }
       ]
     }
   ],
   "paper_titles": [
-    "The Structure of cold dark matter halos",
-    "Cosmology of axion dark matter",
-    "First Dark Matter Search Results from the LUX-ZEPLIN (LZ) Experiment.",
-    "Particle dark matter: Evidence, candidates and constraints",
-    "Dark Matter Search Results from the PandaX-4T Commissioning Run.",
-    "Dark Matter Search Results from a One Ton-Year Exposure of XENON1T.",
-    "Wave Dark Matter",
-    "New Horizons: Scalar and Vector Ultralight Dark Matter"
+    "A Computer Movie Simulating Urban Growth in the Detroit Region",
+    "Movie Gen: A Cast of Media Foundation Models",
+    "A Naturalistic Open Source Movie for Optical Flow Evaluation",
+    "Dominance of AI and Machine Learning Techniques in Hybrid Movie Recommendation System Applying Text-to-number Conversion and Cosine Similarity Approaches",
+    "From Speaker to Dubber: Movie Dubbing with Prosody and Duration Consistency Learning",
+    "Proposing sentiment analysis model based on BERT and XLNet for movie reviews",
+    "Multimodal Movie Recommendation System Using Deep Learning",
+    "MovieNet: A Holistic Dataset for Movie Understanding"
   ]
 }

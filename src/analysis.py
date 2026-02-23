@@ -14,6 +14,7 @@ import json
 import re
 import math
 import os
+import threading
 import concurrent.futures
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
@@ -33,6 +34,9 @@ except ImportError:
     from utils import setup_logger
 
 logger = setup_logger(__name__)
+
+# Lock to prevent concurrent file writes if analysis is triggered simultaneously
+_file_write_lock = threading.Lock()
 
 # ── Output paths ──────────────────────────────────────────
 SECTIONS_DIR          = DATA_DIR / "sections"
@@ -120,22 +124,28 @@ def _cosine_similarity(vec_a: Dict[str, float], vec_b: Dict[str, float]) -> floa
 
 def _extract_text_from_pdf(pdf_path: str) -> str:
     """
-    Extract plain text from a local PDF file.
-    Uses PyPDF2 if available, otherwise falls back gracefully.
+    Extract plain text from a local PDF file using PyMuPDF (fitz).
+    Falls back gracefully if fitz is not installed.
     """
     try:
-        import PyPDF2  # optional dependency
-        text_parts = []
-        with open(pdf_path, 'rb') as f:
-            reader = PyPDF2.PdfReader(f)
-            for page in reader.pages:
-                text_parts.append(page.extract_text() or "")
-        return "\n".join(text_parts)
+        import fitz  # PyMuPDF — install with: pip install pymupdf
+        doc = fitz.open(pdf_path)
+        text = "\n".join(page.get_text() for page in doc)
+        doc.close()
+        if text.strip():
+            logger.info(f"[ANALYSIS] Extracted {len(text)} chars from PDF via PyMuPDF")
+            return text
+        else:
+            logger.warning(f"[ANALYSIS] PyMuPDF returned empty text for {pdf_path} — will use abstract")
+            return ""
     except ImportError:
-        logger.warning("[ANALYSIS] PyPDF2 not installed — using abstract as text source")
+        logger.warning(
+            "[ANALYSIS] PyMuPDF (fitz) not installed. Install with: pip install pymupdf\n"
+            "           Falling back to abstract text — analysis quality will be lower."
+        )
         return ""
     except Exception as e:
-        logger.warning(f"[ANALYSIS] PDF extraction failed for {pdf_path}: {e}")
+        logger.warning(f"[ANALYSIS] PDF extraction failed for {pdf_path}: {e} — using abstract fallback")
         return ""
 
 
@@ -229,24 +239,25 @@ def _save_section_files(papers_analysis: List[Dict]) -> None:
     """
     SECTIONS_DIR.mkdir(parents=True, exist_ok=True)
 
-    for paper in papers_analysis:
-        idx   = paper.get('id', 0)
-        title = re.sub(r'[^\w\s-]', '', paper.get('title', f'paper_{idx}'))[:50].strip()
-        title = re.sub(r'\s+', '_', title)
-        paper_dir = SECTIONS_DIR / f"{idx:02d}_{title}"
-        paper_dir.mkdir(parents=True, exist_ok=True)
+    with _file_write_lock:
+        for paper in papers_analysis:
+            idx   = paper.get('id', 0)
+            title = re.sub(r'[^\w\s-]', '', paper.get('title', f'paper_{idx}'))[:50].strip()
+            title = re.sub(r'\s+', '_', title)
+            paper_dir = SECTIONS_DIR / f"{idx:02d}_{title}"
+            paper_dir.mkdir(parents=True, exist_ok=True)
 
-        sections = paper.get('sections', {})
-        for section_name, content in sections.items():
-            if content:
-                out_path = paper_dir / f"{section_name}.txt"
-                out_path.write_text(content, encoding='utf-8')
+            sections = paper.get('sections', {})
+            for section_name, content in sections.items():
+                if content:
+                    out_path = paper_dir / f"{section_name}.txt"
+                    out_path.write_text(content, encoding='utf-8')
 
-        # Also write key findings
-        findings = paper.get('key_findings', [])
-        if findings:
-            findings_path = paper_dir / "key_findings.txt"
-            findings_path.write_text("\n\n".join(f"• {f}" for f in findings), encoding='utf-8')
+            # Also write key findings
+            findings = paper.get('key_findings', [])
+            if findings:
+                findings_path = paper_dir / "key_findings.txt"
+                findings_path.write_text("\n\n".join(f"• {f}" for f in findings), encoding='utf-8')
 
     logger.info(f"[ANALYSIS] Section files saved → {SECTIONS_DIR}")
 

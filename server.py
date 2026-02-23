@@ -908,8 +908,7 @@ def api_export_pdf():
 
 
 # ── Run ───────────────────────────────────────────────────
-# Export app for Vercel serverless functions
-# Vercel will use this directly without calling app.run()
+# Gunicorn imports `app` directly (server:app) — app.run() is for local dev only
 
 if __name__ == "__main__":
     print("\n" + "="*50)

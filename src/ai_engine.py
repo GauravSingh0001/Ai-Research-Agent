@@ -72,7 +72,7 @@ class AIEngine:
         # 3. Cohere
         if COHERE_API_KEY:
             try:
-                self.cohere_client = cohere.Client(COHERE_API_KEY)
+                self.cohere_client = cohere.ClientV2(COHERE_API_KEY)
                 logger.info(f"[OK] Cohere initialized ({COHERE_MODEL})")
             except Exception as e:
                 logger.error(f"Failed to initialize Cohere: {e}")
@@ -128,7 +128,7 @@ class AIEngine:
                         model=COHERE_MODEL
                     )
                     self.provider = "Cohere"
-                    return {"text": response.text, "status": "success", "provider": "Cohere", "error": None}
+                    return {"text": response.message.content[0].text, "status": "success", "provider": "Cohere", "error": None}
                 except Exception as e:
                     err_str = str(e)
                     if "500" in err_str or "INTERNAL" in err_str.upper():

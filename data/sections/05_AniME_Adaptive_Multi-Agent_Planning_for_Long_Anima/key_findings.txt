@@ -1,0 +1,3 @@
+• By integrating customized Model Context Protocol (MCP) with downstream model instruction, the specialized agent adaptively selects control conditions for diverse sub-tasks.
+
+• AniME produces cinematic animation with consistent characters and synchronized audio–visual elements, offering a scalable solution for AI-driven anime creation.

@@ -57,11 +57,11 @@ def archive_results(topic=None):
         if src.exists():
             try:
                 shutil.copy2(src, final_output_dir / dest_name)
-                print(f"   ✓ {dest_name}")
+                logger.info(f"[ARCHIVE] Copied: {dest_name}")
             except Exception as e:
-                print(f"   ✗ {src.name}: {e}")
+                logger.error(f"[ARCHIVE] Failed to copy {src.name}: {e}")
         else:
-            print(f"   – {dest_name} (not found, skipping)")
+            logger.warning(f"[ARCHIVE] {dest_name} not found — skipping (source: {src})")
 
     # Copy sections/ directory
     sections_src = DATA_DIR / "sections"
@@ -69,9 +69,9 @@ def archive_results(topic=None):
         sections_dst = final_output_dir / "sections"
         try:
             shutil.copytree(sections_src, sections_dst, dirs_exist_ok=True)
-            print(f"   ✓ sections/ directory")
+            logger.info(f"[ARCHIVE] Copied: sections/ directory")
         except Exception as e:
-            print(f"   ✗ sections/: {e}")
+            logger.error(f"[ARCHIVE] Failed to copy sections/: {e}")
 
     return final_output_dir
 

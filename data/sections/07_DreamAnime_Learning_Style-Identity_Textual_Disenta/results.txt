@@ -1,0 +1,1 @@
+Empirical results suggest that this disentanglement into separate word embeddings successfully captures a broad range of unique and complex concepts, with each word focusing on style or identity as appropriate.

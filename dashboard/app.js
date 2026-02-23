@@ -13,7 +13,7 @@
 
 'use strict';
 
-const API = '/api';
+const API = window.location.origin + '/api';
 
 // ── STATE ──────────────────────────────────────────────────
 const state = {
@@ -78,7 +78,7 @@ async function downloadFile(url, fileName) {
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error(response.statusText);
-        
+
         const blob = await response.blob();
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -87,7 +87,7 @@ async function downloadFile(url, fileName) {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(a.href);
-        
+
         showToast(`✓ Downloaded: ${fileName}`, 'success', 3000);
     } catch (e) {
         showToast(`Download failed: ${e.message}`, 'error', 4000);
@@ -539,7 +539,7 @@ function renderAcademicFormat(data, container) {
     sectionDefs.forEach(({ key, parsed, label, icon }) => {
         const content = sections[key] || parsed || '';
         if (!content || content.length < 10) return;
-        
+
         // Special handling for final_report (JSON) and critique (long text)
         if (key === 'final_report') {
             try {
@@ -1074,7 +1074,7 @@ function startSynthesisPoller() {
                 const hasNewRevision = data.revised_markdown && data.revised_markdown.length > 100;
                 const contentChanged = data.markdown && data.markdown !== lastSynthesisMarkdown;
                 const isReady = data.synthesis_ready === true;  // FIX: Use explicit synthesis_ready flag
-                
+
                 if (!data.running && hasNewRevision && contentChanged) {
                     clearInterval(state.synthesisPoller);
                     state.synthesisPoller = null;
@@ -1084,7 +1084,7 @@ function startSynthesisPoller() {
 
                     // Track that we've seen this markdown
                     lastSynthesisMarkdown = data.markdown || '';
-                    
+
                     // Update state with revised content
                     state.synthesis = data;
                     // Update the editor to show the revised markdown
@@ -1100,27 +1100,27 @@ function startSynthesisPoller() {
                     state.isSynthesizing = false;
                     const overlay = document.getElementById('loading-overlay');
                     if (overlay) overlay.classList.add('hidden');
-                    
+
                     // Track that we've seen this markdown
                     lastSynthesisMarkdown = data.markdown || '';
-                    
+
                     state.synthesis = data;
                     renderSynthesisView(data);
-                    
+
                     // FIX: Also update generated_files display in reports view if visible
                     if (state.currentView === 'reports') {
                         loadReportsView();
                     }
-                    
+
                     showToast('✨ Synthesis complete!', 'success', 4000);
                     return;
                 }
-                
+
                 // Fallback: If synthesis_ready is true but no explicit change detected, still render
                 if (isReady && !state.synthesis) {
                     state.synthesis = data;
                     renderSynthesisView(data);
-                    
+
                     // FIX: Also update reports if currently viewing
                     if (state.currentView === 'reports') {
                         loadReportsView();
@@ -1416,11 +1416,11 @@ async function loadReportsView() {
         // Fetch archived reports
         const reportsData = await apiFetch('/reports');
         state.reports = reportsData.reports || [];
-        
+
         // Also fetch current synthesis to get generated_files
         const synthData = await apiFetch('/synthesis');
         const generatedFiles = synthData.generated_files || [];
-        
+
         renderReports(state.reports, generatedFiles);
     } catch (e) {
         grid.innerHTML = `<div class="empty-state">⚠️ Could not load reports: ${e.message}</div>`;
@@ -1430,9 +1430,9 @@ async function loadReportsView() {
 function renderReports(reports, generatedFiles = []) {
     const grid = document.getElementById('reports-grid');
     if (!grid) return;
-    
+
     let html = '';
-    
+
     // Show generated files from current synthesis session if available
     if (generatedFiles && generatedFiles.length > 0) {
         html += `
@@ -1446,26 +1446,26 @@ function renderReports(reports, generatedFiles = []) {
           </div>
           <div style="margin-top:12px">
             ${generatedFiles.map(f => {
-              // Construct proper download URL (handle both relative and absolute paths)
-              const downloadUrl = f.url.startsWith('http') ? f.url : (API + f.url);
-              const fileName = f.name.replace(/\s+/g, '_');
-              const fileIcon = f.type === 'pdf' ? '📄' : '📁';
-              return `
+            // Construct proper download URL (handle both relative and absolute paths)
+            const downloadUrl = f.url.startsWith('http') ? f.url : (API + f.url);
+            const fileName = f.name.replace(/\s+/g, '_');
+            const fileIcon = f.type === 'pdf' ? '📄' : '📁';
+            return `
               <a href="${downloadUrl}" onclick="event.preventDefault(); downloadFile('${downloadUrl}', '${fileName}')" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(79,142,247,0.1);border-radius:6px;text-decoration:none;color:#4f8ef7;font-size:13px;margin-bottom:6px;transition:background 0.2s;cursor:pointer" onmouseover="this.style.background='rgba(79,142,247,0.2)'" onmouseout="this.style.background='rgba(79,142,247,0.1)'">
                 <span>${fileIcon}</span>
                 <span>${f.name}</span>
                 ${f.size ? `<span style="font-size:11px;color:#999;margin-left:auto">${(f.size / 1024 / 1024).toFixed(1)}MB</span>` : ''}
               </a>`;
-            }).join('')}
+        }).join('')}
           </div>
         </div>`;
     }
-    
+
     if (!reports.length && (!generatedFiles || generatedFiles.length === 0)) {
         grid.innerHTML = html || `<div class="empty-state">No reports yet. Run a synthesis to generate one.</div>`;
         return;
     }
-    
+
     html += reports.map(r => `
     <div class="report-card" onclick="openReport('${r.id}')">
       <div class="report-card-header">
@@ -1495,7 +1495,7 @@ function renderReports(reports, generatedFiles = []) {
         </button>
       </div>
     </div>`).join('');
-    
+
     grid.innerHTML = html;
 }
 

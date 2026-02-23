@@ -6,7 +6,6 @@ Results Synthesis, Discussion, Conclusion, and APA References.
 
 import json
 import re
-import concurrent.futures
 from datetime import datetime
 from typing import List, Dict, Any
 
@@ -19,6 +18,7 @@ from src.config import (
     ABSTRACT_WORD_LIMIT,
     OUTPUT_DIR
 )
+from src.cache import get_cache
 from src.utils import setup_logger
 
 logger = setup_logger(__name__)
@@ -54,7 +54,6 @@ class ResearchWriter:
     def __init__(self, analysis_file: str = None):
         # Delayed import
         from src.ai_engine import AIEngine
-        self.ai = AIEngine()
         self.analysis_file = analysis_file if analysis_file else ANALYSIS_RESULTS_FILE
         self.analysis_data = self._load_analysis()
         self.output_sections = {
@@ -142,7 +141,7 @@ class ResearchWriter:
 
         context = self._build_paper_context(papers)
         prompt = (
-            f"Write a concise academic abstract (maximum 150 words) for a research synthesis "
+            f"Write a concise academic abstract (maximum {ABSTRACT_WORD_LIMIT} words) for a research synthesis "
             f"that reviews the following {len(papers)} papers on the topic of {', '.join(themes[:3])}.\n\n"
             f"The abstract must cover: (1) purpose of the review, (2) scope and methodology of the synthesis, "
             f"(3) key findings across papers, (4) conclusions and implications.\n\n"
@@ -309,22 +308,31 @@ class ResearchWriter:
         - "Gaurav Singh" → ("singh", "Singh, G.")
         - "John D. Watson" → ("watson", "Watson, J. D.")
         - "Marie-Pierre Curie" → ("curie", "Curie, M.-P.")
+        - "van der Berg" → ("van der berg", "van der Berg, V. D. B.")
         """
+        SURNAME_PREFIXES = {"van", "von", "de", "del", "della", "di", "la", "le",
+                            "el", "al", "bin", "binte", "do", "da", "das", "dos"}
+
         parts = author_name.strip().split()
         if not parts:
             return ("unknown", "Unknown Author")
-        
-        # Extract surname (last component)
-        surname = parts[-1]
+
+        # Walk backwards from the end to collect the surname (including prefixes)
+        surname_parts = [parts[-1]]
+        i = len(parts) - 2
+        while i >= 0 and parts[i].lower() in SURNAME_PREFIXES:
+            surname_parts.insert(0, parts[i])
+            i -= 1
+        surname = " ".join(surname_parts)
         surname_for_sort = surname.lower()
-        
+        # Given names are everything before the surname parts
+        given_parts = parts[:i + 1]
+
         # Extract first/middle name(s) for initials
-        if len(parts) > 1:
-            # First and middle names (all but last)
-            first_middle = parts[:-1]
+        if given_parts:
             # Convert each to initial (handle hyphens and periods)
             initials = []
-            for name in first_middle:
+            for name in given_parts:
                 # Remove existing periods
                 name_clean = name.rstrip('.')
                 # Handle hyphenated names (e.g., "Marie-Pierre" → "M.-P.")
@@ -417,7 +425,10 @@ class ResearchWriter:
                 cite_key = f"{cite_key_base}{chr(96 + suffix)}"
                 suffix += 1
             used_keys.add(cite_key)
-            cite_keys[f"{primary_surname}_{year}"] = cite_key
+            lookup_key = f"{primary_surname}_{year}"
+            if lookup_key not in cite_keys:
+                cite_keys[lookup_key] = []
+            cite_keys[lookup_key].append(cite_key)
 
             # Build reference following APA 7th Edition schema:
             # Author(s). (Year). Title. Venue. URL
@@ -485,7 +496,8 @@ class ResearchWriter:
             # Get consistent cite key from the mapping
             primary_surname = entry["surname_lower"]
             key_lookup = f"{primary_surname}_{year}"
-            cite_key = cite_keys.get(key_lookup, f"{primary_surname}{year}")
+            key_list = cite_keys.get(key_lookup, [])
+            cite_key = key_list.pop(0) if key_list else f"{primary_surname}{year}"
 
             # Format authors for BibTeX (Last, First)
             formatted_authors = []
@@ -535,31 +547,39 @@ class ResearchWriter:
             logger.warning("No papers to write about.")
             return ""
 
+        # Check synthesis cache — skip full generation if papers haven't changed
+        cache = get_cache()
+        cached = cache.get_synthesis_result(papers)
+        if cached:
+            logger.info("[WRITING] Cache hit — returning cached synthesis (papers unchanged)")
+            full_doc = cached.get("full_doc", "")
+            if full_doc:
+                # Restore all sections from cache
+                for key, val in cached.get("sections", {}).items():
+                    self.output_sections[key] = val
+                return full_doc
+
         themes = self.analysis_data.get("key_themes", [])
         topic_str = ", ".join(themes[:3]) if themes else "Research Topic"
         date_str = datetime.now().strftime("%B %d, %Y")
 
         # ━━━━ PHASE 1: Generate main synthesis sections in parallel ━━━━
-        print("[WRITING] Phase 1: Generating sections in parallel...")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-            abstract_future = executor.submit(self.generate_abstract)
-            introduction_future = executor.submit(self.generate_introduction)
-            methods_future = executor.submit(self.generate_methods_comparison)
-            results_future = executor.submit(self.generate_results_synthesis)
-            discussion_future = executor.submit(self.generate_discussion)
-            conclusion_future = executor.submit(self.generate_conclusion)
-            references_future = executor.submit(self.generate_references)
-            bibtex_future = executor.submit(self.generate_bibtex)
-            
-            # Collect results as completed
-            abstract = abstract_future.result()
-            introduction = introduction_future.result()
-            methods = methods_future.result()
-            results = results_future.result()
-            discussion = discussion_future.result()
-            conclusion = conclusion_future.result()
-            references = references_future.result()
-            bibtex = bibtex_future.result()
+        print("[WRITING] Phase 1: Generating sections sequentially (thread-safe)...")
+        def _safe_run(fn, section_name):
+            try:
+                return fn()
+            except Exception as e:
+                logger.warning(f"[WRITING] {section_name} generation failed: {e}. Using fallback.")
+                return f"[{section_name} generation failed: {e}]"
+
+        abstract     = _safe_run(self.generate_abstract,             "Abstract")
+        introduction = _safe_run(self.generate_introduction,         "Introduction")
+        methods      = _safe_run(self.generate_methods_comparison,   "Methods")
+        results      = _safe_run(self.generate_results_synthesis,    "Results")
+        discussion   = _safe_run(self.generate_discussion,           "Discussion")
+        conclusion   = _safe_run(self.generate_conclusion,           "Conclusion")
+        references   = _safe_run(self.generate_references,           "References")
+        bibtex       = _safe_run(self.generate_bibtex,               "BibTeX")
 
         # Assemble full document
         doc_parts = [
@@ -603,7 +623,9 @@ class ResearchWriter:
         print("[WRITING] Phase 2: Generating first-pass critique & academic review...")
         critique = self._generate_first_pass_critique(full_doc)
         self.output_sections["critique"] = critique
-        self.output_sections["suggestions"] = critique  # Both critique and suggestions point to same source
+        # ━━━━ PHASE 2b: Generate independent suggestions from critique ━━━━
+        suggestions = self._generate_suggestions_from_critique(critique)
+        self.output_sections["suggestions"] = suggestions
 
         # ━━━━ PHASE 3: Generate final bundled report ━━━━
         print("[WRITING] Phase 3: Bundling final report with all artefacts...")
@@ -620,6 +642,12 @@ class ResearchWriter:
         print(f"  Critique: Generated with ACADEMIC_EDITOR_PROMPT (10 editorial rules)")
         print(f"  Final Report: Bundled with all artefacts")
         print(f"{'='*60}\n")
+
+        # Store result in cache keyed by papers content hash
+        cache.set_synthesis_result(papers, {
+            "full_doc": full_doc,
+            "sections": dict(self.output_sections),
+        })
 
         return full_doc
 
@@ -724,6 +752,28 @@ class ResearchWriter:
 *Critique generated using ACADEMIC_EDITOR_PROMPT with 10 editorial rules enforced.*
 """
 
+    def _generate_suggestions_from_critique(self, critique: str) -> str:
+        """Extract 5-7 concrete, actionable improvement suggestions from a critique."""
+        if not self.ai or self.ai.provider == "None":
+            return self._extract_suggestions_fallback(critique)
+        prompt = (
+            f"From the following academic critique, extract exactly 5 to 7 concrete, "
+            f"actionable improvement suggestions. Format as a numbered list. "
+            f"Each suggestion must be one sentence and start with an action verb "
+            f"(e.g. Add, Expand, Clarify, Remove, Restructure, Quantify). "
+            f"Do not repeat the critique text — only list the actions.\n\n"
+            f"CRITIQUE:\n{critique}"
+        )
+        result = self.ai.generate(prompt, system_prompt=SYSTEM_PROMPT, max_tokens=400)
+        if result.get("status") == "success" and result.get("text"):
+            return result["text"]
+        return self._extract_suggestions_fallback(critique)
+
+    def _extract_suggestions_fallback(self, critique: str) -> str:
+        """Fallback: pull bullet-point lines from critique text."""
+        lines = [l.strip() for l in critique.split("\n") if l.strip().startswith(("-", "•", "*", "1", "2", "3", "4", "5"))]
+        return "\n".join(lines[:7]) if lines else "See critique section for improvement suggestions."
+
     def _generate_final_report_bundle(self, full_doc: str, critique: str) -> str:
         """
         Generate a bundled final report containing all synthesis artefacts.
@@ -817,15 +867,14 @@ class ResearchWriter:
         if not self.ai or self.ai.provider == "None":
             return "Error: No AI provider available for revision."
 
-        # Build revision prompt with ACADEMIC_EDITOR_PROMPT
-        prompt = (
-            f"{ACADEMIC_EDITOR_PROMPT}\n\n"
+        # Build user prompt without ACADEMIC_EDITOR_PROMPT (moved to system_prompt)
+        user_prompt = (
             f"USER INSTRUCTION: \"{instruction}\"\n\n"
             f"CURRENT DOCUMENT:\n{current_doc}"
         )
 
-        logger.info("[REVISION] Using ACADEMIC_EDITOR_PROMPT with strict editorial rules")
-        result = self.ai.generate(prompt, max_tokens=2500)
+        logger.info("[REVISION] Using ACADEMIC_EDITOR_PROMPT as system_prompt (correct placement)")
+        result = self.ai.generate(user_prompt, system_prompt=ACADEMIC_EDITOR_PROMPT, max_tokens=2500)
         
         if result.get("status") == "success" and result.get("text"):
             revised_doc = result["text"]
@@ -835,6 +884,13 @@ class ResearchWriter:
             # Save the revision
             self._save_document(revised_doc, self.output_sections.get("bibtex", ""))
             logger.info("[REVISION] Document saved successfully")
+            
+            # Invalidate synthesis cache so next load reflects the revision
+            try:
+                get_cache().invalidate_synthesis_cache()
+            except Exception:
+                pass
+            
             return revised_doc
         
         error_msg = f"Error: Revision failed. {result.get('error', 'Unknown error')}"

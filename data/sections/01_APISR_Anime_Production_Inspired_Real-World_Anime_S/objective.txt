@@ -1,0 +1,1 @@
+Instead, we propose an anime image collection pipeline by choosing the least compressed and the most informative frames from the video sources.

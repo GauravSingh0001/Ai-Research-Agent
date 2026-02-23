@@ -1,0 +1,7 @@
+• Utilizing our hybrid training strategy, the network convergence speed is accelerated, and the colorization performance is improved.
+
+• In addition, the model has a certain generalization performance for line drawings of different line styles.
+
+• To train and evaluate colorization methods, an anime face line drawing colorization benchmark dataset, containing 31,696 training data and 579 testing data, is introduced and shared.
+
+• Extensive experiments and user studies have demonstrated that our proposed AnimeDiffusion outperforms state-of-the-art GAN-based methods and another diffusion-based model, both quantitatively and qualitatively.

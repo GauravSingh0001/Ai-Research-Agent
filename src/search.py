@@ -22,24 +22,26 @@ try:
     from src.config import (
         SEMANTIC_SCHOLAR_API_URL,
         SEMANTIC_SCHOLAR_API_KEY,
+        SEMANTIC_SCHOLAR_API_KEY_SECONDARY,
         SEARCH_FIELDS,
         SEARCH_LIMIT_DEFAULT,
         SEARCH_TIMEOUT_SECONDS,
         PAPERS_DATA_FILE,
         DATA_DIR,
     )
-    from src.utils import setup_logger
+    from src.utils import setup_logger, safe_filename
 except ImportError:
     from config import (
         SEMANTIC_SCHOLAR_API_URL,
         SEMANTIC_SCHOLAR_API_KEY,
+        SEMANTIC_SCHOLAR_API_KEY_SECONDARY,
         SEARCH_FIELDS,
         SEARCH_LIMIT_DEFAULT,
         SEARCH_TIMEOUT_SECONDS,
         PAPERS_DATA_FILE,
         DATA_DIR,
     )
-    from utils import setup_logger
+    from utils import setup_logger, safe_filename
 
 logger = setup_logger(__name__)
 
@@ -79,7 +81,24 @@ def _search_semantic_scholar(topic: str, limit: int, session: requests.Session) 
             timeout=SEARCH_TIMEOUT_SECONDS,
         )
         if resp.status_code == 429:
-            logger.warning("[SEARCH] Semantic Scholar rate-limited (429) — will try arXiv fallback")
+            # Try secondary API key before falling back to arXiv
+            if SEMANTIC_SCHOLAR_API_KEY_SECONDARY:
+                logger.warning("[SEARCH] Primary Semantic Scholar key rate-limited — retrying with secondary key")
+                secondary_session = _get_session()
+                secondary_session.headers.update({"x-api-key": SEMANTIC_SCHOLAR_API_KEY_SECONDARY})
+                try:
+                    retry_resp = secondary_session.get(
+                        SEMANTIC_SCHOLAR_API_URL,
+                        params={"query": topic.strip(), "limit": limit, "fields": SEARCH_FIELDS},
+                        timeout=SEARCH_TIMEOUT_SECONDS,
+                    )
+                    if retry_resp.status_code == 200:
+                        data = retry_resp.json().get("data", [])
+                        logger.info(f"[SEARCH] Secondary key succeeded: {len(data)} papers")
+                        return [_normalize_ss_paper(p) for p in data]
+                except Exception as e2:
+                    logger.warning(f"[SEARCH] Secondary key also failed: {e2}")
+            logger.warning("[SEARCH] Both Semantic Scholar keys exhausted — falling back to arXiv")
             return []
         resp.raise_for_status()
         data = resp.json().get("data", [])
@@ -170,9 +189,8 @@ def download_pdf(paper: dict, topic_slug: str, session: requests.Session) -> Opt
     topic_dir = PDFS_DIR / topic_slug
     topic_dir.mkdir(parents=True, exist_ok=True)
 
-    # Safe filename from title
-    safe_title = re.sub(r'[^\w\s-]', '', paper.get("title", "paper"))[:60].strip()
-    safe_title = re.sub(r'\s+', '_', safe_title)
+    # Use safe_filename utility which handles all OS-unsafe characters
+    safe_title = safe_filename(paper.get("title", "paper"))[:80]
     dest = topic_dir / f"{safe_title}.pdf"
 
     if dest.exists():

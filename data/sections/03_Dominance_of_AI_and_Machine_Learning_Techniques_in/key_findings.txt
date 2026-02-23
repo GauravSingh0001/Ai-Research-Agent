@@ -1,0 +1,9 @@
+• The proposed movie recommendation employed the Alternating Least Squares (ALS) algorithm to reinforce the accuracy of movie recommendations.
+
+• The performance analysis and evaluation were undertaken by employing the widely used "TMDB 5000 Movie Dataset" from the Kaggle dataset.
+
+• Two experiments were conducted, categorizing the dataset into distinct modules, and the outcomes were contrasted with state-of-the-art models.
+
+• The first experiment attained a Root Mean Squared Error (RMSE) of 0.97613, while the second experiment expanded predictions to 4800 movies, culminating in a substantially minimized RMSE of 0.8951, portraying a 97% accuracy enhancement.
+
+• Overall, the proposed hybrid movie recommendation system demonstrated promising results in predicting top-rated movies and offering personalized and accurate recommendations to users.

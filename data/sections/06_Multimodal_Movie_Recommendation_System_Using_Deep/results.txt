@@ -1,0 +1,1 @@
+With a learning rate of 0.001, the root mean squared error (RMSE) scores achieved 0.9908 and 0.9096 for test sets of MovieLens 100 K and 1 M datasets, respectively. The scoring prediction results show improved accuracy after incorporating the potential features and connections in multimodal data with deep-learning technology.
