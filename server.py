@@ -54,7 +54,7 @@ logger = setup_logger(__name__)
 logger.info("--- STARTING VERCEL DEPLOYMENT (Fix Applied) ---")
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='dashboard', template_folder='dashboard')
 # Read allowed origins from env var for production flexibility
 # Default allows all origins for local development and Render deployment
 _cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
@@ -911,7 +911,7 @@ def api_export_pdf():
 # Gunicorn imports `app` directly (server:app) — app.run() is for local dev only
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))
     print("\n" + "="*50)
     print("  AI PAPER REVIEWER — API SERVER")
     print(f"  http://localhost:{port}")
