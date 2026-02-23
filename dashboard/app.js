@@ -1784,13 +1784,39 @@ document.getElementById('global-search')?.addEventListener('keydown', (e) => {
 document.addEventListener('DOMContentLoaded', async () => {
     switchView('synthesis');
 
+    const sidebarStatusEl = document.getElementById('sidebar-status');
+    const sidebarStatusText = document.getElementById('sidebar-status-text');
+
     try {
         const status = await apiFetch('/status');
+
+        // Update sidebar status dot to green (online)
+        if (sidebarStatusEl) {
+            sidebarStatusEl.style.background = 'rgba(16,185,129,0.10)';
+            sidebarStatusEl.style.borderColor = 'rgba(16,185,129,0.2)';
+        }
+        if (sidebarStatusText) sidebarStatusText.textContent = 'Server online';
+
+        // Update topbar project name
+        const projectName = document.getElementById('topbar-project-name');
+        if (projectName && status.topic) {
+            projectName.textContent = status.topic;
+        }
+
         const msg = status.papers_loaded
-            ? `${status.papers_loaded} papers loaded · ${status.synthesis_ready ? 'Synthesis ready' : 'No synthesis yet'}`
+            ? `✓ ${status.papers_loaded} papers loaded · ${status.synthesis_ready ? 'Synthesis ready' : 'No synthesis yet'}`
             : 'No papers loaded yet — start with Search';
-        showToast(msg, status.papers_loaded ? 'success' : 'info', 4000);
+        showToast(msg, status.papers_loaded ? 'success' : 'info', 4500);
+
     } catch (_) {
-        showToast('API server offline — start server.py to connect backend', 'error', 7000);
+        // Server offline — update sidebar indicator to red
+        if (sidebarStatusEl) {
+            sidebarStatusEl.style.background = 'rgba(239,68,68,0.10)';
+            sidebarStatusEl.style.borderColor = 'rgba(239,68,68,0.2)';
+            const dot = sidebarStatusEl.querySelector('.status-dot');
+            if (dot) dot.style.background = '#EF4444';
+        }
+        if (sidebarStatusText) sidebarStatusText.textContent = 'Server offline';
+        showToast('API server offline — start server.py to connect', 'error', 7000);
     }
 });
