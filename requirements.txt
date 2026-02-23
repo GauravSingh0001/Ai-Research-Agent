@@ -10,3 +10,27 @@ cohere>=5.0.0
 openai>=1.3.0
 reportlab>=4.0.0
 gunicorn>=21.0.0
+# ── Web Framework ──────────────────────────────────────────
+flask==3.0.3
+flask-cors==4.0.1
+
+# ── Environment ────────────────────────────────────────────
+python-dotenv==1.0.1
+
+# ── AI Providers ───────────────────────────────────────────
+cohere==5.13.5
+openai==1.70.0
+google-generativeai==0.8.4
+
+# ── HTTP / Search ──────────────────────────────────────────
+requests==2.32.3
+urllib3==2.2.3
+
+# ── PDF Generation (Export PDF feature) ────────────────────
+reportlab==4.2.5
+
+# ── PDF Text Extraction (Analysis module) ──────────────────
+pymupdf==1.24.14
+
+# ── Feed Parsing (arXiv fallback) ──────────────────────────
+feedparser==6.0.11

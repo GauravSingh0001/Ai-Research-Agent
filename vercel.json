@@ -2,7 +2,8 @@
   "version": 2,
   "functions": {
     "api/index.py": {
-      "runtime": "python3.12"
+      "runtime": "python3.12",
+      "maxDuration": 60
     }
   },
   "routes": [
@@ -12,7 +13,7 @@
     },
     {
       "src": "/(app\\.js|styles\\.css|index\\.html|.*\\.(png|svg|ico|json|jpg))$",
-      "dest": "/dashboard/$1"
+      "dest": "dashboard/$1"
     },
     {
       "src": "/(.*)",
