@@ -911,8 +911,10 @@ def api_export_pdf():
 # Gunicorn imports `app` directly (server:app) — app.run() is for local dev only
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     print("\n" + "="*50)
     print("  AI PAPER REVIEWER — API SERVER")
-    print("  http://localhost:5000")
+    print(f"  http://localhost:{port}")
     print("="*50 + "\n")
-    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+
